@@ -18,7 +18,7 @@
                 <a href="index.php"><img src="./src/img/logo2.png" alt="Despliega Menu" class="menu--logo"></a>
             </div>
             <div class="menu--items">
-                <!-- Menu items -->
+                <div class="menu--item"><a href="./php/login.php">Login</a></div>
             </div>
         </nav>
     </header>
@@ -32,6 +32,5 @@
     <footer>
         <!-- Footer -->
     </footer>
-    <script type="text/javascript" src="./js/cookie.js"></script>
 </body>
 </html>
