@@ -19,139 +19,172 @@ LISTA DE CONTENIDOS
 
 /*    TODO Cambiar Fuente    */
 @font-face {
-    font-family: 'KingsCross';
-    src: url(../src/font/DragonHunter-9Ynxj.otf);
+  font-family: 'KingsCross';
+  src: url(../src/font/DragonHunter-9Ynxj.otf);
 }
 
 /******************************/
 /*    01.Colores y Estilos    */
 /******************************/
 :root {
-  --principal: black;
-  --secundario: white;
-  --tercero: red;
-  --apoyo: #db6d13;
+  --granate: #b00000;
+  --hueso: #f0ece4;
+  --negro: #000000;
+  --apoyo: #d9c7a3;
   --fondo-section: #f2e7dc;
   --tarjeta: #b2f5f8;
   --fondo-principal: #f4f4f4;
   --fondo: #ffffffc9;
   --fondo-header: #333;
-  --fondo-footer: #a52a2a;
+  --fondo-footer: brown;
   --box-shadow: rgba(0, 0, 0, 0.2);
 }
+
 /******************************/
-/*    02.General    */
+/*    02.General              */
 /******************************/
-/* necesario para evitar solapamientos con el header y el footer */
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
 }
-body{
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-areas:"header"
-                        "main"
-                        "footer";
-    background-color: var(--fondo-principal);
-    height: 100vh;
-    overflow: hidden; /* Evita scroll en body */
+
+body {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: "header"
+    "main"
+    "footer";
+  background-color: var(--fondo-principal);
+  height: 100vh;
+  overflow: hidden;
 }
-header{
-    background-color: var(--fondo-header);
-    padding: 0.5em;
-    grid-area: header;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 6em;
-    z-index: 10;
-    padding: 0 1rem;
+
+/************* HEADER COMPLETO REVISADO *************/
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--fondo-header);
+  height: 6em;
 }
-h1{
-    text-decoration: none;
-    font-family: 'KingsCross';
-    text-align: center;
-    color: var(--secundario);
+
+
+header h1 {
+  text-align: center;
+  color: var(--hueso);
+  margin: 0;
+  flex: 1;
 }
-main{
-    margin-top: 1em;
-    grid-area: main;
-    margin-top: 6em;
-    margin-bottom: 3em;
-    overflow: auto;
-    padding: 1rem;
-    height: calc(100vh - 6em - 5em);
+
+/**************** A LA DERECHA EN EL HEADER ***************/
+.derecha-header {
+  position: absolute;
+  right: 1rem;
+  top: 40%;
 }
-section{
+
+.derecha-header span {
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.6rem;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  background: white;
+  margin-left: 0.4em;
+}
+
+/****************************************************/
+
+main {
+  margin-top: 6em;
+  margin-bottom: 3em;
+  overflow: auto;
+  padding: 1rem;
+  height: calc(100vh - 6em - 5em);
+}
+
+section {
   overflow: auto;
 }
+
 a {
   color: var(--fondo-footer);
   text-decoration: none;
 }
-b {
-  font-size: 1.2em;
+
+select {
+  text-align: center;
+  width: 100%;
+  margin: auto;
 }
-select{
-    text-align: center;
-    width: 100%;
-    margin: auto;
-}
-textarea{
+
+textarea {
   height: 10em;
 }
-button,input[type="submit"]{
+
+button,
+input[type="submit"] {
   border-radius: 7em;
 }
-.ocupaTodo{
+
+.ocupaTodo {
   width: 100%;
 }
-.contenedor{
-    padding: 1em;
-    background-color: var(--fondo);
-    border-radius: 2em;
+
+.contenedor {
+  padding: 1em;
+  background-color: var(--fondo);
+  border-radius: 2em;
 }
+
 /******************************/
-/*    03.Tablas    */
+/*    03.Tablas               */
 /******************************/
 table {
-    width: 90%;
-    margin: auto;
-    border: thin solid #cccccc;
-    background: #ffffff;
-    border-collapse: collapse;
+  width: 90%;
+  margin: auto;
+  border: thin solid #cccccc;
+  background: #ffffff;
+  border-collapse: collapse;
 }
-td,th {
-    border: thin solid #cccccc;
-    padding: 1em;
-}
+
+td,
 th {
-    text-transform: uppercase;
-    text-align: center;
+  border: thin solid #cccccc;
+  padding: 1em;
 }
-.equipo>tr:hover{
-    background-color: var(--apoyo);
-    color: var(--secundario);
+
+th {
+  text-transform: uppercase;
+  text-align: center;
 }
+
+.equipo>tr:hover {
+  background-color: var(--granate);
+  color: var(--hueso);
+}
+
 /******************************/
-/*    04.Barra de Navegacion    */
+/*    04.Barra de Navegacion  */
 /******************************/
 .menu {
   font-weight: 500;
-  color: var(--principal);
+  color: var(--granate);
   display: flex;
   align-items: center;
-  position: fixed;
+  position: absolute;
+  /* AJUSTE */
   top: 0.8rem;
   left: 1.25rem;
   gap: 0.9rem;
   padding: 0.9375rem;
-  background-color: #ffffffae;
+  background-color: var(--hueso);
   border-radius: 1.25rem;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
-  z-index: 1;
 }
 
 .menu:hover {
@@ -159,16 +192,13 @@ th {
   transform: translateY(-0.1875rem);
 }
 
-/* Estilo para la etiqueta principal con imagen */
 .menu--etiqueta {
   cursor: pointer;
-  pointer-events: all;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 2.5rem;
   max-width: 2.5rem;
-  position: relative;
 }
 
 .menu--logo {
@@ -176,7 +206,6 @@ th {
   height: auto;
 }
 
-/* Ocultar elementos del menú por defecto */
 .menu--items {
   padding-left: 0.1em;
   text-align: center;
@@ -190,7 +219,6 @@ th {
   transform: translateY(0.625rem);
 }
 
-/* Mostrar elementos del menú al hacer hover en la etiqueta */
 .menu:hover .menu--items {
   padding-right: 0.9375rem;
   display: flex;
@@ -198,7 +226,6 @@ th {
   transform: translateY(0);
 }
 
-/* Estilo de cada elemento de menú */
 .menu--item {
   opacity: 0;
   transition: opacity 0.5s ease, transform 0.5s ease;
@@ -206,13 +233,13 @@ th {
 }
 
 .menu--item a {
-  color: var(--principal);
+  color: var(--granate);
   text-decoration: none;
   transition: color 0.5s ease;
 }
 
 .menu--item:hover a {
-    color: var(--tercero);
+  color: var(--negro);
 }
 
 .menu:hover .menu--item {
@@ -221,80 +248,92 @@ th {
 }
 
 /******************************/
-/*  05.Superior a tarjetas  */
+/*  05.Superior a tarjetas    */
 /******************************/
-.superior{
+.superior {
   grid-area: gastado;
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
+
 .animacionError {
   opacity: 0;
   font-size: 2em;
-  animation: animacionError 5s ease-in-out infinite; /* 10s = 5s visible + 5s invisible */
+  animation: animacionError 5s ease-in-out infinite;
 }
 
 @keyframes animacionError {
-  0%   { opacity: 0; }
-  50%  { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
+
 /******************************/
-/*    06.Tarjetas    */
+/*    06.Tarjetas             */
 /******************************/
-.contenedorTarjetas{
+.contenedorTarjetas {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-areas:"gastado";
+  grid-template-areas: "gastado";
 }
-.tarjeta{
+
+.tarjeta {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-areas:"tipo cantidad cantidad"
-                      "estadisticas habilidades habilidades"
-                      "estadisticas habilidades habilidades"
-                      "estadisticas precio precio"
-                      "aniadir nada eliminar";
+  grid-template-areas: "tipo tags cantidad"
+    "estadisticas habilidades habilidades"
+    "estadisticas habilidades habilidades"
+    "estadisticas precio precio"
+    "aniadir nada eliminar";
   background-color: var(--tarjeta);
   margin: 1em;
   padding: 0.5em;
+  gap: 0.5em;
 }
+
 /******************************/
-/*    07.Footer    */
+/*    07.Footer               */
 /******************************/
-footer{
-    grid-area: footer;
-    display: grid;
-    gap: 3%;
-    grid-template-columns: 1fr;
-    grid-template-areas:"img";
-    align-items: center;
-    text-align: center;
-    background-color: var(--fondo-footer);
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 3em;
-    z-index: 10;
+footer {
+  grid-area: footer;
+  display: grid;
+  gap: 3%;
+  grid-template-columns: 1fr;
+  grid-template-areas: "img";
+  align-items: center;
+  text-align: center;
+  background-color: var(--granate);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3em;
+  z-index: 10;
 }
-footer>p{
-    color: var(--secundario);
-    grid-area: auto;
+
+footer>p {
+  color: var(--hueso);
 }
 
 /******************************/
 /*           08.Cookie        */
 /******************************/
-
 .aviso-cookies {
   position: fixed;
   bottom: 50%;
   left: 50%;
   transform: translateX(-50%);
-  background-color: var(--principal);
-  color: var(--secundario);
+  background-color: var(--granate);
+  color: var(--hueso);
   padding: 1.5em;
   border-radius: 0.5em;
   display: none;
@@ -319,19 +358,20 @@ footer>p{
 
 #aceptar-btn {
   background-color: var(--apoyo);
-  color: var(--secundario);
+  color: var(--hueso);
 }
 
 #rechazar-btn {
-  background-color: var(--tercero);
-  color: var(--secundario);
+  background-color: var(--negro);
+  color: var(--hueso);
 }
 
 /******************************/
-/*    09.Media Tablets    */
+/*    09.Media Tablets        */
 /******************************/
 @media (min-width: 750px) {
- body {
+
+  body {
     font-size: 1.1em;
   }
 
@@ -339,15 +379,29 @@ footer>p{
     font-size: 2em;
   }
 
-  .menu{
+  .menu {
     top: 1rem;
   }
 
-  /* Tarjetas más amplias y con sombra */
-  .contenedorTarjetas{
+  .derecha-header {
+  position: absolute;
+  right: 1rem;
+  top: 40%;
+}
+
+.derecha-header span {
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.6rem;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  background: white;
+  margin-left: 0.4em;
+}
+
+  .contenedorTarjetas {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-areas:"gastado gastado";
+    grid-template-areas: "gastado gastado";
   }
 
   .tarjeta {
@@ -356,20 +410,24 @@ footer>p{
     padding: 1em;
   }
 
-  /* Formularios más cómodos */
   table {
     width: 80%;
   }
 
-  input, select, textarea, button {
+  input,
+  select,
+  textarea,
+  button {
     font-size: 1em;
   }
 }
+
 /******************************/
-/*    10.Media Escritorio    */
+/*    10.Media Escritorio     */
 /******************************/
 @media (min-width: 1000px) {
-body {
+
+  body {
     font-size: 1.15em;
   }
 
@@ -381,28 +439,25 @@ body {
     padding: 1rem;
   }
 
-  .menu{
+  .menu {
     top: 1.2rem;
   }
 
-  /* Tarjetas en cuadrícula más espaciosa */
-  .contenedorTarjetas{
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-areas:"gastado gastado gastado";
-}
+  .contenedorTarjetas {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas: "gastado gastado gastado";
+  }
 
   .tarjeta {
     padding: 1.5em;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  /* Contenedor más ancho y equilibrado */
   .contenedor {
     margin: auto;
   }
 
-  /* Formularios centrados */
   form {
     display: flex;
     flex-direction: column;
@@ -414,12 +469,12 @@ body {
     font-size: 1em;
   }
 }
+
 /******************************/
-/*    11.Media Print  */
+/*        11.Media Print      */
 /******************************/
 @media print {
 
-  /********** Ocultar elementos no necesarios **********/
   header,
   nav,
   footer,
@@ -431,7 +486,6 @@ body {
     display: none !important;
   }
 
-  /********** General **********/
   body {
     background: white !important;
     color: black !important;
@@ -456,7 +510,9 @@ body {
     padding: 0;
   }
 
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     color: black !important;
     text-align: center;
   }
@@ -471,14 +527,14 @@ body {
     font-size: 0.9em;
   }
 
-  /********** Tablas **********/
   table {
     width: 100%;
     border-collapse: collapse;
     border: 1px solid #000;
   }
 
-  th, td {
+  th,
+  td {
     border: 1px solid #000;
     padding: 0.5em;
   }
@@ -492,18 +548,18 @@ body {
     background-color: white !important;
   }
 
-  /********** Formularios **********/
   form {
     display: block;
   }
 
-  input, select, textarea {
+  input,
+  select,
+  textarea {
     border: 1px solid #000;
     color: black;
     background: white !important;
   }
 
-  /********** Tarjetas **********/
   .contenedorTarjetas {
     display: block;
   }
@@ -519,7 +575,6 @@ body {
     color: black !important;
   }
 
-  /********** Imágenes **********/
   img {
     max-width: 100%;
     height: auto;
@@ -529,13 +584,15 @@ body {
     display: none !important;
   }
 
-  /********** Pie de página personalizado **********/
   @page {
     margin: 1.5cm;
   }
 
-  /********** Evitar cortes bruscos **********/
-  table, tr, img, section, .tarjeta {
+  table,
+  tr,
+  img,
+  section,
+  .tarjeta {
     page-break-inside: avoid;
   }
 
@@ -543,7 +600,6 @@ body {
     page-break-after: avoid;
   }
 
-  /********** Quitar colores fuertes **********/
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;

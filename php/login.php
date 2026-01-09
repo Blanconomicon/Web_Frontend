@@ -1,3 +1,19 @@
+<?php
+    session_start();
+
+    if(isset($_POST['login'])){
+        //comprobar loginOK
+        //TODO cambiar esto por un login real
+        $loginOK=true;
+        if($loginOK){
+            //Guardar el id y el usarname
+            $_SESSION['user'] = $_POST['user'];
+            // redirigir a index.php
+            header("Location: ../index.php");
+            exit();
+        }
+    }
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,7 +22,7 @@
     <meta name="author" content="Aketza Gonzalez Rey">
     <meta name="author" content="Daniel Alvarez Burgo">
     <meta name="description" content="Pagina principal en la cual, se muestra una breve descripcion de que es Blanconomicon">
-    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/style.css">
     <link rel="icon" href="../src/img/logo1.png" type="image/x-icon">
     <title>Blanconomicon</title>
 </head>

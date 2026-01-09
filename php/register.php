@@ -6,7 +6,7 @@
     <meta name="author" content="Aketza Gonzalez Rey">
     <meta name="author" content="Daniel Alvarez Burgo">
     <meta name="description" content="Pagina principal en la cual, se muestra una breve descripcion de que es Blanconomicon">
-    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/style.css">
     <link rel="icon" href="../src/img/logo1.png" type="image/x-icon">
     <title>Blanconomicon</title>
 </head>
@@ -52,6 +52,7 @@
                     </tr>
                 </table>
             </form>
+            <p>Ya tienes una cuenta, <a href="./login.php">INICIA SESION</a></p>
         </section>
     </main>
     <footer>
