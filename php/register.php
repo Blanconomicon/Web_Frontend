@@ -1,6 +1,15 @@
+<?php
+//TODO comprobar que el usuario no exista y que las passwords coinciden
+$usuarioCorrecto=true;
+if($usuarioCorrecto){
+    //Si el usuario es correcto redirigir al login
+    header("Location: ./login.php");
+    exit();
+}
+
+?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

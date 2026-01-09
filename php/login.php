@@ -6,7 +6,7 @@ if (isset($_POST['login'])) {
     //TODO cambiar esto por un login real
     $loginOK = true;
     if ($loginOK) {
-        //Guardar el id y el usarname
+        //Guardar el user_nick
         $_SESSION['user'] = $_POST['user'];
         // redirigir a index.php
         header("Location: ../index.php");
