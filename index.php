@@ -69,11 +69,12 @@ session_start();
     <script>
         const hamburguesa = document.getElementById('menu-hamburguesa');
         const menu = document.getElementById('menu');
-
-        hamburguesa.addEventListener('click', () => {
-            hamburguesa.classList.toggle('active'); // animación de X
-            menu.classList.toggle('show'); // mostrar/ocultar menú
-        });
+        if (hamburguesa) {
+            hamburguesa.addEventListener('click', () => {
+                hamburguesa.classList.toggle('active'); // animación de X
+                menu.classList.toggle('show'); // mostrar/ocultar menú
+            });
+        }
     </script>
 
 
