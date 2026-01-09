@@ -20,31 +20,31 @@ session_start();
     <header>
         <h1>Blanconomicon</h1>
         <?php
-            if (isset($_SESSION['user'])) {
-            ?>
-        <div class="menu-hamburguesa" id="menu-hamburguesa">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-        </div>
+        if (isset($_SESSION['user'])) {
+        ?>
+            <div class="menu-hamburguesa" id="menu-hamburguesa">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
             <nav class="menu" id="menu">
-            <div class="menu--etiqueta">
-                <!-- <a href="index.php"><img src="./src/img/logo2.png" alt="Despliega Menu" class="menu--logo"></a> -->
-                <img src="./src/img/logo2.png" alt="Despliega Menu" class="menu--logo">
-            </div>
-            <div class="menu--items">
-                <div class="menu--item"><a href="./php/login.php">Login</a></div>
-                <div class="menu--item"><a href="./php/login.php">Logon</a></div>
-            </div>
+                <div class="menu--etiqueta">
+                    <!-- <a href="index.php"><img src="./src/img/logo2.png" alt="Despliega Menu" class="menu--logo"></a> -->
+                    <img src="./src/img/logo2.png" alt="Despliega Menu" class="menu--logo">
+                </div>
+                <div class="menu--items">
+                    <div class="menu--item"><a href="./php/login.php">Login</a></div>
+                    <div class="menu--item"><a href="./php/login.php">Logon</a></div>
+                </div>
             </nav>
         <?php
-            }
+        }
         ?>
         <div class="derecha-header">
             <?php
             if (isset($_SESSION['user'])) {
                 echo "<span>Usuario: <b>" . $_SESSION['user'] . "</b></span>";
-                echo "<span><a href='./php/login.php'>LOGOUT</a></span>";
+                echo "<span><a href='./php/utils.php?logout'>LOGOUT</a></span>";
             } else {
                 echo "<span><a href='./php/login.php'>Login</a></span>";
             }
