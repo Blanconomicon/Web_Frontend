@@ -132,6 +132,10 @@ input[type="submit"] {
   border-radius: 7em;
 }
 
+.activo{
+  color: var(--negro)
+}
+
 .ocupaTodo {
   width: 100%;
 }

@@ -33,6 +33,7 @@ session_start();
                     <img src="./src/img/logo2.png" alt="Despliega Menu" class="menu--logo">
                 </div>
                 <div class="menu--items">
+                    <div class="menu--item activo">Index</div>
                     <div class="menu--item"><a href="./php/personajes.php">Personajes</a></div>
                     <div class="menu--item"><a href="./php/grupos.php">Grupos</a></div>
                 </div>
