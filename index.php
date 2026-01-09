@@ -33,8 +33,8 @@ session_start();
                     <img src="./src/img/logo2.png" alt="Despliega Menu" class="menu--logo">
                 </div>
                 <div class="menu--items">
-                    <div class="menu--item"><a href="./php/login.php">Login</a></div>
-                    <div class="menu--item"><a href="./php/login.php">Logon</a></div>
+                    <div class="menu--item"><a href="./php/personajes.php">Personajes</a></div>
+                    <div class="menu--item"><a href="./php/grupos.php">Grupos</a></div>
                 </div>
             </nav>
         <?php
@@ -64,7 +64,7 @@ session_start();
         </section>
     </main>
     <footer>
-        <!-- Footer -->
+        <p>Daniel Alvarez - Aketza González</p>
     </footer>
     <script>
         const hamburguesa = document.getElementById('menu-hamburguesa');

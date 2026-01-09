@@ -1,21 +1,22 @@
 <?php
-    session_start();
+session_start();
 
-    if(isset($_POST['login'])){
-        //comprobar loginOK
-        //TODO cambiar esto por un login real
-        $loginOK=true;
-        if($loginOK){
-            //Guardar el id y el usarname
-            $_SESSION['user'] = $_POST['user'];
-            // redirigir a index.php
-            header("Location: ../index.php");
-            exit();
-        }
+if (isset($_POST['login'])) {
+    //comprobar loginOK
+    //TODO cambiar esto por un login real
+    $loginOK = true;
+    if ($loginOK) {
+        //Guardar el id y el usarname
+        $_SESSION['user'] = $_POST['user'];
+        // redirigir a index.php
+        header("Location: ../index.php");
+        exit();
     }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,17 +27,13 @@
     <link rel="icon" href="../src/img/logo1.png" type="image/x-icon">
     <title>Blanconomicon</title>
 </head>
+
 <body>
     <header>
         <h1>Blanconomicon</h1>
-        <nav class="menu">
-            <div class="menu--etiqueta">
-                <a href="../index.php"><img src="../src/img/logo2.png" alt="Despliega Menu" class="menu--logo"></a>
-            </div>
-            <div class="menu--items">
-                <!-- Menu items -->
-            </div>
-        </nav>
+        <div class="derecha-header">
+            <span><a href="../index.php">Ver index</a></span>
+        </div>
     </header>
     <main>
         <!-- Informacion de la Pagina -->
@@ -60,7 +57,8 @@
         </section>
     </main>
     <footer>
-        <!-- Footer -->
+        <p>Daniel Alvarez - Aketza González</p>
     </footer>
 </body>
+
 </html>
