@@ -3,11 +3,7 @@ require_once "./utils.php";
 
 comprobarLogin();
 
-if (isset($_GET['nombreGrupo'])) {
-    crearGrupo($_GET['nombreGrupo']);
-}
-
-$grupos = obtenerGrupos($_SESSION['user'])
+$personajes = obtenerPersonajes($_SESSION['user'])
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +16,7 @@ $grupos = obtenerGrupos($_SESSION['user'])
     <meta name="description" content="Pagina principal en la cual, se muestra una breve descripcion de que es Blanconomicon">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="icon" href="../src/img/logo1.png" type="image/x-icon">
-    <title>Blanconomicon | Grupos</title>
+    <title>Blanconomicon | Personajes</title>
 </head>
 
 <body>
@@ -41,8 +37,8 @@ $grupos = obtenerGrupos($_SESSION['user'])
                 </div>
                 <div class="menu--items">
                     <div class="menu--item"><a href="../index.php">Index</a></div>
-                    <div class="menu--item"><a href="./personajes.php">Personajes</a></div>
-                    <div class="menu--item activo">Grupos</div>
+                    <div class="menu--item activo">Personajes</div>
+                    <div class="menu--item"><a href="./grupos.php">Grupos</a></div>
                 </div>
             </nav>
         <?php
@@ -59,45 +55,19 @@ $grupos = obtenerGrupos($_SESSION['user'])
         <!-- Informacion de la Pagina -->
         <section class="contenedor">
             <?php
-            foreach ($grupos as $grupo) {
-                echo "<p><a href='grupos.php?idGrupo=" . $grupo->group_id . "'>" . $grupo->group_name . "</a></p>";
-                if (isset($_GET['idGrupo']) && $_GET['idGrupo'] == $grupo->group_id) {
-                    $jugadores = obtenerJugadores($grupo->group_id);
-            ?>
-                    <table>
-                        <tr>
-                            <th>JUGADOR</th>
-                            <th>ROL</th>
-                        </tr>
-                        <?php
-                        foreach ($jugadores as $jugador) {
-                            echo "<tr>";
-                            echo "<td>" . $jugador->user_nick . "</td>";
-                            echo "<td>" . $jugador->rol_name . "</td>";
-                            echo "</tr>";
-                        }
-                        ?>
-                    </table>
-            <?php
-                    echo "<p><a href='grupos.php?idGrupo=" . $grupo->group_id . "&aniadirGente'>Añadir gente</a></p>";
-                }
+            foreach ($personajes as $personaje) {
+                echo "<p><a href='consultarPersonajes.php?nombrePj=" . $personaje->char_name . "'>" . $$personaje->char_name . "</a></p>";
             }
             ?>
-            <button id="btnNuevoGrupo">Nuevo grupo</button>
-
-            <div id="modal" class="modal">
-                <p>Nombre del grupo:</p>
-                <input type="text" id="nombre">
-                <button id="btnCrearGrupo">Aceptar</button>
-            </div>
-
+            <button onclick="location.href='./crearPersonaje.php'">
+                Nuevo Personaje
+            </button>
         </section>
     </main>
     <footer>
         <p>Daniel Alvarez - Aketza González</p>
     </footer>
     <script src="../js/menuHamburguesa.js"></script>
-    <script src="../js/crearGrupo.js"></script>
 </body>
 
 </html>

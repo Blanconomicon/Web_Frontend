@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+//--------------------------------------------
+//FUNCIONES DE LOGIN
+//--------------------------------------------
+
 //funcion para redirigir a login si no hay login realizado
 function comprobarLogin()
 {
@@ -37,19 +41,22 @@ function register($user, $email, $nombre, $password, $password2)
         exit();
     }
 }
+//--------------------------------------------
+//FUNCIONES DE GRUPOS
+//--------------------------------------------
 
 //funcion para obtener los grupos de un usuario concreto y devuelve un array con estos
 function obtenerGrupos($user)
 {
     //TODO obtener los grupos a los que pertenece un usuario concreto
-    $arrGrupo = [];
-    return $arrGrupo;
+    $arrGrupos = [];
+    return $arrGrupos;
 }
 
 //funcion para obtener todos los jugadores de un mismo grupo
 function obtenerJugadores($idGrupo)
 {
-    //TODO obtener los jugadores de un grupo concreto (rol incluido????)
+    //TODO obtener los jugadores de un grupo concreto (nombre y rol)
     $arrJugadores = [];
     return $arrJugadores;
 }
@@ -61,4 +68,15 @@ function crearGrupo($nombre)
 
     header("Location: ./grupos.php");
     exit();
+}
+
+//--------------------------------------------
+//FUNCIONES DE PERSONAJES
+//--------------------------------------------
+
+//funcion para obtener todos los personajes de un usuario
+function obtenerPersonajes($user){
+    //TODO obtener los personajes de un jugador
+    $arrPersonajes = [];
+    return $arrPersonajes;
 }
