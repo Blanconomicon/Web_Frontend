@@ -1,16 +1,22 @@
 <?php
-session_start();
+require_once "./utils.php";
+
+$error = "";
 
 if (isset($_POST['login'])) {
-    //comprobar loginOK
-    //TODO cambiar esto por un login real
-    $loginOK = true;
-    if ($loginOK) {
-        //Guardar el user_nick
-        $_SESSION['user'] = $_POST['user'];
-        // redirigir a index.php
-        header("Location: ../index.php");
-        exit();
+    if (trim($_POST['user']) != "" && trim($_POST['password']) != "") {
+        //comprobar loginOK
+        if (loginOK($_POST['user'], $_POST['password'])) {
+            //Guardar el user_nick
+            $_SESSION['user'] = $_POST['user'];
+            // redirigir a index.php
+            header("Location: ../index.php");
+            exit();
+        } else {
+            $error = "<p style='color: red'>Usuario o contraseña invalidos</p>";
+        }
+    } else {
+        $error = "<p style='color: red'>Debes introducir un usuario y una contraseña</p>";
     }
 }
 ?>
@@ -38,15 +44,18 @@ if (isset($_POST['login'])) {
     <main>
         <!-- Informacion de la Pagina -->
         <section class="contenedor">
+            <?php
+            echo $error
+            ?>
             <form method="post">
                 <table>
                     <tr>
                         <td>User</td>
-                        <td><input type="text" name="user" class="ocupaTodo"></td>
+                        <td><input type="text" name="user" class="ocupaTodo" required></td>
                     </tr>
                     <tr>
                         <td>Password</td>
-                        <td><input type="password" name="password" class="ocupaTodo"></td>
+                        <td><input type="password" name="password" class="ocupaTodo" required></td>
                     </tr>
                     <tr>
                         <td colspan="2"><input type="submit" value="Login" name="login" class="ocupaTodo"></td>

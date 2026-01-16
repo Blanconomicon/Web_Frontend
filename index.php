@@ -1,5 +1,9 @@
 <?php
-session_start();
+require_once "./php/utils.php";
+
+if (isset($_GET['logout'])) {
+    logout();
+}
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +49,7 @@ session_start();
             <?php
             if (isset($_SESSION['user'])) {
                 echo "<span>Usuario: <b>" . $_SESSION['user'] . "</b></span>";
-                echo "<span><a href='./php/utils.php?logout'>LOGOUT</a></span>";
+                echo "<span><a href='index.php?logout'>LOGOUT</a></span>";
             } else {
                 echo "<span><a href='./php/login.php'>Login</a></span>";
             }
