@@ -28,3 +28,25 @@ function register($user, $email, $nombre, $password, $password2)
         exit();
     }
 }
+
+//funcion para obtener los grupos de un usuario concreto y devuelve un array con estos
+function obtenerGrupos($user){
+    //TODO obtener los grupos a los que pertenece un usuario concreto
+    $arrGrupo=[];
+    return $arrGrupo;
+}
+
+//funcion para obtener todos los jugadores de un mismo grupo
+function obtenerJugadores($idGrupo){
+    //TODO obtener los jugadores de un grupo concreto (rol incluido????)
+    $arrJugadores=[];
+    return $arrJugadores;
+}
+
+//funcion para crear un nuevo grupo
+function crearGrupo($nombre){
+    //TODO crear el grupo
+}
+
+
+?>
