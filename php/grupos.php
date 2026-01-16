@@ -1,7 +1,9 @@
 <?php
 require_once "./utils.php";
 
-if(isset($_GET['nombreGrupo'])){
+comprobarLogin();
+
+if (isset($_GET['nombreGrupo'])) {
     crearGrupo($_GET['nombreGrupo']);
 }
 
@@ -49,7 +51,7 @@ $grupos = obtenerGrupos($_SESSION['user'])
         <div class="derecha-header">
             <?php
             echo "<span>Usuario: <b>" . $_SESSION['user'] . "</b></span>";
-            echo "<span><a href='../index.php?logout'>LOGOUT</a></span>";
+            echo "<span><a href='../index.php?logout'>Logout</a></span>";
             ?>
         </div>
     </header>
@@ -83,7 +85,7 @@ $grupos = obtenerGrupos($_SESSION['user'])
             ?>
             <button id="btnNuevoGrupo">Nuevo grupo</button>
 
-            <div id="modal" style="display:none; position:fixed; top:40%; left:40%; background:#fff; padding:20px; border:1px solid #000;">
+            <div id="modal" class="modal">
                 <p>Nombre del grupo:</p>
                 <input type="text" id="nombre">
                 <button id="btnCrearGrupo">Aceptar</button>

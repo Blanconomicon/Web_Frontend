@@ -67,12 +67,16 @@ header {
   left: 0;
   right: 0;
   display: flex;
-  flex-direction: column; /* esto hace que los hijos se apilen verticalmente */
-  align-items: center;    /* centra horizontalmente los hijos */
+  flex-direction: column;
+  /* esto hace que los hijos se apilen verticalmente */
+  align-items: center;
+  /* centra horizontalmente los hijos */
   justify-content: center;
   background-color: var(--fondo-header);
-  padding: 1em 0;         /* espacio arriba y abajo */
-  height: auto;           /* se ajusta al contenido */
+  padding: 1em 0;
+  /* espacio arriba y abajo */
+  height: auto;
+  /* se ajusta al contenido */
 }
 
 header h1 {
@@ -84,8 +88,10 @@ header h1 {
 
 /**************** DEBAJO DEL H1 ***************/
 .derecha-header {
-  margin-top: 0.5em;      /* separación del h1 */
-  text-align: center;      /* centra el contenido */
+  margin-top: 0.5em;
+  /* separación del h1 */
+  text-align: center;
+  /* centra el contenido */
 }
 
 .derecha-header span {
@@ -94,7 +100,8 @@ header h1 {
   border: 1px solid #ccc;
   font-size: 1em;
   background: white;
-  margin-left: 0.4em; /* opcional */
+  margin-left: 0.4em;
+  /* opcional */
 }
 
 
@@ -132,7 +139,7 @@ input[type="submit"] {
   border-radius: 7em;
 }
 
-.activo{
+.activo {
   color: var(--negro)
 }
 
@@ -144,6 +151,16 @@ input[type="submit"] {
   padding: 1em;
   background-color: var(--fondo);
   border-radius: 2em;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 40%;
+  left: 40%;
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #000;
 }
 
 /******************************/
@@ -420,7 +437,7 @@ footer>p {
     top: 1rem;
   }
 
-.derecha-header {
+  .derecha-header {
     position: absolute;
     right: 1rem;
     top: 30%;

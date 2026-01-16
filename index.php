@@ -49,7 +49,7 @@ if (isset($_GET['logout'])) {
             <?php
             if (isset($_SESSION['user'])) {
                 echo "<span>Usuario: <b>" . $_SESSION['user'] . "</b></span>";
-                echo "<span><a href='index.php?logout'>LOGOUT</a></span>";
+                echo "<span><a href='index.php?logout'>Logout</a></span>";
             } else {
                 echo "<span><a href='./php/login.php'>Login</a></span>";
             }
