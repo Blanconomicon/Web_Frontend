@@ -56,10 +56,10 @@ $personajes = obtenerPersonajes($_SESSION['user'])
         <section class="contenedor">
             <?php
             foreach ($personajes as $personaje) {
-                echo "<p><a href='consultarPersonajes.php?nombrePj=" . $personaje->char_name . "'>" . $$personaje->char_name . "</a></p>";
+                echo "<p class='centrado'><a href='consultarPersonajes.php?nombrePj=" . $personaje->char_name . "'>" . $$personaje->char_name . "</a></p>";
             }
             ?>
-            <button onclick="location.href='./crearPersonaje.php'">
+            <button onclick="location.href='./crearPersonaje.php'" class="centrado">
                 Nuevo Personaje
             </button>
         </section>

@@ -83,7 +83,7 @@ $grupos = obtenerGrupos($_SESSION['user'])
                 }
             }
             ?>
-            <button id="btnNuevoGrupo">Nuevo grupo</button>
+            <button id="btnNuevoGrupo" class="centrado">Nuevo grupo</button>
 
             <div id="modal" class="modal">
                 <p>Nombre del grupo:</p>
