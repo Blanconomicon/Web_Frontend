@@ -42,14 +42,6 @@ require_once "../includes/header.php";
             ?>
             <button id="btnNuevoGrupo" class="centrado">Nuevo grupo</button>
 
-            <div id="modal" class="modal">
-                <form method="post">
-                    <p>Nombre del grupo:</p>
-                    <input type="text" id="nombre" name="nombreGrupo">
-                    <input type="submit" value="Aceptar" name="submit" id="btnCrearGrupo">
-                </form>
-            </div>
-
         </section>
     </main>
 <?php

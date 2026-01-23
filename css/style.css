@@ -154,10 +154,9 @@ input[type="submit"] {
 }
 
 .modal {
-  display: none;
   position: fixed;
-  top: 40%;
-  left: 40%;
+  left: 25%;
+  top:20%;
   background: #fff;
   padding: 20px;
   border: 1px solid #000;

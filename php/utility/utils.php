@@ -66,8 +66,6 @@ function crearGrupo($nombre)
 {
     //TODO crear el grupo
 
-    header("Location: ./grupos.php");
-    exit();
 }
 
 //--------------------------------------------

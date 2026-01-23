@@ -1,10 +1,19 @@
-function abrirPrompt() {
-    document.getElementById("modal").style.display = "block";
-}
+document.addEventListener("DOMContentLoaded", () => {
+    const btnNuevoGrupo = document.getElementById("btnNuevoGrupo");
 
-function crearGrupo() {
-    document.getElementById("modal").style.display = "none";
-}
+    btnNuevoGrupo.addEventListener("click", () => {
+        const ventana = window.open(
+            "crearGrupo.php",
+            "crearGrupo",
+            "width=400,height=250,resizable=no"
+        );
 
-document.getElementById("btnNuevoGrupo").addEventListener("click", abrirPrompt);
-document.getElementById("btnCrearGrupo").addEventListener("click",crearGrupo)
+        // Bloquea la página hasta que se cierre la ventana
+        const bloqueo = setInterval(() => {
+            if (ventana.closed) {
+                clearInterval(bloqueo);
+                location.reload(); // recarga para ver el nuevo grupo
+            }
+        }, 500);
+    });
+});
