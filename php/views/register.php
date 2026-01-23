@@ -1,5 +1,5 @@
 <?php
-require_once "./utils.php";
+require_once "../utility/utils.php";
 $error="";
 if (isset($_POST['register'])) {
     if (
@@ -12,28 +12,9 @@ if (isset($_POST['register'])) {
     }
 }
 
+
+require_once "../includes/header.php";
 ?>
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="Aketza Gonzalez Rey">
-    <meta name="author" content="Daniel Alvarez Burgo">
-    <meta name="description" content="Pagina principal en la cual, se muestra una breve descripcion de que es Blanconomicon">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" href="../src/img/logo1.png" type="image/x-icon">
-    <title>Blanconomicon</title>
-</head>
-
-<body>
-    <header>
-        <h1>Blanconomicon</h1>
-        <div class="derecha-header">
-            <span><a href="../index.php">Ver index</a></span>
-        </div>
-    </header>
     <main>
         <!-- Informacion de la Pagina -->
         <section class="contenedor">

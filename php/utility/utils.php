@@ -18,7 +18,7 @@ function comprobarLogin()
 function logout()
 {
     session_destroy();
-    header("Location: php/login.php");
+    header("Location: php/views/login.php");
 }
 
 //fucnion para comprobar el login
@@ -37,7 +37,7 @@ function register($user, $email, $nombre, $password, $password2)
         //Si el usuario es correcto redirigir al index y registrarlo
         //TODO registrar al usuario
         $_SESSION['user'] = $user;
-        header("Location: ../index.php");
+        header("Location: ../../index.php");
         exit();
     }
 }

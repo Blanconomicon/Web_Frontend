@@ -3,9 +3,6 @@ function abrirPrompt() {
 }
 
 function crearGrupo() {
-    const nombreGrupo = document.getElementById("nombre").value;
-    console.log(nombreGrupo);
-    location.href="./grupos.php?nombreGrupo="+nombreGrupo;
     document.getElementById("modal").style.display = "none";
 }
 

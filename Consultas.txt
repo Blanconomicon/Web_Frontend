@@ -1,0 +1,5 @@
+Obtener user y password
+Crear un usuario (user,email,name,password)
+Obtener el nombre nombre de todos los personajes de un usuario
+Obtener toda la informacion de los grupos
+Obtener el usernick y el rol de todos los usuarios de un grupo en concreto
