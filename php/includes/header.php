@@ -29,8 +29,9 @@ if (isset($_GET['logout'])) {
         <link rel="icon" href="../../src/img/logo1.png" type="image/x-icon">
     <?php
     }
+    echo "<title>Blanconomicon | " . ucfirst(substr(basename($_SERVER['PHP_SELF']), 0, strlen(basename($_SERVER['PHP_SELF'])) - 4))
+        . "</title>"
     ?>
-    <title>Blanconomicon</title>
 </head>
 
 <body>
@@ -46,7 +47,7 @@ if (isset($_GET['logout'])) {
             </div>
             <nav class="menu" id="menu">
                 <div class="menu--etiqueta">
-                    <!-- <a href="index.php"><img src="./src/img/logo2.png" alt="Despliega Menu" class="menu--logo"></a> -->
+
                     <?php
                     if (basename($_SERVER['PHP_SELF']) == "index.php") {
                         echo "<img src='./src/img/logo2.png' alt='Despliega Menu' class='menu--logo'>";
