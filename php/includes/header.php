@@ -1,7 +1,4 @@
 <?php
-if (basename($_SERVER['PHP_SELF']) == "index.php") {
-    require_once "./php/utility/utils.php";
-}
 
 if (isset($_GET['logout'])) {
     logout();
