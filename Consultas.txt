@@ -3,3 +3,9 @@ Crear un usuario (user,email,name,password)
 Obtener el nombre nombre de todos los personajes de un usuario
 Obtener toda la informacion de los grupos
 Obtener el usernick y el rol de todos los usuarios de un grupo en concreto
+Obtener todos los trasfondos
+Obtener todas las clases
+Obtener todas las razas/especies
+Obtener un trasfondo concreto
+Obtener una clase concreta
+Obtener una raza/especie concreta
