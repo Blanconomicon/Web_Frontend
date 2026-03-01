@@ -60,7 +60,6 @@ body {
   overflow: hidden;
 }
 
-/************* HEADER COMPLETO REVISADO *************/
 header {
   position: fixed;
   top: 0;
@@ -68,30 +67,22 @@ header {
   right: 0;
   display: flex;
   flex-direction: column;
-  /* esto hace que los hijos se apilen verticalmente */
   align-items: center;
-  /* centra horizontalmente los hijos */
   justify-content: center;
   background-color: var(--fondo-header);
   padding: 1em 0;
-  /* espacio arriba y abajo */
   height: auto;
-  /* se ajusta al contenido */
 }
 
 header h1 {
   color: var(--hueso);
   margin: 0;
   text-align: center;
-  /* ya no hace falta flex:1 */
 }
 
-/**************** DEBAJO DEL H1 ***************/
 .derecha-header {
   margin-top: 0.5em;
-  /* separación del h1 */
   text-align: center;
-  /* centra el contenido */
 }
 
 .derecha-header span {
@@ -101,11 +92,8 @@ header h1 {
   font-size: 1em;
   background: white;
   margin-left: 0.4em;
-  /* opcional */
 }
 
-
-/****************************************************/
 
 main {
   margin-top: 6em;
