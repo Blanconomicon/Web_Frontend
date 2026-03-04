@@ -29,6 +29,8 @@ let selectCarisma = document.getElementById("selectCarisma");
 let txtCarismaTotal = document.getElementById("txtCarismaTotal");
 let txtCarismaModificador = document.getElementById("txtCarismaModificador")
 
+let btnSiguiente=document.getElementById("btnSiguiente");
+
 //los selects agrupados
 let selects = [
     selectFuerza,
@@ -70,19 +72,9 @@ let modificadores = [
 ///////////////////////////////////////////////////////////////////////////
 //funciones
 ///////////////////////////////////////////////////////////////////////////
-//funcion para cargar los selects y los textos con los valores por defecto
-function cargarPuntuaciones() {
+//funcion para dar los eventos a los selects
+function cargarEventosSelects() {
     selects.forEach(select => {
-        select.innerHTML = "";
-        for (let i = 8; i <= 15; i++) {
-            let option = document.createElement("option");
-            option.value = i;
-            option.textContent = i;
-            select.appendChild(option);
-        }
-        select.value = 8;
-
-        // Pasamos el evento automáticamente
         select.addEventListener("change", fijarValorTotal);
     });
 }
@@ -133,6 +125,16 @@ function obtenerCoste(valor) {
 }
 
 ///////////////////////////////////////////////////////////////////////////
+//eventos
+///////////////////////////////////////////////////////////////////////////
+btnSiguiente.addEventListener("click",(event)=>{
+    if(restantes!=0){
+        event.preventDefault();
+        alert("Debes gastar todos los puntos de las caracteristicas")
+    }
+})
+
+///////////////////////////////////////////////////////////////////////////
 //codigo a ejecutar
 ///////////////////////////////////////////////////////////////////////////
-cargarPuntuaciones();
+cargarEventosSelects();

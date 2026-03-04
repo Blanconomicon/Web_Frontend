@@ -3,7 +3,31 @@ require_once "../utility/utils.php";
 
 comprobarLogin();
 
+if (isset($_POST['siguiente'])) {
+    $personaje = new stdClass();
+    $personaje->nombre = $_POST["nombrePj"];
+    $personaje->raza = $_POST["raza"];
+    $personaje->clase = $_POST["clase"];
+    $personaje->trasfondo = $_POST["trasfondo"];
+    $personaje->fuerza = $_POST["selectFuerza"];
+    $personaje->destreza = $_POST["selectDesteza"];
+    $personaje->constitucion = $_POST["selectConstitucion"];
+    $personaje->inteligencia = $_POST["selectInteligencia"];
+    $personaje->sabiduria = $_POST["selectSabiduria"];
+    $personaje->carisma = $_POST["selectCarisma"];
+    $_SESSION['personaje'] = $personaje;
+    header("Location: ./crearPersonaje2.php");
+    exit();
+}
+$personaje = null;
+if (isset($_SESSION['personaje'])) {
+    $personaje = $_SESSION['personaje'];
+}
+
+
+
 //TODO cargar los selects
+//TODO recargar los selects con lo que tuviera el personaje si se ha pulsado atras desde la siguente pagina
 
 require_once "../includes/header.php";
 ?>
@@ -14,20 +38,26 @@ require_once "../includes/header.php";
             <table>
                 <tr>
                     <td colspan="2">
-                        <input class="ocupaTodo" type="text" name="nombrePj" id="nombrePj" placeholder="Nombre del personaje">
+                        <input class="ocupaTodo" type="text" name="nombrePj" id="nombrePj" placeholder="Nombre del personaje" required value=<?php echo ($personaje != null) ? $personaje->nombre : "" ?>>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <select class="ocupaTodo" name="raza" id="raza"></select>
+                        <select class="ocupaTodo" name="raza" id="raza">
+                            <option value="RAZA">RAZA</option>
+                        </select>
                     </td>
                     <td>
-                        <select class="ocupaTodo" name="clase" id="clase"></select>
+                        <select class="ocupaTodo" name="clase" id="clase">
+                            <option value="CLASE">CLASE</option>
+                        </select>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <select class="ocupaTodo" name="trasfondo" id="trasfondo"></select>
+                        <select class="ocupaTodo" name="trasfondo" id="trasfondo">
+                            <option value="TRASFONDO">TRASFONDO</option>
+                        </select>
                     </td>
                 </tr>
                 <tr>
@@ -42,7 +72,14 @@ require_once "../includes/header.php";
                             </tr>
                             <tr>
                                 <td>
-                                    <select name="selectFuerza" id="selectFuerza"></select>
+                                    <select name="selectFuerza" id="selectFuerza">
+                                        <?php
+                                        for ($i = 8; $i <= 15; $i++) {
+                                            $selected = ($personaje && $personaje->fuerza == $i) ? "selected" : "";
+                                            echo "<option value='$i' $selected>$i</option>";
+                                        }
+                                        ?>
+                                    </select>
                                     <br>
                                     <table>
                                         <tr>
@@ -56,7 +93,14 @@ require_once "../includes/header.php";
                                     </table>
                                 </td>
                                 <td>
-                                    <select name="selectDesteza" id="selectDesteza"></select>
+                                    <select name="selectDesteza" id="selectDesteza">
+                                        <?php
+                                        for ($i = 8; $i <= 15; $i++) {
+                                            $selected = ($personaje && $personaje->destreza == $i) ? "selected" : "";
+                                            echo "<option value='$i' $selected>$i</option>";
+                                        }
+                                        ?>
+                                    </select>
                                     <br>
                                     <table>
                                         <tr>
@@ -70,7 +114,14 @@ require_once "../includes/header.php";
                                     </table>
                                 </td>
                                 <td>
-                                    <select name="selectConstitucion" id="selectConstitucion"></select>
+                                    <select name="selectConstitucion" id="selectConstitucion">
+                                        <?php
+                                        for ($i = 8; $i <= 15; $i++) {
+                                            $selected = ($personaje && $personaje->constitucion == $i) ? "selected" : "";
+                                            echo "<option value='$i' $selected>$i</option>";
+                                        }
+                                        ?>
+                                    </select>
                                     <br>
                                     <table>
                                         <tr>
@@ -94,7 +145,14 @@ require_once "../includes/header.php";
                             </tr>
                             <tr>
                                 <td>
-                                    <select name="selectInteligencia" id="selectInteligencia"></select>
+                                    <select name="selectInteligencia" id="selectInteligencia">
+                                        <?php
+                                        for ($i = 8; $i <= 15; $i++) {
+                                            $selected = ($personaje && $personaje->inteligencia == $i) ? "selected" : "";
+                                            echo "<option value='$i' $selected>$i</option>";
+                                        }
+                                        ?>
+                                    </select>
                                     <br>
                                     <table>
                                         <tr>
@@ -108,7 +166,14 @@ require_once "../includes/header.php";
                                     </table>
                                 </td>
                                 <td>
-                                    <select name="selectSabiduria" id="selectSabiduria"></select>
+                                    <select name="selectSabiduria" id="selectSabiduria">
+                                        <?php
+                                        for ($i = 8; $i <= 15; $i++) {
+                                            $selected = ($personaje && $personaje->sabiduria == $i) ? "selected" : "";
+                                            echo "<option value='$i' $selected>$i</option>";
+                                        }
+                                        ?>
+                                    </select>
                                     <br>
                                     <table>
                                         <tr>
@@ -122,7 +187,14 @@ require_once "../includes/header.php";
                                     </table>
                                 </td>
                                 <td>
-                                    <select name="selectCarisma" id="selectCarisma"></select>
+                                    <select name="selectCarisma" id="selectCarisma">
+                                        <?php
+                                        for ($i = 8; $i <= 15; $i++) {
+                                            $selected = ($personaje && $personaje->carisma == $i) ? "selected" : "";
+                                            echo "<option value='$i' $selected>$i</option>";
+                                        }
+                                        ?>
+                                    </select>
                                     <br>
                                     <table>
                                         <tr>
@@ -140,7 +212,7 @@ require_once "../includes/header.php";
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input type="submit" name="siguiente" value="Siguiente"></td>
+                    <td colspan="2"><input type="submit" id="btnSiguiente" name="siguiente" value="Siguiente"></td>
                 </tr>
             </table>
         </form>
