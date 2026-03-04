@@ -9,7 +9,7 @@ session_start();
 function comprobarLogin()
 {
     if (!isset($_SESSION['user'])) {
-        header("Location: ../index.php");
+        header("Location: ../../index.php");
         exit();
     }
 }
