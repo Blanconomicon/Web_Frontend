@@ -74,6 +74,7 @@ let modificadores = [
 ///////////////////////////////////////////////////////////////////////////
 //funcion para dar los eventos a los selects
 function cargarEventosSelects() {
+    calcularRestantes();
     selects.forEach(select => {
         select.addEventListener("change", fijarValorTotal);
     });

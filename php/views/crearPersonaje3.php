@@ -2,17 +2,17 @@
 require_once "../utility/utils.php";
 
 comprobarLogin();
-if (!isset($_SESSION['personaje']) || isset($_POST["anterior"])) {
-    header("Location: ./crearPersonaje.php");
+if (!isset($_SESSION['personaje']) || isset($_POST["anterior"]) || !isset($_SESSION['personaje']->subraza)) {
+    header("Location: ./crearPersonaje2.php");
     exit();
 }
 $personaje = $_SESSION["personaje"];
 
 if (isset($_POST['siguiente'])) {
-    //TODO arreglar con las caracteristicas de la raza
-    $personaje->subraza = $_POST["subraza"];
+    //TODO arreglar con las caracteristicas de la clase
+    $personaje->datosClase = $_POST["datosClase"];
     $_SESSION['personaje'] = $personaje;
-    header("Location: ./crearPersonaje3.php");
+    header("Location: ./crearPersonaje4.php");
     exit();
 }
 
@@ -26,13 +26,12 @@ require_once "../includes/header.php";
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
         <form action="" method="post">
-            <h2><?php echo $personaje->raza; ?></h2>
-            <select name="subraza" id="subraza">
-                <option value="SUBRAZA">SUBRAZA</option>
-            </select>
+            <h2><?php echo $personaje->clase; ?></h2>
             <div>
-                CARACTERISTICAS DE LA RAZA Y SUBRAZA
+                CARACTERISTICAS DE LA CLASE
             </div>
+            <!-- TODO cambiar esto por la informacion de la clase -->
+            <input type="hidden" name="datosClase" value="datosClase">
             <div>
                 <input type="submit" name="anterior" value="Anterior">
                 <input type="submit" name="siguiente" value="Siguiente">

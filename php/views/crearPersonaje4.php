@@ -1,0 +1,67 @@
+<?php
+require_once "../utility/utils.php";
+
+comprobarLogin();
+if (!isset($_SESSION['personaje']) || isset($_POST["anterior"]) || !isset($_SESSION['personaje']->datosClase)) {
+    header("Location: ./crearPersonaje3.php");
+    exit();
+}
+$personaje = $_SESSION["personaje"];
+
+if (isset($_POST['finalizar'])) {
+    $personaje->equipoClase = $_POST["equipoClase"];
+    $personaje->equipoTrasfondo = $_POST["equipoTrasfondo"];
+    //TODO crear el personaje
+}
+
+
+
+
+//TODO cargar el select
+require_once "../includes/header.php";
+?>
+<main>
+    <!-- Informacion de la Pagina -->
+    <section class="contenedor">
+        <form action="" method="post">
+            <h2><?php echo $personaje->clase; ?></h2>
+            <table>
+                <tr>
+                    <td>
+                        <select name="equipoClase" id="equipoClase">
+                            <option value="equipoClase">equipoClase</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="equipoTrasfondo" id="equipoTrasfondo">
+                            <option value="equipoTrasfondo">equipoTrasfondo</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            ITEMS CLASE
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            ITEMS TRASONFO
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div>
+                <input type="submit" name="anterior" value="Anterior">
+                <input type="submit" name="finalizar" value="Finalizar">
+            </div>
+        </form>
+    </section>
+</main>
+<?php
+require_once "../includes/footer.php"
+?>
+<script src="../../js/menuHamburguesa.js"></script>
+</body>
+
+</html>
