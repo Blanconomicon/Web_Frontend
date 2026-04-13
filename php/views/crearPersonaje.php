@@ -1,5 +1,6 @@
 <?php
 require_once "../utility/utils.php";
+require_once "../utility/conexion.php";
 
 comprobarLogin();
 
@@ -25,9 +26,9 @@ if (isset($_SESSION['personaje'])) {
 }
 
 
-
-//TODO cargar los selects
-//TODO recargar los selects con lo que tuviera el personaje si se ha pulsado atras desde la siguente pagina
+$razas = getRace($con);
+$clases = getClass($con);
+$trasfondos = getBackground($con);
 
 require_once "../includes/header.php";
 ?>
@@ -44,19 +45,34 @@ require_once "../includes/header.php";
                 <tr>
                     <td>
                         <select class="ocupaTodo" name="raza" id="raza">
-                            <option value="RAZA">RAZA</option>
+                            <?php
+                            foreach ($razas as $raza) {
+                                  $selected = ($personaje && $personaje->raza == $raza->race_id) ? "selected" : "";
+                                echo "<option value='" . $raza->race_id . "' $selected>" . $raza->race_name . "</option>";
+                            }
+                            ?>
                         </select>
                     </td>
                     <td>
                         <select class="ocupaTodo" name="clase" id="clase">
-                            <option value="CLASE">CLASE</option>
+                            <?php
+                            foreach ($clases as $clase) {
+                                $selected = ($personaje && $personaje->clase == $clase->class_id) ? "selected" : "";
+                                echo "<option value='" . $clase->class_id . "' $selected>" . $clase->class_name . "</option>";
+                            }
+                            ?>
                         </select>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <select class="ocupaTodo" name="trasfondo" id="trasfondo">
-                            <option value="TRASFONDO">TRASFONDO</option>
+                            <?php
+                            foreach ($trasfondos as $trasfondo) {
+                                $selected = ($personaje && $personaje->trasfondo == $trasfondo->background_id) ? "selected" : "";
+                                echo "<option value='" . $trasfondo->background_id . "' $selected>" . $trasfondo->background_name . "</option>";
+                            }
+                            ?>
                         </select>
                     </td>
                 </tr>

@@ -18,10 +18,7 @@ function getBackground(PDO $con, $id = null)
         $stmt = $con->prepare("CALL getBackground(:id)");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
-        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($resultados as $fila) {
-            print_r($fila);
-        }
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
@@ -35,7 +32,7 @@ function getCharacter(PDO $con, $id = null, $nick = null)
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->bindParam(":nick", $nick, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
@@ -48,7 +45,7 @@ function getClass(PDO $con, $id = null)
         $stmt = $con->prepare("CALL getClass(:id)");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
@@ -62,7 +59,7 @@ function getGroup(PDO $con, $id = null, $nick = null)
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
@@ -76,7 +73,7 @@ function getGroupMembers(PDO $con, $id = null, $nick = null)
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
@@ -89,7 +86,7 @@ function getPass(PDO $con, $nick = null)
         $stmt = $con->prepare("CALL getPass(:nick)");
         $stmt->bindParam(":nick", $nick, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
@@ -102,7 +99,7 @@ function getRace(PDO $con, $id = null)
         $stmt = $con->prepare("CALL getrace(:id)");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
@@ -115,7 +112,7 @@ function getUser(PDO $con, $nick)
         $stmt = $con->prepare("CALL getUser(:nick)");
         $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }

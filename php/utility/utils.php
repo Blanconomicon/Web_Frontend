@@ -1,5 +1,10 @@
 <?php
+
+require_once __DIR__."/conexion.php";
+require_once __DIR__."/config.php";
 session_start();
+
+$con=conexion(RUTA,DBNAME,USER,PASSWORD);
 
 //--------------------------------------------
 //FUNCIONES DE LOGIN
@@ -32,6 +37,8 @@ function loginOK($user, $password)
 function register($user, $email, $nombre, $password, $password2)
 {
     //TODO comprobar que el usuario no exista y que las passwords coinciden
+    global $con;
+    // getUser($con,$nombre);
     $usuarioCorrecto = true;
     if ($usuarioCorrecto) {
         //Si el usuario es correcto redirigir al index y registrarlo
@@ -39,6 +46,8 @@ function register($user, $email, $nombre, $password, $password2)
         $_SESSION['user'] = $user;
         header("Location: ../../index.php");
         exit();
+    }else{
+
     }
 }
 //--------------------------------------------
