@@ -1,5 +1,6 @@
 <?php
 require_once "../utility/utils.php";
+require_once "../utility/conexion.php";
 
 comprobarLogin();
 if (!isset($_SESSION['personaje']) || isset($_POST["anterior"]) || !isset($_SESSION['personaje']->datosClase)) {
@@ -24,7 +25,7 @@ require_once "../includes/header.php";
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
         <form action="" method="post">
-            <h2><?php echo $personaje->clase; ?></h2>
+            <h2><?php echo $personaje->nombre; ?></h2>
             <table>
                 <tr>
                     <td>

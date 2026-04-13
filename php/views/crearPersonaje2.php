@@ -1,5 +1,6 @@
 <?php
 require_once "../utility/utils.php";
+require_once "../utility/conexion.php";
 
 comprobarLogin();
 if (!isset($_SESSION['personaje']) || isset($_POST["anterior"])) {
@@ -16,7 +17,7 @@ if (isset($_POST['siguiente'])) {
     exit();
 }
 
-
+$raza=getRace($con,$personaje->raza);
 
 
 //TODO cargar el select
@@ -26,12 +27,15 @@ require_once "../includes/header.php";
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
         <form action="" method="post">
-            <h2><?php echo $personaje->raza; ?></h2>
+            <h2><?php echo $raza[0]->race_name;?></h2>
             <select name="subraza" id="subraza">
                 <option value="SUBRAZA">SUBRAZA</option>
             </select>
+            <select name="tamanio" id="tamanio">
+                <option value="tamanio">TAMAÑO EN SELECT SOLO SI SE PUEDE ELEGIR</option>
+            </select>
             <div>
-                CARACTERISTICAS DE LA RAZA Y SUBRAZA
+                CARACTERISTICAS DE LA RAZA Y SUBRAZA (VELOCIDAD INCLUIDA, 30 PIES SIEMPRE)
             </div>
             <div>
                 <input type="submit" name="anterior" value="Anterior">

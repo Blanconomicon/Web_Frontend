@@ -1,5 +1,6 @@
 <?php
 require_once "../utility/utils.php";
+require_once "../utility/conexion.php";
 
 comprobarLogin();
 if (!isset($_SESSION['personaje']) || isset($_POST["anterior"]) || !isset($_SESSION['personaje']->subraza)) {
@@ -17,7 +18,7 @@ if (isset($_POST['siguiente'])) {
 }
 
 
-
+$clase=getClass($con,$personaje->clase);
 
 //TODO cargar el select
 require_once "../includes/header.php";
@@ -26,7 +27,7 @@ require_once "../includes/header.php";
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
         <form action="" method="post">
-            <h2><?php echo $personaje->clase; ?></h2>
+            <h2><?php echo $clase[0]->class_name; ?></h2>
             <div>
                 CARACTERISTICAS DE LA CLASE
             </div>
