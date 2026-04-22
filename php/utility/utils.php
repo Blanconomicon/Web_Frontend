@@ -31,7 +31,7 @@ function loginOK($user, $password)
 {
     global $con;
     $passCorrecta = getPass($con, $user);
-    if (count($passCorrecta)==0) {
+    if (count($passCorrecta) == 0) {
         return false;
     }
     return password_verify($password, $passCorrecta[0]->pass_hash);
