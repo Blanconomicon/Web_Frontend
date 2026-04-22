@@ -8,7 +8,7 @@ if (isset($_POST['login'])) {
         //comprobar loginOK
         if (loginOK($_POST['user'], $_POST['password'])) {
             //Guardar el user_nick
-            $_SESSION['user'] = $_POST['user'];
+            $_SESSION['user'] = getUser($con,$_POST['user']);
             // redirigir a index.php
             header("Location: ../../index.php");
             exit();

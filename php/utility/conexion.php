@@ -84,7 +84,7 @@ function getPass(PDO $con, $nick = null)
 {
     try {
         $stmt = $con->prepare("CALL getPass(:nick)");
-        $stmt->bindParam(":nick", $nick, PDO::PARAM_INT);
+        $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {

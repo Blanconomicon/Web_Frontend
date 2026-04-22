@@ -29,8 +29,12 @@ function logout()
 //fucnion para comprobar el login
 function loginOK($user, $password)
 {
-    //TODO validar cuando este la DB conectada
-    return true;
+    global $con;
+    $passCorrecta = getPass($con, $user);
+    if (count($passCorrecta)==0) {
+        return false;
+    }
+    return password_verify($password, $passCorrecta[0]->pass_hash);
 }
 
 //funcion para registrarse
@@ -49,8 +53,8 @@ function register($user, $email, $nombre, $password, $password2)
     }
     if ($usuarioCorrecto) {
         //Si el usuario es correcto redirigir al index y registrarlo
-        putUser($con,$user,$nombre,$email,password_hash($password, PASSWORD_ARGON2ID),'');
-        $usuario=getUser($con,$user);
+        putUser($con, $user, $nombre, $email, password_hash($password, PASSWORD_ARGON2ID), '');
+        $usuario = getUser($con, $user);
         $_SESSION['user'] = $usuario;
         header("Location: ../../index.php");
         exit();
