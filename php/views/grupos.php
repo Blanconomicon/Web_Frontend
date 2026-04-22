@@ -78,7 +78,7 @@ require_once "../includes/header.php";
 require_once "../includes/footer.php"
 ?>
 <script src="../../js/menuHamburguesa.js"></script>
-<script src="../../js/crearGrupo.js"></script>
+<script src="../../js/grupos.js"></script>
 </body>
 
 </html>
