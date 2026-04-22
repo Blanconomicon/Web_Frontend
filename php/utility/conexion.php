@@ -52,7 +52,7 @@ function getClass(PDO $con, $id = null)
 }
 
 //TODO poner el comentario
-function getGroup(PDO $con, $id = null, $nick = null)
+function getGroup(PDO $con, $nick, $id = null)
 {
     try {
         $stmt = $con->prepare("CALL getGroup(:id, :nick)");
@@ -66,7 +66,7 @@ function getGroup(PDO $con, $id = null, $nick = null)
 }
 
 //TODO poner el comentario
-function getGroupMembers(PDO $con, $id = null, $nick = null)
+function getGroupMembers(PDO $con, $id, $nick = null)
 {
     try {
         $stmt = $con->prepare("CALL getGroupMembers(:id, :nick)");

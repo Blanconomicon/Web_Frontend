@@ -67,8 +67,8 @@ function register($user, $email, $nombre, $password, $password2)
 //funcion para obtener los grupos de un usuario concreto y devuelve un array con estos
 function obtenerGrupos($user)
 {
-    //TODO obtener los grupos a los que pertenece un usuario concreto
-    $arrGrupos = [];
+    global $con;
+    $arrGrupos = getGroup($con,$user);
     return $arrGrupos;
 }
 
@@ -76,7 +76,8 @@ function obtenerGrupos($user)
 function obtenerJugadores($idGrupo)
 {
     //TODO obtener los jugadores de un grupo concreto (nombre y rol)
-    $arrJugadores = [];
+    global $con;
+    $arrJugadores = getGroupMembers($con,$idGrupo,$_SESSION['user'][0]->user_nick);
     return $arrJugadores;
 }
 

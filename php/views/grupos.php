@@ -7,7 +7,7 @@ if (isset($_POST['submit'])) {
     crearGrupo($_POST['nombreGrupo']);
 }
 
-$grupos = obtenerGrupos($_SESSION['user']);
+$grupos = obtenerGrupos($_SESSION['user'][0]->user_nick);
 
 require_once "../includes/header.php";
 
@@ -16,6 +16,7 @@ require_once "../includes/header.php";
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
         <?php
+        // var_dump(getGroup($con,$_SESSION['user'][0]->user_nick));
         foreach ($grupos as $grupo) {
             echo "<p><a href='grupos.php?idGrupo=" . $grupo->group_id . "'>" . $grupo->group_name . "</a></p>";
             if (isset($_GET['idGrupo']) && $_GET['idGrupo'] == $grupo->group_id) {
@@ -35,13 +36,14 @@ require_once "../includes/header.php";
                     }
                     ?>
                 </table>
+                <button id="btnAniadir" class="centrado">Añadir gente</button>
         <?php
-                echo "<p><a href='grupos.php?idGrupo=" . $grupo->group_id . "&aniadirGente'>Añadir gente</a></p>";
+                // echo "<p><a href='grupos.php?idGrupo=" . $grupo->group_id . "&aniadirGente'>Añadir gente</a></p>";
             }
         }
         ?>
         <button id="btnNuevoGrupo" class="centrado">Nuevo grupo</button>
-        <dialog id="dialog">
+        <dialog id="dialogCrear">
             <div>
                 <form method="post">
                     <p>Nombre del grupo:</p>
@@ -50,6 +52,22 @@ require_once "../includes/header.php";
                     <div>
                         <input type="submit" name="submit" value="Crear">
                         <button id="btnCancelar" type="reset">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </dialog>
+        <dialog id="dialogAniadir">
+            <div>
+                <form method="post">
+                    <p>Persona a invitar:</p>
+                    <select name="selectPersonas" id="selectPersonas">
+                        <!-- TODO CARGAR CON LAS PERSONAS QUE NO ESTAN EN EL GRUPO -->
+                        <option value="persona">CARGAR CON LAS PERSONAS QUE NO ESTAN EN EL GRUPO</option>
+                    </select>
+                    <br>
+                    <div>
+                        <input type="submit" name="submit" value="Añadir">
+                        <button id="btnCancelarAnaidir" type="reset">Cancelar</button>
                     </div>
                 </form>
             </div>
