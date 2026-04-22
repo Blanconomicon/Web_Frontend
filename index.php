@@ -12,8 +12,8 @@ require_once "./php/includes/header.php";
   Bienvenido a Blanconomicon, una web para crear tus personajes de Dragones y Mazmorras
    5.5e en castellano, diseñada para acompañarte desde la primera idea hasta la ficha final
     de tu aventurero. Blanconomicon no solo te permite crear personajes de nivel 1, sino también
-     almacenarlos de forma organizada para que puedas revisarlos y reutilizarlos en cualquier momento
-     , manteniendo siempre a mano el desarrollo completo de tus héroes a lo largo del tiempo.
+     almacenarlos de forma organizada para que puedas revisarlos y reutilizarlos en cualquier momento, 
+     manteniendo siempre a mano el desarrollo completo de tus héroes a lo largo del tiempo.
 </p>
 
 <p>
