@@ -71,6 +71,14 @@ if (isset($_GET['logout'])) {
                             echo "<div class='menu--item activo'>Personajes</div>";
                             echo "<div class='menu--item'><a href='./grupos.php'>Grupos</a></div>";
                             break;
+                        case "crearPersonaje.php":
+                        case "crearPersonaje2.php":
+                        case "crearPersonaje3.php":
+                        case "crearPersonaje4.php":
+                            echo "<div class='menu--item'><a href='../../index.php'>Index</a></div>";
+                            echo "<div class='menu--item'><a href='./personajes.php'>Personajes</a></div>";
+                            echo "<div class='menu--item'><a href='./grupos.php'>Grupos</a></div>";
+                            break;
                     }
                     ?>
                 </div>
