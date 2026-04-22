@@ -89,7 +89,7 @@ if (isset($_GET['logout'])) {
         <div class="derecha-header">
             <?php
             if (isset($_SESSION['user'])) {
-                echo "<span>Usuario: <b>" . $_SESSION['user'] . "</b></span>";
+                echo "<span>Usuario: <b>" . $_SESSION['user'][0]->user_nick . "</b></span>";
                 if (basename($_SERVER['PHP_SELF']) == "index.php") {
                     echo "<span><a href='index.php?logout'>Logout</a></span>";
                 } else {

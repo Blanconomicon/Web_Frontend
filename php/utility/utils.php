@@ -1,10 +1,10 @@
 <?php
 
-require_once __DIR__."/conexion.php";
-require_once __DIR__."/config.php";
+require_once __DIR__ . "/conexion.php";
+require_once __DIR__ . "/config.php";
 session_start();
 
-$con=conexion(RUTA,DBNAME,USER,PASSWORD);
+$con = conexion(RUTA, DBNAME, USER, PASSWORD);
 
 //--------------------------------------------
 //FUNCIONES DE LOGIN
@@ -36,18 +36,24 @@ function loginOK($user, $password)
 //funcion para registrarse
 function register($user, $email, $nombre, $password, $password2)
 {
-    //TODO comprobar que el usuario no exista y que las passwords coinciden
     global $con;
-    // getUser($con,$nombre);
     $usuarioCorrecto = true;
+    if ($password != $password2) {
+        $usuarioCorrecto = false;
+        return 'Las contraseñas deben coincidir';
+    }
+    $usuario = getUser($con, $user);
+    if ($usuarioCorrecto && count($usuario) != 0) {
+        $usuarioCorrecto = false;
+        return 'El usuario ya existe ';
+    }
     if ($usuarioCorrecto) {
         //Si el usuario es correcto redirigir al index y registrarlo
-        //TODO registrar al usuario
-        $_SESSION['user'] = $user;
+        putUser($con,$user,$nombre,$email,password_hash($password, PASSWORD_ARGON2ID),'');
+        $usuario=getUser($con,$user);
+        $_SESSION['user'] = $usuario;
         header("Location: ../../index.php");
         exit();
-    }else{
-
     }
 }
 //--------------------------------------------
@@ -82,7 +88,8 @@ function crearGrupo($nombre)
 //--------------------------------------------
 
 //funcion para obtener todos los personajes de un usuario
-function obtenerPersonajes($user){
+function obtenerPersonajes($user)
+{
     //TODO obtener los personajes de un jugador
     $arrPersonajes = [];
     return $arrPersonajes;

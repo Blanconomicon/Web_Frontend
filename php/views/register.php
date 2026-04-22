@@ -6,9 +6,9 @@ if (isset($_POST['register'])) {
         trim($_POST['user']) != "" && trim($_POST['email']) != "" && trim($_POST['nombre']) != "" &&
         trim($_POST['password']) != "" && trim($_POST['password2']) != ""
     ) {
-        register($_POST['user'], $_POST['email'], $_POST['nombre'], $_POST['password'], $_POST['password2']);
+        $error=register($_POST['user'], $_POST['email'], $_POST['nombre'], $_POST['password'], $_POST['password2']);
     }else{
-        $error = "<p style='color: red'>Todos los campos deben tener texto para poder registrarse</p>";
+        $error = "Todos los campos deben tener texto para poder registrarse";
     }
 }
 
@@ -19,7 +19,7 @@ require_once "../includes/header.php";
         <!-- Informacion de la Pagina -->
         <section class="contenedor">
             <?php
-                echo $error
+                echo "<p style='color: red'>".$error."</p>";
             ?>
             <form method="post">
                 <table>
