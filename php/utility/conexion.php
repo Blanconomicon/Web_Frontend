@@ -96,8 +96,19 @@ function getPass(PDO $con, $nick = null)
 function getRace(PDO $con, $id = null)
 {
     try {
-        $stmt = $con->prepare("CALL getrace(:id)");
+        $stmt = $con->prepare("CALL getRace(:id)");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+function getSize(PDO $con,$sizeId=null){
+    try {
+        $stmt = $con->prepare("CALL getSize(:id)");
+        $stmt->bindParam(":id", $sizeId, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
