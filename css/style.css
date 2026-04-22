@@ -518,7 +518,6 @@ footer>p {
   }
 
   .menu--etiqueta {
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
