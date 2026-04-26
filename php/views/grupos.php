@@ -28,6 +28,7 @@ require_once "../includes/header.php";
                         <th>ROL</th>
                     </tr>
                     <?php
+                    var_dump($jugadores);
                     foreach ($jugadores as $jugador) {
                         echo "<tr>";
                         echo "<td>" . $jugador->user_nick . "</td>";

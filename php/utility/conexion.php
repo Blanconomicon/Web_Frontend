@@ -51,7 +51,7 @@ function getClass(PDO $con, $id = null)
     }
 }
 
-//TODO poner el comentario
+//funcion para obtener los grupos de un usuario
 function getGroup(PDO $con, $nick, $id = null)
 {
     try {
