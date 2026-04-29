@@ -2,13 +2,12 @@
 require_once "../utility/utils.php";
 
 $error = "";
-
 if (isset($_POST['login'])) {
     if (trim($_POST['user']) != "" && trim($_POST['password']) != "") {
         //comprobar loginOK
         if (loginOK($_POST['user'], $_POST['password'])) {
             //Guardar el user_nick
-            $_SESSION['user'] = getUser($con,$_POST['user']);
+            $_SESSION['user'] = getUser(getCon(),$_POST['user']);
             // redirigir a index.php
             header("Location: ../../index.php");
             exit();
@@ -28,7 +27,7 @@ require_once "../includes/header.php";
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
         <?php
-        echo $error
+        echo $error;
         ?>
         <form method="post">
             <table>

@@ -130,15 +130,14 @@ function getUser(PDO $con, $nick)
 }
 
 //TODO poner el comentario
-function putUser(PDO $con, $nick, $username, $mail, $hash, $salt)
+function putUser(PDO $con, $nick, $username, $mail, $hash)
 {
     try {
-        $stmt = $con->prepare("CALL putUser(:nick, :username, :mail, :hash, :salt)");
+        $stmt = $con->prepare("CALL putUser(:nick, :username, :mail, :hash)");
         $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
         $stmt->bindParam(":username", $username, PDO::PARAM_STR);
         $stmt->bindParam(":mail", $mail, PDO::PARAM_STR);
         $stmt->bindParam(":hash", $hash, PDO::PARAM_STR);
-        $stmt->bindParam(":salt", $salt, PDO::PARAM_STR);
         return $stmt->execute();
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();

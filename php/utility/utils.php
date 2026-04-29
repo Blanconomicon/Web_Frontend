@@ -6,6 +6,11 @@ session_start();
 
 $con = conexion(RUTA, DBNAME, USER, PASSWORD);
 
+function getCon(){
+    global $con;
+    return $con;
+}
+
 //--------------------------------------------
 //FUNCIONES DE LOGIN
 //--------------------------------------------
@@ -53,7 +58,7 @@ function register($user, $email, $nombre, $password, $password2)
     }
     if ($usuarioCorrecto) {
         //Si el usuario es correcto redirigir al index y registrarlo
-        putUser($con, $user, $nombre, $email, password_hash($password, PASSWORD_ARGON2ID), '');
+        putUser($con, $user, $nombre, $email, password_hash($password, PASSWORD_ARGON2ID));
         $usuario = getUser($con, $user);
         $_SESSION['user'] = $usuario;
         header("Location: ../../index.php");
