@@ -11,11 +11,10 @@ LISTA DE CONTENIDOS
 05. Superior a tarjetas
 06. Tarjetas
 07. Footer
-08. Cookie
-09. Media Tablets
-10. Media Escritorio 
-11. Media Print  
-12. Character Sheet  
+08. Media Tablets
+09. Media Escritorio 
+10. Media Print  
+11. Character Sheet  
 */
 
 /*    TODO Cambiar Fuente    */
@@ -153,6 +152,20 @@ input[type="submit"] {
   text-align: center;
 }
 
+.mostrarTextosIndex {
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+.mostrarTextosIndex div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1em;
+}
+
+
 /******************************/
 /*    03.Tablas               */
 /******************************/
@@ -163,7 +176,7 @@ input[type="submit"] {
   row-gap: 3em;
 }
 
-.compraPuntos table{
+.compraPuntos table {
   width: 100%;
 }
 
@@ -300,6 +313,7 @@ th {
     font-size: 1.2em;
     text-decoration: none;
   }
+  
 }
 
 /******************************/
@@ -380,49 +394,7 @@ footer>p {
 }
 
 /******************************/
-/*           08.Cookie        */
-/******************************/
-.aviso-cookies {
-  position: fixed;
-  bottom: 50%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--granate);
-  color: var(--hueso);
-  padding: 1.5em;
-  border-radius: 0.5em;
-  display: none;
-  box-shadow: 0 0.4em 1em rgba(0, 0, 0, 0.3);
-  max-width: 90%;
-  z-index: 1000;
-  font-size: 1em;
-}
-
-.aviso-cookies p {
-  text-align: center;
-}
-
-.aviso-cookies button {
-  margin: 0.5em;
-  padding: 0.5em 1em;
-  border: none;
-  border-radius: 0.3em;
-  cursor: pointer;
-  font-size: 1em;
-}
-
-#aceptar-btn {
-  background-color: var(--apoyo);
-  color: var(--hueso);
-}
-
-#rechazar-btn {
-  background-color: var(--negro);
-  color: var(--hueso);
-}
-
-/******************************/
-/*    09.Media Tablets        */
+/*    08.Media Tablets        */
 /******************************/
 @media (min-width: 750px) {
   main {
@@ -436,6 +408,11 @@ footer>p {
 
   h1 {
     font-size: 2em;
+  }
+
+  .mostrarTextosIndex div {
+    display: flex;
+    flex-direction: row;
   }
 
   .menu {
@@ -486,7 +463,7 @@ footer>p {
 }
 
 /******************************/
-/*    10.Media Escritorio     */
+/*    09.Media Escritorio     */
 /******************************/
 @media (min-width: 1000px) {
 
@@ -615,7 +592,7 @@ footer>p {
 }
 
 /******************************/
-/*        11.Media Print      */
+/*        10.Media Print      */
 /******************************/
 @media print {
 
@@ -623,16 +600,15 @@ footer>p {
   nav,
   footer,
   .menu,
-  .aviso-cookies,
   button,
   input[type="submit"],
   input[type="button"] {
-    display: none !important;
+    display: none;
   }
 
   body {
-    background: white !important;
-    color: black !important;
+    background: white;
+    color: black;
     font-size: 12pt;
     line-height: 1.5;
     margin: 1cm;
@@ -647,7 +623,7 @@ footer>p {
 
   section,
   .contenedor {
-    background: none !important;
+    background: none;
     border: none;
     box-shadow: none;
     color: black;
@@ -657,7 +633,7 @@ footer>p {
   h1,
   h2,
   h3 {
-    color: black !important;
+    color: black;
     text-align: center;
   }
 
@@ -745,7 +721,7 @@ footer>p {
 }
 
 /******************************/
-/*     12.Character Sheet     */
+/*     11.Character Sheet     */
 /******************************/
 .dnd {
   --bg: #2b2b2b;
