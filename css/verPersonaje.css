@@ -1,0 +1,152 @@
+/******************************/
+/*     11.Character Sheet     */
+/******************************/
+body {
+    --bg: #2b2b2b;
+    --paper: #f4ecd8;
+    --ink: #2a1a0a;
+    --border: #5a3e1b;
+    --accent: #7a5528;
+
+    background: var(--bg);
+    font-family: "Garamond", serif;
+    color: var(--ink);
+    padding: 1em 0;
+}
+
+.dnd__sheet {
+    max-width: 80%;
+    min-height: 80vh;
+    margin: auto;
+    padding: 1em;
+    background: var(--paper);
+    border: .8em solid var(--border);
+    border-radius: 1.3em;
+    box-shadow: 0 0 2em rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+/* HEADER */
+.dnd__header {
+    border-bottom: 0.2em solid var(--border);
+    padding-bottom: 1em;
+}
+
+.dnd__title {
+    font-family: "Cinzel", serif;
+    font-size: 1.6em;
+    text-transform: uppercase;
+}
+
+.dnd__text {
+    font-size: 1.2em;
+}
+
+.dnd__muted {
+    color: var(--accent);
+}
+
+/* STATS */
+.dnd__stats {
+    display: flex;
+    gap: 1em;
+}
+
+.dnd__stat-box {
+    flex: 1;
+    text-align: center;
+    border: 0.2em solid var(--border);
+    border-radius: 0.7em;
+    padding: 1em;
+    background: #fff8dc;
+    font-weight: bold;
+}
+
+/* COLUMNAS */
+.dnd__columns {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 1em;
+}
+
+/* ATRIBUTOS */
+.dnd__attributes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em;
+}
+
+.dnd__attribute {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border: 0.2em solid var(--border);
+    border-radius: 1em;
+    background: #fff8dc;
+    padding: 0.5em;
+    text-align: center;
+}
+
+.dnd__attr-name {
+    font-size: 1em;
+    text-transform: uppercase;
+}
+
+.dnd__attr-mod {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.dnd__attr-score {
+    font-size: 1em;
+    color: var(--accent);
+}
+
+/* SKILLS */
+.dnd__skills {
+    border: 0.2em solid var(--border);
+    border-radius: 0.8em;
+    background: rgba(255, 248, 220, 0.6);
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    overflow-y: auto;
+}
+
+.dnd__skill {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 0.1em solid var(--border);
+    font-size: 0.8em;
+}
+
+.dnd__skill-mod {
+    font-weight: bold;
+}
+
+/* BLOQUES */
+.dnd__bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.9em;
+}
+
+.dnd__block {
+    border: 0.2em solid var(--border);
+    border-radius: 1em;
+    background: rgba(255, 248, 220, 0.6);
+    padding: 0.6em;
+}
+
+.dnd__block-title {
+    font-family: "Cinzel", serif;
+    border-bottom: 0.1em solid var(--border);
+}
+
+.dnd__block-content {
+    min-height: 10vh;
+}
