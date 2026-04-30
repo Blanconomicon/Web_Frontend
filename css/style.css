@@ -313,7 +313,10 @@ th {
     font-size: 1.2em;
     text-decoration: none;
   }
-  
+
+  .menu--logo{
+    width: 20vw;
+  }
 }
 
 /******************************/
