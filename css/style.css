@@ -163,6 +163,10 @@ input[type="submit"] {
   row-gap: 3em;
 }
 
+.compraPuntos table{
+  width: 100%;
+}
+
 table {
   width: 90%;
   margin: auto;
@@ -471,7 +475,7 @@ footer>p {
   }
 
   table {
-    max-width: 80%;
+    width: 80%;
   }
 
   input,
