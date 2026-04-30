@@ -40,6 +40,10 @@ comprobarLogin();
       <!-- STATS PRINCIPALES -->
       <div class="dnd__stats">
         <div class="dnd__stat-box">CA <br> 14</div>
+        <div class="dnd__stat-box">Iniciativa <br> +x</div>
+        <!--Inspiraciones
+        REVISAR TABLA CHARACTER-->
+        <div class="dnd__stat-box">MaxPG xx <br> PG actuales xxx</div>
         <div class="dnd__stat-box">Velocidad <br> 30</div>
         <div class="dnd__stat-box">Bonif. competencia <br> +2</div>
       </div>
