@@ -119,10 +119,6 @@ select {
   margin: auto;
 }
 
-textarea {
-  height: 10em;
-}
-
 button,
 input[type="submit"] {
   border-radius: 7em;
@@ -145,7 +141,7 @@ input[type="submit"] {
 .modal {
   position: fixed;
   left: 25%;
-  top:20%;
+  top: 20%;
   background: #fff;
   padding: 20px;
   border: 1px solid #000;
@@ -160,6 +156,13 @@ input[type="submit"] {
 /******************************/
 /*    03.Tablas               */
 /******************************/
+.compraPuntos {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  column-gap: 1em;
+  row-gap: 3em;
+}
+
 table {
   width: 90%;
   margin: auto;
@@ -462,13 +465,17 @@ footer>p {
     padding: 1em;
   }
 
+  .compraPuntos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   table {
-    width: 80%;
+    max-width: 80%;
   }
 
   input,
   select,
-  textarea,
   button {
     font-size: 1em;
   }
@@ -592,6 +599,11 @@ footer>p {
     align-items: center;
   }
 
+  .compraPuntos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
   table {
     width: 70%;
     font-size: 1em;
@@ -650,11 +662,6 @@ footer>p {
     text-decoration: none;
   }
 
-  a::after {
-    content: " (" attr(href) ")";
-    font-size: 0.9em;
-  }
-
   table {
     width: 100%;
     border-collapse: collapse;
@@ -681,8 +688,7 @@ footer>p {
   }
 
   input,
-  select,
-  textarea {
+  select {
     border: 1px solid #000;
     color: black;
     background: white !important;
@@ -757,7 +763,7 @@ footer>p {
   background: var(--paper);
   border: 8px solid var(--border);
   border-radius: 12px;
-  box-shadow: 0 0 25px rgba(0,0,0,0.6);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
   gap: 20px;

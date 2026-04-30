@@ -17,9 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
         dialogCrear.close();
     })
 
-    btnAniadir.addEventListener("click", () => {
-        dialigAniadir.showModal();
-    })
+    if (btnAniadir) {
+        btnAniadir.addEventListener("click", () => {
+            dialigAniadir.showModal();
+        })
+    }
 
     btnCancelarAniadir.addEventListener("click", () => {
         dialigAniadir.close();

@@ -3,7 +3,7 @@ require_once "../utility/utils.php";
 
 comprobarLogin();
 
-if (isset($_POST['submit'])) {
+if (isset($_POST['crearGrupo'])) {
     crearGrupo($_POST['nombreGrupo']);
 }
 
@@ -51,7 +51,7 @@ require_once "../includes/header.php";
                     <input type="text" name="nombreGrupo" required>
                     <br><br>
                     <div>
-                        <input type="submit" name="submit" value="Crear">
+                        <input type="submit" name="crearGrupo" value="Crear">
                         <button id="btnCancelar" type="reset">Cancelar</button>
                     </div>
                 </form>
@@ -67,7 +67,7 @@ require_once "../includes/header.php";
                     </select>
                     <br>
                     <div>
-                        <input type="submit" name="submit" value="Añadir">
+                        <input type="submit" name="aniadirAGrupo" value="Añadir">
                         <button id="btnCancelarAnaidir" type="reset">Cancelar</button>
                     </div>
                 </form>

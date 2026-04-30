@@ -9,9 +9,9 @@ let selectFuerza = document.getElementById("selectFuerza");
 let txtFuerzaTotal = document.getElementById("txtFuerzaTotal");
 let txtFuerzaModificador = document.getElementById("txtFuerzaModificador")
 
-let selectDesteza = document.getElementById("selectDesteza");
-let txtDestezaTotal = document.getElementById("txtDestezaTotal");
-let txtDestezaModificador = document.getElementById("txtDestezaModificador")
+let selectDesteza = document.getElementById("selectDestreza");
+let txtDestezaTotal = document.getElementById("txtDestrezaTotal");
+let txtDestezaModificador = document.getElementById("txtDestrezaModificador")
 
 let selectConstitucion = document.getElementById("selectConstitucion");
 let txtConstitucionTotal = document.getElementById("txtConstitucionTotal");

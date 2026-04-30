@@ -26,9 +26,9 @@ if (isset($_SESSION['personaje'])) {
 }
 
 
-$razas = getRace($con);
-$clases = getClass($con);
-$trasfondos = getBackground($con);
+$razas = getRace(getCon());
+$clases = getClass(getCon());
+$trasfondos = getBackground(getCon());
 
 require_once "../includes/header.php";
 ?>
@@ -47,7 +47,7 @@ require_once "../includes/header.php";
                         <select class="ocupaTodo" name="raza" id="raza">
                             <?php
                             foreach ($razas as $raza) {
-                                  $selected = ($personaje && $personaje->raza == $raza->race_id) ? "selected" : "";
+                                $selected = ($personaje && $personaje->raza == $raza->race_id) ? "selected" : "";
                                 echo "<option value='" . $raza->race_id . "' $selected>" . $raza->race_name . "</option>";
                             }
                             ?>
@@ -80,151 +80,140 @@ require_once "../includes/header.php";
                     <td colspan="2" id="tdCompraPuntos">
                         <h3 class="centrado">Compra de puntos</h3>
                         <p class="centrado"><b id="txtRestantes">27/27</b></p>
-                        <table>
-                            <tr>
-                                <th>Fuerza</th>
-                                <th>Desteza</th>
-                                <th>Constitución</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select name="selectFuerza" id="selectFuerza">
-                                        <?php
-                                        for ($i = 8; $i <= 15; $i++) {
-                                            $selected = ($personaje && $personaje->fuerza == $i) ? "selected" : "";
-                                            echo "<option value='$i' $selected>$i</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                    <br>
-                                    <table>
-                                        <tr>
-                                            <th>Total</th>
-                                            <td id="txtFuerzaTotal">8</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Modificador</th>
-                                            <td id="txtFuerzaModificador">-1</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td>
-                                    <select name="selectDesteza" id="selectDesteza">
-                                        <?php
-                                        for ($i = 8; $i <= 15; $i++) {
-                                            $selected = ($personaje && $personaje->destreza == $i) ? "selected" : "";
-                                            echo "<option value='$i' $selected>$i</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                    <br>
-                                    <table>
-                                        <tr>
-                                            <th>Total</th>
-                                            <td id="txtDestezaTotal">8</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Modificador</th>
-                                            <td id="txtDestezaModificador">-1</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td>
-                                    <select name="selectConstitucion" id="selectConstitucion">
-                                        <?php
-                                        for ($i = 8; $i <= 15; $i++) {
-                                            $selected = ($personaje && $personaje->constitucion == $i) ? "selected" : "";
-                                            echo "<option value='$i' $selected>$i</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                    <br>
-                                    <table>
-                                        <tr>
-                                            <th>Total</th>
-                                            <td id="txtConstitucionTotal">8</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Modificador</th>
-                                            <td id="txtConstitucionModificador">-1</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-                        <br>
-                        <table>
-                            <tr>
-                                <th>Inteligencia</th>
-                                <th>Sabiduría</th>
-                                <th>Carisma</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select name="selectInteligencia" id="selectInteligencia">
-                                        <?php
-                                        for ($i = 8; $i <= 15; $i++) {
-                                            $selected = ($personaje && $personaje->inteligencia == $i) ? "selected" : "";
-                                            echo "<option value='$i' $selected>$i</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                    <br>
-                                    <table>
-                                        <tr>
-                                            <th>Total</th>
-                                            <td id="txtInteligenciaTotal">8</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Modificador</th>
-                                            <td id="txtInteligenciaModificador">-1</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td>
-                                    <select name="selectSabiduria" id="selectSabiduria">
-                                        <?php
-                                        for ($i = 8; $i <= 15; $i++) {
-                                            $selected = ($personaje && $personaje->sabiduria == $i) ? "selected" : "";
-                                            echo "<option value='$i' $selected>$i</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                    <br>
-                                    <table>
-                                        <tr>
-                                            <th>Total</th>
-                                            <td id="txtSabiduriaTotal">8</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Modificador</th>
-                                            <td id="txtSabiduriaModificador">-1</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td>
-                                    <select name="selectCarisma" id="selectCarisma">
-                                        <?php
-                                        for ($i = 8; $i <= 15; $i++) {
-                                            $selected = ($personaje && $personaje->carisma == $i) ? "selected" : "";
-                                            echo "<option value='$i' $selected>$i</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                    <br>
-                                    <table>
-                                        <tr>
-                                            <th>Total</th>
-                                            <td id="txtCarismaTotal">8</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Modificador</th>
-                                            <td id="txtCarismaModificador">-1</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
+                        <div class="compraPuntos">
+                            <div>
+                                <h3 class="centrado">Fuerza</h3>
+                                <select name="selectFuerza" id="selectFuerza">
+                                    <?php
+                                    for ($i = 8; $i <= 15; $i++) {
+                                        $selected = ($personaje && $personaje->fuerza == $i) ? "selected" : "";
+                                        echo "<option value='$i' $selected>$i</option>";
+                                    }
+                                    ?>
+                                </select>
+                                <br>
+                                <table>
+                                    <tr>
+                                        <th>Total</th>
+                                        <td id="txtFuerzaTotal">8</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Modificador</th>
+                                        <td id="txtFuerzaModificador">-1</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div>
+                                <h3 class="centrado">Destreza</h3>
+                                <select name="selectDestreza" id="selectDestreza">
+                                    <?php
+                                    for ($i = 8; $i <= 15; $i++) {
+                                        $selected = ($personaje && $personaje->destreza == $i) ? "selected" : "";
+                                        echo "<option value='$i' $selected>$i</option>";
+                                    }
+                                    ?>
+                                </select>
+                                <br>
+                                <table>
+                                    <tr>
+                                        <th>Total</th>
+                                        <td id="txtDestrezaTotal">8</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Modificador</th>
+                                        <td id="txtDestrezaModificador">-1</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div>
+                                <h3 class="centrado">Constitucion</h3>
+                                <select name="selectConstitucion" id="selectConstitucion">
+                                    <?php
+                                    for ($i = 8; $i <= 15; $i++) {
+                                        $selected = ($personaje && $personaje->constitucion == $i) ? "selected" : "";
+                                        echo "<option value='$i' $selected>$i</option>";
+                                    }
+                                    ?>
+                                </select>
+                                <br>
+                                <table>
+                                    <tr>
+                                        <th>Total</th>
+                                        <td id="txtConstitucionTotal">8</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Modificador</th>
+                                        <td id="txtConstitucionModificador">-1</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div>
+                                <h3 class="centrado">Inteligencia</h3>
+                                <select name="selectInteligencia" id="selectInteligencia">
+                                    <?php
+                                    for ($i = 8; $i <= 15; $i++) {
+                                        $selected = ($personaje && $personaje->inteligencia == $i) ? "selected" : "";
+                                        echo "<option value='$i' $selected>$i</option>";
+                                    }
+                                    ?>
+                                </select>
+                                <br>
+                                <table>
+                                    <tr>
+                                        <th>Total</th>
+                                        <td id="txtInteligenciaTotal">8</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Modificador</th>
+                                        <td id="txtInteligenciaModificador">-1</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div>
+                                <h3 class="centrado">Sabiduria</h3>
+                                <select name="selectSabiduria" id="selectSabiduria">
+                                    <?php
+                                    for ($i = 8; $i <= 15; $i++) {
+                                        $selected = ($personaje && $personaje->sabiduria == $i) ? "selected" : "";
+                                        echo "<option value='$i' $selected>$i</option>";
+                                    }
+                                    ?>
+                                </select>
+                                <br>
+                                <table>
+                                    <tr>
+                                        <th>Total</th>
+                                        <td id="txtSabiduriaTotal">8</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Modificador</th>
+                                        <td id="txtSabiduriaModificador">-1</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div>
+                                <h3 class="centrado">Carisma</h3>
+                                <select name="selectCarisma" id="selectCarisma">
+                                    <?php
+                                    for ($i = 8; $i <= 15; $i++) {
+                                        $selected = ($personaje && $personaje->carisma == $i) ? "selected" : "";
+                                        echo "<option value='$i' $selected>$i</option>";
+                                    }
+                                    ?>
+                                </select>
+                                <br>
+                                <table>
+                                    <tr>
+                                        <th>Total</th>
+                                        <td id="txtCarismaTotal">8</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Modificador</th>
+                                        <td id="txtCarismaModificador">-1</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 <tr>

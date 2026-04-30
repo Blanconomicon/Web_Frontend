@@ -79,7 +79,7 @@ function getGroupMembers(PDO $con, $id, $nick = null)
     }
 }
 
-//TODO poner el comentario
+//funcion para obtener la contrasenia de un usuario por su nick
 function getPass(PDO $con, $nick = null)
 {
     try {
@@ -92,7 +92,7 @@ function getPass(PDO $con, $nick = null)
     }
 }
 
-//Funcion para obtener una lista de las razas/especies o la informacion de una raza/especie completo
+//funcion para obtener una lista de las razas/especies o la informacion de una raza/especie completo
 function getRace(PDO $con, $id = null)
 {
     try {
@@ -105,6 +105,7 @@ function getRace(PDO $con, $id = null)
     }
 }
 
+//funcion para obtener el tamanio por su id
 function getSize(PDO $con,$sizeId=null){
     try {
         $stmt = $con->prepare("CALL getSize(:id)");
@@ -116,7 +117,7 @@ function getSize(PDO $con,$sizeId=null){
     }
 }
 
-//TODO poner el comentario
+//funcion para obtener un usuario por su nick
 function getUser(PDO $con, $nick)
 {
     try {
@@ -129,7 +130,7 @@ function getUser(PDO $con, $nick)
     }
 }
 
-//TODO poner el comentario
+//funcion para introducir un nuevo usuario en la db
 function putUser(PDO $con, $nick, $username, $mail, $hash)
 {
     try {
