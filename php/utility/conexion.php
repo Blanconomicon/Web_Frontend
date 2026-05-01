@@ -65,13 +65,24 @@ function getGroup(PDO $con, $nick, $id = null)
     }
 }
 
+//funcion para aniadir un nuevo grupo
+function putGroup(PDO $con,$nombreGrupo,$nick){
+        try {
+        $stmt = $con->prepare("CALL putGroup(:nombreGrupo, :nick)");
+        $stmt->bindParam(":nombreGrupo", $nombreGrupo, PDO::PARAM_STR);
+        $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
 //TODO poner el comentario
-function getGroupMembers(PDO $con, $id, $nick = null)
+function getGroupMembers(PDO $con, $id)
 {
     try {
-        $stmt = $con->prepare("CALL getGroupMembers(:id, :nick)");
+        $stmt = $con->prepare("CALL getGroupMembers(:id)");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-        $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
@@ -98,6 +109,19 @@ function getRace(PDO $con, $id = null)
     try {
         $stmt = $con->prepare("CALL getRace(:id)");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//TODO arreglar cuando este en la db
+function getSubrace(PDO $con, $raceId,$subraceId=null){
+    try {
+        $stmt = $con->prepare("CALL getSubrace(:raceId, :subraceId)");
+        $stmt->bindParam(":raceId", $raceId, PDO::PARAM_INT);
+        $stmt->bindParam(":subraceId", $subraceId, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {

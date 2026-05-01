@@ -7,6 +7,7 @@ if (isset($_POST['crearGrupo'])) {
     crearGrupo($_POST['nombreGrupo']);
 }
 
+// $grupos = obtenerGrupos("admin");
 $grupos = obtenerGrupos($_SESSION['user'][0]->user_nick);
 
 require_once "../includes/header.php";
@@ -16,7 +17,7 @@ require_once "../includes/header.php";
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
         <?php
-        // var_dump(getGroup($con,$_SESSION['user'][0]->user_nick));
+        // var_dump(obtenerGrupos($_SESSION['user'][0]->user_nick));
         foreach ($grupos as $grupo) {
             echo "<p><a href='grupos.php?idGrupo=" . $grupo->group_id . "'>" . $grupo->group_name . "</a></p>";
             if (isset($_GET['idGrupo']) && $_GET['idGrupo'] == $grupo->group_id) {
@@ -32,7 +33,7 @@ require_once "../includes/header.php";
                     foreach ($jugadores as $jugador) {
                         echo "<tr>";
                         echo "<td>" . $jugador->user_nick . "</td>";
-                        echo "<td>" . $jugador->rol_name . "</td>";
+                        echo "<td>" . $jugador->rol_id . "</td>";
                         echo "</tr>";
                     }
                     ?>

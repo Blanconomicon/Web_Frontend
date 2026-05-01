@@ -82,7 +82,7 @@ function obtenerJugadores($idGrupo)
 {
     //TODO obtener los jugadores de un grupo concreto (nombre y rol)
     global $con;
-    $arrJugadores = getGroupMembers($con,$idGrupo,$_SESSION['user'][0]->user_nick);
+    $arrJugadores = getGroupMembers($con,$idGrupo);
     return $arrJugadores;
 }
 
@@ -90,6 +90,8 @@ function obtenerJugadores($idGrupo)
 function crearGrupo($nombre)
 {
     //TODO crear el grupo
+    global $con;
+    putGroup($con,$nombre,$_SESSION['user'][0]->user_nick);
 
 }
 
