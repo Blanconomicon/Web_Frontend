@@ -10,7 +10,6 @@ if (!isset($_SESSION['personaje']) || isset($_POST["anterior"])) {
 $personaje = $_SESSION["personaje"];
 
 if (isset($_POST['siguiente'])) {
-    //TODO arreglar con las caracteristicas de la raza
     $personaje->subraza = $_POST["subraza"];
     $_SESSION['personaje'] = $personaje;
     header("Location: ./crearPersonaje3.php");
@@ -20,39 +19,38 @@ if (isset($_POST['siguiente'])) {
 $raza = getRace(getCon(), $personaje->raza);
 $tamanios = getSize(getCon(), $raza[0]->size_id);
 $subrazas = getSubrace(getCon(), $personaje->raza);
-$traitsRaza=getTraitRace(getCon(),$personaje->raza);
+$traitsRaza = getTraitRace(getCon(), $personaje->raza);
 
-
-//TODO cargar bien los select
 require_once "../includes/header.php";
 ?>
 <main>
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
         <?php
-        // var_dump($subrazas);
+        // var_dump($traitsRaza);
         ?>
         <form action="" method="post">
             <h2><?php echo $raza[0]->race_name ?></h2>
             <?php
-                if(count($subrazas)>0){
+            if (count($subrazas) > 0) {
             ?>
-            <select name="subraza" id="subraza">
-                <?php
-                foreach ($subrazas as $subraza) {
-                    echo "<option value='$subraza->subrace_id'>$subraza->subrace_name</option>";
-                }
-                ?>
-                <!-- <option value="SUBRAZA">SUBRAZA</option> -->
-            </select>
+                <select name="subraza" id="subraza">
+                    <?php
+                    foreach ($subrazas as $subraza) {
+                        echo "<option value='$subraza->subrace_id'>$subraza->subrace_name</option>";
+                    }
+                    ?>
+                </select>
             <?php
-                }
+            }else{
+                echo "<input type='hidden' name='subraza' value='Sin subraza'>";
+            }
             ?>
             <select name="tamanio" id="tamanio">
                 <!-- <option value="tamanio">TAMAÑO EN SELECT SOLO SI SE PUEDE ELEGIR</option> -->
                 <?php
-                echo "<option value='".$tamanios[0]->size_id."'>".$tamanios[0]->size_name."</option>";
-                if($tamanios[0]->size_id==3 && $raza[0]->race_name!="Enano") {
+                echo "<option value='" . $tamanios[0]->size_id . "'>" . $tamanios[0]->size_name . "</option>";
+                if ($tamanios[0]->size_id == 3 && $raza[0]->race_name != "Enano") {
                     echo "<option value='2'>Pequeño</option>";
                 }
                 ?>
@@ -64,10 +62,9 @@ require_once "../includes/header.php";
                     foreach ($raza[0] as $nombreCaracteristica => $caracteristica) {
                         echo "<li><b>$nombreCaracteristica:</b>$caracteristica</li>";
                     }
-                    foreach ($traitsRaza as $traitRaza) {
-                        echo "<li><b>".$traitRaza->trait_name.":</b>".$traitRaza->trait_desc."</li>";
-                    }
                     ?>
+                </ul>
+                <ul id="traitsSubraza">
                 </ul>
             </div>
             <div>
@@ -81,6 +78,11 @@ require_once "../includes/header.php";
 require_once "../includes/footer.php"
 ?>
 <script src="../../js/menuHamburguesa.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        cargarDesdeSelect("subraza", "traitsSubraza", "<?php echo "../utility/obtenerTraits.php";  ?>", "subraza");
+    });
+</script>
 </body>
 
 </html>

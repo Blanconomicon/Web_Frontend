@@ -32,6 +32,7 @@ if (isset($_GET['logout'])) {
 </head>
 
 <body>
+    <script src="../../js/utils.js"></script>
     <header>
         <h1>Blanconomicon</h1>
         <?php
