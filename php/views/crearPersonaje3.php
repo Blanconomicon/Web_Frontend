@@ -8,17 +8,17 @@ if (!isset($_SESSION['personaje']) || isset($_POST["anterior"]) || !isset($_SESS
     exit();
 }
 $personaje = $_SESSION["personaje"];
+$clase=getClass(getCon(),$personaje->clase);
 
 if (isset($_POST['siguiente'])) {
     //TODO arreglar con las caracteristicas de la clase
     $personaje->datosClase = $_POST["datosClase"];
+    $personaje->pg=intval(substr($clase[0]->class_hpdice,1))+(($personaje->constitucion-10)/2);
     $_SESSION['personaje'] = $personaje;
     header("Location: ./crearPersonaje4.php");
     exit();
 }
 
-
-$clase=getClass(getCon(),$personaje->clase);
 $traitsClase=getTraitClass(getCon(),$personaje->clase,1);
 
 require_once "../includes/header.php";

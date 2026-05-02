@@ -43,7 +43,7 @@ require_once "../includes/header.php";
                 </select>
             <?php
             }else{
-                echo "<input type='hidden' name='subraza' value='Sin subraza'>";
+                echo "<input type='hidden' name='subraza' value=-1>";
             }
             ?>
             <select name="tamanio" id="tamanio">

@@ -12,7 +12,13 @@ $personaje = $_SESSION["personaje"];
 if (isset($_POST['finalizar'])) {
     $personaje->equipoClase = $_POST["equipoClase"];
     $personaje->equipoTrasfondo = $_POST["equipoTrasfondo"];
-    //TODO crear el personaje
+    putCharacter(getCon(),$_SESSION['user'][0]->user_nick,$personaje->nombre,
+    $personaje->raza, $personaje->clase, $personaje->trasfondo,$personaje->fuerza,
+    $personaje->destreza,$personaje->constitucion,$personaje->inteligencia,$personaje->sabiduria,
+    $personaje->carisma,$personaje->pg,$personaje->subraza);
+    $personaje=null;
+    header("Location: ./personajes.php");
+    exit();
 }
 
 
