@@ -16,7 +16,7 @@ if (isset($_POST['finalizar'])) {
     $personaje->raza, $personaje->clase, $personaje->trasfondo,$personaje->fuerza,
     $personaje->destreza,$personaje->constitucion,$personaje->inteligencia,$personaje->sabiduria,
     $personaje->carisma,$personaje->pg,$personaje->subraza);
-    $personaje=null;
+    $_SESSION["personaje"]=null;
     header("Location: ./personajes.php");
     exit();
 }

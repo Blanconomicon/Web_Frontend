@@ -2,12 +2,26 @@
 require_once "../utility/utils.php";
 
 comprobarLogin();
+if (!isset($_GET['idPersonaje'])) {
+  header("Location: ./personajes.php");
+  exit();
+}
 
-// require_once "../includes/header.php";
-?>
+$personaje = getCharacter(getCon(), $_SESSION['user'][0]->user_nick, $_GET['idPersonaje'])[0];
+$clase = getClass(getCon(), $personaje->class_id)[0]->class_name;
+$raza = getRace(getCon(), $personaje->race_id)[0]->race_name;
+if($personaje->subrace_id!=-1){
+$subraza = getSubrace(getCon(), $personaje->race_id,$personaje->subrace_id)[0]->subrace_name;
+  
+}
+$trasfondo=getBackground(getCon(),$personaje->background_id)[0]->background_name;
+$modFuerza=(int)(($personaje->strength-10)/2);
+$modDestreza=(int)(($personaje->dexterity-10)/2);
+$modConstitucion=(int)(($personaje->constitution-10)/2);
+$modInteligencia=(int)(($personaje->intelligence-10)/2);
+$modSabiduria=(int)(($personaje->wisdom-10)/2);
+$modCarisma=(int)(($personaje->charisma-10)/2);
 
-<?php
-// require_once "../includes/footer.php"
 ?><html lang="es">
 
 <head>
@@ -28,24 +42,37 @@ comprobarLogin();
 <body>
   <main>
     <section class="dnd__sheet">
-
       <!-- CABECERA -->
       <div class="dnd__header">
-        <div class="dnd__title">Nombre del personaje</div>
-        <div class="dnd__text">Clase <span class="dnd__muted">- Subclase</span></div>
-        <div class="dnd__text">Raza</div>
-        <div class="dnd__text">Trasfondo</div>
+        <div class="dnd__title"><?php echo $personaje->character_name ?></div>
+        <div class="dnd__text">
+          <?php
+          echo $clase;
+          if ($personaje->subclass_id) {
+            echo "<span class='dnd__muted'>- Subclase</span>";
+          }
+          ?>
+        </div>
+        <div class="dnd__text">
+          <?php
+          echo $raza;
+          if($personaje->subrace_id!=-1){
+            echo "<span class='dnd__muted'>- ".$subraza."</span>";
+          }
+          ?>
+        </div>
+        <div class="dnd__text"><?php echo $trasfondo ?></div>
       </div>
 
       <!-- STATS PRINCIPALES -->
       <div class="dnd__stats">
-        <div class="dnd__stat-box">CA <br> 14</div>
-        <div class="dnd__stat-box">Iniciativa <br> +x</div>
+        <div class="dnd__stat-box">CA <br> <?php echo $personaje->armor_class ?></div>
+        <div class="dnd__stat-box">Iniciativa <br> <?php echo $personaje->initiative ?></div>
         <!--Inspiraciones
         REVISAR TABLA CHARACTER-->
-        <div class="dnd__stat-box">MaxPG xx <br> PG actuales xxx</div>
-        <div class="dnd__stat-box">Velocidad <br> 30</div>
-        <div class="dnd__stat-box">Bonif. competencia <br> +2</div>
+        <div class="dnd__stat-box">MaxPG <?php echo $personaje->max_hp ?> <br> PG actuales <?php echo $personaje->current_hp ?></div>
+        <div class="dnd__stat-box">Velocidad <br> <?php echo $personaje->speed ?></div>
+        <div class="dnd__stat-box">Bonif. competencia <br> <?php echo $personaje->proficiency_bonus ?></div>
       </div>
 
       <!-- ATRIBUTOS + HABILIDADES -->
@@ -56,42 +83,43 @@ comprobarLogin();
 
           <div class="dnd__attribute">
             <div class="dnd__attr-name">Fuerza</div>
-            <div class="dnd__attr-mod">+2</div>
-            <div class="dnd__attr-score">14</div>
+            <div class="dnd__attr-mod"><?php echo $modFuerza ?></div>
+            <div class="dnd__attr-score"><?php echo $personaje->strength ?></div>
           </div>
 
           <div class="dnd__attribute">
             <div class="dnd__attr-name">Destreza</div>
-            <div class="dnd__attr-mod">+3</div>
-            <div class="dnd__attr-score">16</div>
+            <div class="dnd__attr-mod"><?php echo $modDestreza ?></div>
+            <div class="dnd__attr-score"><?php echo $personaje->dexterity ?></div>
           </div>
 
           <div class="dnd__attribute">
             <div class="dnd__attr-name">Constitución</div>
-            <div class="dnd__attr-mod">+1</div>
-            <div class="dnd__attr-score">12</div>
+            <div class="dnd__attr-mod"><?php echo $modConstitucion ?></div>
+            <div class="dnd__attr-score"><?php echo $personaje->constitution ?></div>
           </div>
 
           <div class="dnd__attribute">
             <div class="dnd__attr-name">Inteligencia</div>
-            <div class="dnd__attr-mod">+0</div>
-            <div class="dnd__attr-score">10</div>
+            <div class="dnd__attr-mod"><?php echo $modInteligencia ?></div>
+            <div class="dnd__attr-score"><?php echo $personaje->intelligence ?></div>
           </div>
 
           <div class="dnd__attribute">
             <div class="dnd__attr-name">Sabiduría</div>
-            <div class="dnd__attr-mod">+1</div>
-            <div class="dnd__attr-score">12</div>
+            <div class="dnd__attr-mod"><?php echo $modSabiduria ?></div>
+            <div class="dnd__attr-score"><?php echo $personaje->wisdom ?></div>
           </div>
 
           <div class="dnd__attribute">
             <div class="dnd__attr-name">Carisma</div>
-            <div class="dnd__attr-mod">+4</div>
-            <div class="dnd__attr-score">18</div>
+            <div class="dnd__attr-mod"><?php echo $modCarisma ?></div>
+            <div class="dnd__attr-score"><?php echo $personaje->charisma ?></div>
           </div>
 
         </div>
 
+        <!-- TODO hacer que vayan con las caracteristicas -->
         <!-- HABILIDADES -->
         <div class="dnd__skills">
 
@@ -118,6 +146,7 @@ comprobarLogin();
       </div>
 
       <!-- BLOQUES INFERIORES -->
+      <!-- TODO meter los datos del personaje -->
       <div class="dnd__bottom">
 
         <div class="dnd__block">

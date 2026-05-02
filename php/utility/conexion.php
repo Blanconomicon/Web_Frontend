@@ -25,7 +25,7 @@ function getBackground(PDO $con, $id = null)
 }
 
 //TODO poner el comentario bien
-function getCharacter(PDO $con, $id = null, $nick = null)
+function getCharacter(PDO $con, $nick, $id = null)
 {
     try {
         $stmt = $con->prepare("CALL getCharacter(:id, :nick)");
@@ -38,7 +38,7 @@ function getCharacter(PDO $con, $id = null, $nick = null)
     }
 }
 
-//TODO poner el comentario
+// funcion para crar un personaje
 function putCharacter(
     PDO $con,
     $nick,

@@ -103,6 +103,6 @@ function crearGrupo($nombre)
 function obtenerPersonajes($user)
 {
     //TODO obtener los personajes de un jugador
-    $arrPersonajes = [];
+    $arrPersonajes = getCharacter(getCon(),$user);
     return $arrPersonajes;
 }
