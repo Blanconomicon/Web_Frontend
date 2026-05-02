@@ -18,9 +18,9 @@ if (isset($_POST['siguiente'])) {
 }
 
 
-$clase=getClass($con,$personaje->clase);
+$clase=getClass(getCon(),$personaje->clase);
+$traitsClase=getTraitClass(getCon(),$personaje->clase,1);
 
-//TODO cargar el select
 require_once "../includes/header.php";
 ?>
 <main>
@@ -29,7 +29,13 @@ require_once "../includes/header.php";
         <form action="" method="post">
             <h2><?php echo $clase[0]->class_name; ?></h2>
             <div>
-                CARACTERISTICAS DE LA CLASE
+                <ul>
+                    <?php
+                    foreach ($traitsClase as $trait) {
+                        echo "<li><b>".$trait->trait_name.": </b>".$trait->trait_desc."</li>";
+                    }
+                    ?>
+                </ul>
             </div>
             <!-- TODO cambiar esto por la informacion de la clase -->
             <input type="hidden" name="datosClase" value="datosClase">

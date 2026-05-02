@@ -33,7 +33,7 @@ require_once "../includes/header.php";
                     foreach ($jugadores as $jugador) {
                         echo "<tr>";
                         echo "<td>" . $jugador->user_nick . "</td>";
-                        echo "<td>" . $jugador->rol_id . "</td>";
+                        echo "<td>" . $jugador->rol_name . "</td>";
                         echo "</tr>";
                     }
                     ?>

@@ -51,6 +51,20 @@ function getClass(PDO $con, $id = null)
     }
 }
 
+function getTraitClass(PDO $con, $idClase, $nivelClase = null, $idSubclase = null)
+{
+    try {
+        $stmt = $con->prepare("CALL getTraitClass(:idClase, :idSubclase, :nivelClase)");
+        $stmt->bindParam("idClase", $idClase, PDO::PARAM_INT);
+        $stmt->bindParam("nivelClase", $nivelClase, PDO::PARAM_INT);
+        $stmt->bindParam("idSubclase", $idSubclase, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
 //funcion para obtener los grupos de un usuario
 function getGroup(PDO $con, $nick, $id = null)
 {
@@ -66,8 +80,9 @@ function getGroup(PDO $con, $nick, $id = null)
 }
 
 //funcion para aniadir un nuevo grupo
-function putGroup(PDO $con,$nombreGrupo,$nick){
-        try {
+function putGroup(PDO $con, $nombreGrupo, $nick)
+{
+    try {
         $stmt = $con->prepare("CALL putGroup(:nombreGrupo, :nick)");
         $stmt->bindParam(":nombreGrupo", $nombreGrupo, PDO::PARAM_STR);
         $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
@@ -77,7 +92,21 @@ function putGroup(PDO $con,$nombreGrupo,$nick){
     }
 }
 
-//TODO poner el comentario
+//TODO arreglar cuando se arregle la consulta en la db
+function putGroupMember(PDO $con, $grupoId, $nick, $rolId)
+{
+    try {
+        $stmt = $con->prepare("CALL putGroupMembers(:grupoId, :nick, :rolId)");
+        $stmt->bindParam(":nombreGrupo", $nombreGrupo, PDO::PARAM_STR);
+        $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+
+//funcion para obtener los miembros de un grupo y su rol
 function getGroupMembers(PDO $con, $id)
 {
     try {
@@ -116,8 +145,9 @@ function getRace(PDO $con, $id = null)
     }
 }
 
-//TODO arreglar cuando este en la db
-function getSubrace(PDO $con, $raceId,$subraceId=null){
+//funcion para obtener las subrazas de una raza concreta
+function getSubrace(PDO $con, $raceId, $subraceId = null)
+{
     try {
         $stmt = $con->prepare("CALL getSubrace(:raceId, :subraceId)");
         $stmt->bindParam(":raceId", $raceId, PDO::PARAM_INT);
@@ -129,8 +159,22 @@ function getSubrace(PDO $con, $raceId,$subraceId=null){
     }
 }
 
+function getTraitRace(PDO $con, $idRaza, $idSubraza = null)
+{
+    try {
+        $stmt = $con->prepare("CALL getTraitRace(:idRaza, :idSubraza)");
+        $stmt->bindParam("idRaza", $idRaza, PDO::PARAM_INT);
+        $stmt->bindParam("idSubraza", $idSubraza, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
 //funcion para obtener el tamanio por su id
-function getSize(PDO $con,$sizeId=null){
+function getSize(PDO $con, $sizeId = null)
+{
     try {
         $stmt = $con->prepare("CALL getSize(:id)");
         $stmt->bindParam(":id", $sizeId, PDO::PARAM_INT);

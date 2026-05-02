@@ -11,7 +11,7 @@ if (isset($_POST['siguiente'])) {
     $personaje->clase = $_POST["clase"];
     $personaje->trasfondo = $_POST["trasfondo"];
     $personaje->fuerza = $_POST["selectFuerza"];
-    $personaje->destreza = $_POST["selectDesteza"];
+    $personaje->destreza = $_POST["selectDestreza"];
     $personaje->constitucion = $_POST["selectConstitucion"];
     $personaje->inteligencia = $_POST["selectInteligencia"];
     $personaje->sabiduria = $_POST["selectSabiduria"];
