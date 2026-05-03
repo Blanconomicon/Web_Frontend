@@ -24,7 +24,7 @@ function getBackground(PDO $con, $id = null)
     }
 }
 
-//TODO poner el comentario bien
+//funcion para obtener la informacion de un personaje
 function getCharacter(PDO $con, $nick, $id = null)
 {
     try {
@@ -79,6 +79,18 @@ function putCharacter(
     }
 }
 
+function deleteCharacter(PDO $con,$idPersonaje,$nick){
+    try {
+        $stmt = $con->prepare("CALL deleteCharacter(:idPersonaje,:nick)");
+        $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
+        $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
 //Funcion para obtener una lista de las clases o la informacion de una clase completo
 function getClass(PDO $con, $id = null)
 {
@@ -92,6 +104,7 @@ function getClass(PDO $con, $id = null)
     }
 }
 
+//funcion para obtener los traits de una clase concreta
 function getTraitClass(PDO $con, $idClase, $nivelClase = null, $idSubclase = null)
 {
     try {
@@ -139,6 +152,7 @@ function putGroup(PDO $con, $nombreGrupo, $nick)
     }
 }
 
+//funcion para obtener los usuarios que no esten en un grupo
 function getNoGroupUser(PDO $con, $idGrupo)
 {
     try {
@@ -151,7 +165,7 @@ function getNoGroupUser(PDO $con, $idGrupo)
     }
 }
 
-//TODO arreglar cuando se arregle la consulta en la db
+//funcion para aniadir un miembro a un grupo
 function putGroupMember(PDO $con, $grupoId, $nick, $rolId="J")
 {
     try {
@@ -219,6 +233,7 @@ function getSubrace(PDO $con, $raceId, $subraceId = null)
     }
 }
 
+//funcion para obtener los traits de una raza y subraza
 function getTraitRace(PDO $con, $idRaza, $idSubraza = null)
 {
     try {
