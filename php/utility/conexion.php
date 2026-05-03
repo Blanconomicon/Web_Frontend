@@ -79,7 +79,9 @@ function putCharacter(
     }
 }
 
-function deleteCharacter(PDO $con,$idPersonaje,$nick){
+//funcion para borrar un personaje por su id
+function deleteCharacter(PDO $con, $idPersonaje, $nick)
+{
     try {
         $stmt = $con->prepare("CALL deleteCharacter(:idPersonaje,:nick)");
         $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
@@ -119,6 +121,20 @@ function getTraitClass(PDO $con, $idClase, $nivelClase = null, $idSubclase = nul
     }
 }
 
+//funcion para obtener las competencias de una clase
+function getProfClass(PDO $con, $idClase, $nivelClase = null)
+{
+    try {
+        $stmt = $con->prepare("CALL getProfClass(:idClase, :nivelClase)");
+        $stmt->bindParam("idClase", $idClase, PDO::PARAM_INT);
+        $stmt->bindParam("nivelClase", $nivelClase, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
 //funcion para obtener los grupos de un usuario
 function getGroup(PDO $con, $nick, $id = null)
 {
@@ -146,7 +162,6 @@ function putGroup(PDO $con, $nombreGrupo, $nick)
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $resultado['id'];
-
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
@@ -166,7 +181,7 @@ function getNoGroupUser(PDO $con, $idGrupo)
 }
 
 //funcion para aniadir un miembro a un grupo
-function putGroupMember(PDO $con, $grupoId, $nick, $rolId="J")
+function putGroupMember(PDO $con, $grupoId, $nick, $rolId = "J")
 {
     try {
         $stmt = $con->prepare("CALL putGroupMembers(:grupoId, :nick, :rolId)");
@@ -240,6 +255,19 @@ function getTraitRace(PDO $con, $idRaza, $idSubraza = null)
         $stmt = $con->prepare("CALL getTraitRace(:idRaza, :idSubraza)");
         $stmt->bindParam("idRaza", $idRaza, PDO::PARAM_INT);
         $stmt->bindParam("idSubraza", $idSubraza, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener las competencias de las razas
+function getProfRace(PDO $con, $idRaza = null)
+{
+    try {
+        $stmt = $con->prepare("CALL getProfRace(:idRaza)");
+        $stmt->bindParam("idRaza", $idRaza, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {

@@ -8,7 +8,7 @@ if(isset($_GET['idPersonajeBorrar'])){
 }
 
 $personajes = obtenerPersonajes($_SESSION['user'][0]->user_nick);
-
+$_SESSION["personaje"]=null;
 
 require_once "../includes/header.php";
 ?>

@@ -11,7 +11,6 @@ $personaje = $_SESSION["personaje"];
 $clase=getClass(getCon(),$personaje->clase);
 
 if (isset($_POST['siguiente'])) {
-    //TODO arreglar con las caracteristicas de la clase
     $personaje->datosClase = $_POST["datosClase"];
     $personaje->pg=intval(substr($clase[0]->class_hpdice,1))+(($personaje->constitucion-10)/2);
     $_SESSION['personaje'] = $personaje;
@@ -20,6 +19,7 @@ if (isset($_POST['siguiente'])) {
 }
 
 $traitsClase=getTraitClass(getCon(),$personaje->clase,1);
+$competenciasClase=getProfClass(getCon(),$personaje->clase,1);
 
 require_once "../includes/header.php";
 ?>
@@ -33,6 +33,9 @@ require_once "../includes/header.php";
                     <?php
                     foreach ($traitsClase as $trait) {
                         echo "<li><b>".$trait->trait_name.": </b>".$trait->trait_desc."</li>";
+                    }
+                    foreach ($competenciasClase as $competencia) {
+                        echo "<li><b>".$competencia->prof_type.": </b>".$competencia->prof_name."</li>";
                     }
                     ?>
                 </ul>

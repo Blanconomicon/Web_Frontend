@@ -19,16 +19,12 @@ if (isset($_POST['siguiente'])) {
 $raza = getRace(getCon(), $personaje->raza);
 $tamanios = getSize(getCon(), $raza[0]->size_id);
 $subrazas = getSubrace(getCon(), $personaje->raza);
-$traitsRaza = getTraitRace(getCon(), $personaje->raza);
 
 require_once "../includes/header.php";
 ?>
 <main>
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
-        <?php
-        // var_dump($traitsRaza);
-        ?>
         <form action="" method="post">
             <h2><?php echo $raza[0]->race_name ?></h2>
             <?php
@@ -42,7 +38,7 @@ require_once "../includes/header.php";
                     ?>
                 </select>
             <?php
-            }else{
+            } else {
                 echo "<input type='hidden' name='subraza' value=-1>";
             }
             ?>
@@ -58,7 +54,6 @@ require_once "../includes/header.php";
             <div>
                 <ul>
                     <?php
-                    //TODO hacer que aparezca bien
                     foreach ($raza[0] as $nombreCaracteristica => $caracteristica) {
                         echo "<li><b>$nombreCaracteristica:</b>$caracteristica</li>";
                     }
@@ -80,7 +75,7 @@ require_once "../includes/footer.php"
 <script src="../../js/menuHamburguesa.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        cargarDesdeSelect("subraza", "traitsSubraza", "<?php echo "../utility/obtenerTraits.php";  ?>", "subraza");
+        cargarDesdeSelect("subraza", "traitsSubraza", "<?php echo "../includes/obtenerTraits.php";  ?>", "subraza");
     });
 </script>
 </body>
