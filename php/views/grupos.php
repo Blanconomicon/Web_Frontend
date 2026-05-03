@@ -7,8 +7,13 @@ if (isset($_POST['crearGrupo'])) {
     crearGrupo($_POST['nombreGrupo']);
 }
 
+if (isset($_POST['aniadirAGrupo'])) {
+    putGroupMember(getCon(),$_GET['idGrupo'],$_POST['selectPersonas']);
+}
+
 // $grupos = obtenerGrupos("admin");
 $grupos = obtenerGrupos($_SESSION['user'][0]->user_nick);
+$posibles = [];
 
 require_once "../includes/header.php";
 
@@ -29,7 +34,8 @@ require_once "../includes/header.php";
                         <th>ROL</th>
                     </tr>
                     <?php
-                    var_dump($jugadores);
+                    // var_dump($jugadores);
+                    $posibles = getNoGroupUser(getCon(), $grupo->group_id);
                     foreach ($jugadores as $jugador) {
                         echo "<tr>";
                         echo "<td>" . $jugador->user_nick . "</td>";
@@ -63,8 +69,11 @@ require_once "../includes/header.php";
                 <form method="post">
                     <p>Persona a invitar:</p>
                     <select name="selectPersonas" id="selectPersonas">
-                        <!-- TODO CARGAR CON LAS PERSONAS QUE NO ESTAN EN EL GRUPO -->
-                        <option value="persona">CARGAR CON LAS PERSONAS QUE NO ESTAN EN EL GRUPO</option>
+                        <?php
+                        foreach ($posibles as $posible) {
+                            echo "<option value='$posible->user_nick'>$posible->user_nick</option>";
+                        }
+                        ?>
                     </select>
                     <br>
                     <div>

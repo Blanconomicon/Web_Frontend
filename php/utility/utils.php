@@ -87,12 +87,12 @@ function obtenerJugadores($idGrupo)
 }
 
 //funcion para crear un nuevo grupo
-function crearGrupo($nombre)
+function crearGrupo($nombreGrupo)
 {
     //TODO crear el grupo
     global $con;
-    putGroup($con,$nombre,$_SESSION['user'][0]->user_nick);
-
+    $id=putGroup($con,$nombreGrupo,$_SESSION['user'][0]->user_nick);
+    putGroupMember($con,$id,$_SESSION['user'][0]->user_nick,"M");
 }
 
 //--------------------------------------------

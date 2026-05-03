@@ -125,21 +125,40 @@ function putGroup(PDO $con, $nombreGrupo, $nick)
 {
     try {
         $stmt = $con->prepare("CALL putGroup(:nombreGrupo, :nick)");
-        $stmt->bindParam(":nombreGrupo", $nombreGrupo, PDO::PARAM_STR);
-        $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
-        return $stmt->execute();
+        $stmt->bindParam(":nombreGrupo", $nombreGrupo);
+        $stmt->bindParam(":nick", $nick);
+
+        $stmt->execute();
+
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $resultado['id'];
+
+    } catch (PDOException $e) {
+        echo $e->getMessage();
+    }
+}
+
+function getNoGroupUser(PDO $con, $idGrupo)
+{
+    try {
+        $stmt = $con->prepare("CALL getNoGroupUser(:idGrupo)");
+        $stmt->bindParam(":idGrupo", $idGrupo, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
 }
 
 //TODO arreglar cuando se arregle la consulta en la db
-function putGroupMember(PDO $con, $grupoId, $nick, $rolId)
+function putGroupMember(PDO $con, $grupoId, $nick, $rolId="J")
 {
     try {
         $stmt = $con->prepare("CALL putGroupMembers(:grupoId, :nick, :rolId)");
-        $stmt->bindParam(":nombreGrupo", $nombreGrupo, PDO::PARAM_STR);
+        $stmt->bindParam(":grupoId", $grupoId, PDO::PARAM_INT);
         $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
+        $stmt->bindParam(":rolId", $rolId, PDO::PARAM_STR);
         return $stmt->execute();
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
