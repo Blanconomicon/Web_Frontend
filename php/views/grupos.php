@@ -8,7 +8,7 @@ if (isset($_POST['crearGrupo'])) {
 }
 
 if (isset($_POST['aniadirAGrupo'])) {
-    putGroupMember(getCon(),$_GET['idGrupo'],$_POST['selectPersonas']);
+    putGroupMember(getCon(), $_GET['idGrupo'], $_POST['selectPersonas']);
 }
 
 // $grupos = obtenerGrupos("admin");
@@ -68,16 +68,26 @@ require_once "../includes/header.php";
             <div>
                 <form method="post">
                     <p>Persona a invitar:</p>
-                    <select name="selectPersonas" id="selectPersonas">
-                        <?php
-                        foreach ($posibles as $posible) {
-                            echo "<option value='$posible->user_nick'>$posible->user_nick</option>";
-                        }
-                        ?>
-                    </select>
+                    <?php
+                    $hay = true;
+                    if (count($posibles) > 0) {
+                    ?>
+                        <select name="selectPersonas" id="selectPersonas">
+                            <?php
+                            foreach ($posibles as $posible) {
+                                echo "<option value='$posible->user_nick'>$posible->user_nick</option>";
+                            }
+                            ?>
+                        </select>
+                    <?php
+                    } else {
+                        $hay = false;
+                        echo "<p>No hay personas que se puedan añadir</p>";
+                    }
+                    ?>
                     <br>
                     <div>
-                        <input type="submit" name="aniadirAGrupo" value="Añadir">
+                        <input type="submit" name="aniadirAGrupo" value="Añadir" <?php echo $hay ? '' : 'disabled' ?>>
                         <button id="btnCancelarAnaidir" type="reset">Cancelar</button>
                     </div>
                 </form>
