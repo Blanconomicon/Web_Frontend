@@ -122,7 +122,6 @@ body {
     display: flex;
     justify-content: space-between;
     border-bottom: 0.1em solid var(--border);
-    font-size: 0.8em;
 }
 
 .dnd__skill-mod {
