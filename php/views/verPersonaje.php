@@ -9,18 +9,19 @@ if (!isset($_GET['idPersonaje'])) {
 
 $personaje = getCharacter(getCon(), $_SESSION['user'][0]->user_nick, $_GET['idPersonaje'])[0];
 $clase = getClass(getCon(), $personaje->class_id)[0]->class_name;
+$dadoDeGolpe = getClass(getCon(), $personaje->class_id)[0]->class_hpdice;
 $raza = getRace(getCon(), $personaje->race_id)[0]->race_name;
 if($personaje->subrace_id!=-1){
 $subraza = getSubrace(getCon(), $personaje->race_id,$personaje->subrace_id)[0]->subrace_name;
   
 }
 $trasfondo=getBackground(getCon(),$personaje->background_id)[0]->background_name;
-$modFuerza=(int)(($personaje->strength-10)/2);
-$modDestreza=(int)(($personaje->dexterity-10)/2);
-$modConstitucion=(int)(($personaje->constitution-10)/2);
-$modInteligencia=(int)(($personaje->intelligence-10)/2);
-$modSabiduria=(int)(($personaje->wisdom-10)/2);
-$modCarisma=(int)(($personaje->charisma-10)/2);
+$modFuerza=obtenerModificador($personaje->strength);
+$modDestreza=obtenerModificador($personaje->dexterity);
+$modConstitucion=obtenerModificador($personaje->constitution);
+$modInteligencia=obtenerModificador($personaje->intelligence);
+$modSabiduria=obtenerModificador($personaje->wisdom);
+$modCarisma=obtenerModificador($personaje->charisma);
 
 ?><html lang="es">
 
@@ -49,7 +50,7 @@ $modCarisma=(int)(($personaje->charisma-10)/2);
           <?php
           echo $clase;
           if ($personaje->subclass_id) {
-            echo "<span class='dnd__muted'>- Subclase</span>";
+            echo "<span class='dnd__muted'> - Subclase</span>";
           }
           ?>
         </div>
@@ -57,7 +58,7 @@ $modCarisma=(int)(($personaje->charisma-10)/2);
           <?php
           echo $raza;
           if($personaje->subrace_id!=-1){
-            echo "<span class='dnd__muted'>- ".$subraza."</span>";
+            echo "<span class='dnd__muted'> - ".$subraza."</span>";
           }
           ?>
         </div>
@@ -70,7 +71,7 @@ $modCarisma=(int)(($personaje->charisma-10)/2);
         <div class="dnd__stat-box">Iniciativa <br> <?php echo $personaje->initiative ?></div>
         <!--Inspiraciones
         REVISAR TABLA CHARACTER-->
-        <div class="dnd__stat-box">MaxPG <?php echo $personaje->max_hp ?> <br> PG actuales <?php echo $personaje->current_hp ?></div>
+        <div class="dnd__stat-box">PG <?php echo $personaje->current_hp."/".$personaje->max_hp ?> <br> Dados de golpe <?php echo $personaje->character_level."".$dadoDeGolpe ?></div>
         <div class="dnd__stat-box">Velocidad <br> <?php echo $personaje->speed ?></div>
         <div class="dnd__stat-box">Bonif. competencia <br> <?php echo $personaje->proficiency_bonus ?></div>
       </div>
