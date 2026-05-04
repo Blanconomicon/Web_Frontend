@@ -152,6 +152,14 @@ input[type="submit"] {
   gap: 1em;
 }
 
+.grid-2{
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  column-gap: 1em;
+  row-gap: 1.5em;
+  width: 80%;
+  margin: 0 auto;
+}
 
 /******************************/
 /*    03.Tablas               */
@@ -516,6 +524,11 @@ footer>p {
   table {
     width: 70%;
     font-size: 1em;
+  }
+
+  .grid-2{
+    width: 50%;
+    grid-template-columns: repeat(2,1fr);
   }
 }
 

@@ -21,10 +21,6 @@ if (isset($_POST['finalizar'])) {
     exit();
 }
 
-
-
-
-//TODO cargar el select
 require_once "../includes/header.php";
 ?>
 <main>
