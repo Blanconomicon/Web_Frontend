@@ -61,8 +61,8 @@ require_once "../includes/header.php";
                     }
                     ?>
                 </ul>
-                <ul id="traitsSubraza">
-                </ul>
+                <div id="traitsSubraza">
+                </div>
             </div>
             <hr class="ocupaTodo">
             <div class="centrado">

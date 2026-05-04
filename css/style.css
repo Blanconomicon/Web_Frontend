@@ -168,7 +168,7 @@ input[type="submit"] {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   column-gap: 1em;
-  row-gap: 2em;
+  row-gap: 1em;
 }
 
 .gridResponsive table {
