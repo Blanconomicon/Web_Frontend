@@ -26,9 +26,10 @@ if (isset($_POST['finalizar'])) {
         $personaje->sabiduria,
         $personaje->carisma,
         $personaje->pg,
+        $personaje->ca,
+        $personaje->iniciativa,
         $personaje->subraza
     );
-    $_SESSION["personaje"] = null;
     header("Location: ./personajes.php");
     exit();
 }

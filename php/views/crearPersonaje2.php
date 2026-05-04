@@ -11,6 +11,8 @@ $personaje = $_SESSION["personaje"];
 
 if (isset($_POST['siguiente'])) {
     $personaje->subraza = $_POST["subraza"];
+    //TODO calcular la inciativa, se hace aqui por si se elige humano y la dote de alerta
+    $personaje->iniciativa=obtenerModificador($personaje->destreza);
     $_SESSION['personaje'] = $personaje;
     header("Location: ./crearPersonaje3.php");
     exit();

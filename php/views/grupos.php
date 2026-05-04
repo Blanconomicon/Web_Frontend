@@ -2,6 +2,7 @@
 require_once "../utility/utils.php";
 
 comprobarLogin();
+$_SESSION["personaje"] = null;
 
 if (isset($_POST['crearGrupo'])) {
     crearGrupo($_POST['nombreGrupo']);

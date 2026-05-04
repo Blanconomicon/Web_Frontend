@@ -12,7 +12,7 @@ function conexion(String $ruta, String $nombreDB, String $usuario, String $passw
 }
 
 //Funcion para obtener una lista de los backgrounds o la informacion de un background completo
-function getBackground(PDO $con, $id = null)
+function getBackground(PDO $con, int|null $id = null)
 {
     try {
         $stmt = $con->prepare("CALL getBackground(:id)");
@@ -25,7 +25,7 @@ function getBackground(PDO $con, $id = null)
 }
 
 //funcion para obtener la informacion de un personaje
-function getCharacter(PDO $con, $nick, $id = null)
+function getCharacter(PDO $con, string $nick, int|null $id = null)
 {
     try {
         $stmt = $con->prepare("CALL getCharacter(:id, :nick)");
@@ -39,21 +39,24 @@ function getCharacter(PDO $con, $nick, $id = null)
 }
 
 // funcion para crar un personaje
+//TODO aniadir la ca y la iniciativa a la db
 function putCharacter(
     PDO $con,
-    $nick,
-    $nombrePersonaje,
-    $idRaza,
-    $idClase,
-    $idTrasfondo,
-    $str,
-    $dex,
-    $constitucion,
-    $int,
-    $wis,
-    $cha,
-    $maxHP,
-    $idSubraza = null
+    string $nick,
+    string $nombrePersonaje,
+    int $idRaza,
+    int $idClase,
+    int $idTrasfondo,
+    int $str,
+    int $dex,
+    int $constitucion,
+    int $int,
+    int $wis,
+    int $cha,
+    int $maxHP,
+    int $ca,
+    int $iniciativa,
+    int|null $idSubraza = null
 ) {
     try {
         $stmt = $con->prepare("CALL putCharacter(:nick, :nombrePersonaje, 
@@ -80,7 +83,7 @@ function putCharacter(
 }
 
 //funcion para borrar un personaje por su id
-function deleteCharacter(PDO $con, $idPersonaje, $nick)
+function deleteCharacter(PDO $con, int $idPersonaje, string $nick)
 {
     try {
         $stmt = $con->prepare("CALL deleteCharacter(:idPersonaje,:nick)");
@@ -94,7 +97,7 @@ function deleteCharacter(PDO $con, $idPersonaje, $nick)
 }
 
 //Funcion para obtener una lista de las clases o la informacion de una clase completo
-function getClass(PDO $con, $id = null)
+function getClass(PDO $con, int|null $id = null)
 {
     try {
         $stmt = $con->prepare("CALL getClass(:id)");
@@ -107,7 +110,7 @@ function getClass(PDO $con, $id = null)
 }
 
 //funcion para obtener los traits de una clase concreta
-function getTraitClass(PDO $con, $idClase, $nivelClase = null, $idSubclase = null)
+function getTraitClass(PDO $con, int $idClase, int|null $nivelClase = null, int|null $idSubclase = null)
 {
     try {
         $stmt = $con->prepare("CALL getTraitClass(:idClase, :idSubclase, :nivelClase)");
@@ -122,7 +125,7 @@ function getTraitClass(PDO $con, $idClase, $nivelClase = null, $idSubclase = nul
 }
 
 //funcion para obtener las competencias de una clase
-function getProfClass(PDO $con, $idClase, $nivelClase = null)
+function getProfClass(PDO $con, int $idClase, int|null $nivelClase = null)
 {
     try {
         $stmt = $con->prepare("CALL getProfClass(:idClase, :nivelClase)");
@@ -136,7 +139,7 @@ function getProfClass(PDO $con, $idClase, $nivelClase = null)
 }
 
 //funcion para obtener los grupos de un usuario
-function getGroup(PDO $con, $nick, $id = null)
+function getGroup(PDO $con, string $nick, int|null $id = null)
 {
     try {
         $stmt = $con->prepare("CALL getGroup(:id, :nick)");
@@ -150,7 +153,7 @@ function getGroup(PDO $con, $nick, $id = null)
 }
 
 //funcion para aniadir un nuevo grupo
-function putGroup(PDO $con, $nombreGrupo, $nick)
+function putGroup(PDO $con, string $nombreGrupo, string $nick)
 {
     try {
         $stmt = $con->prepare("CALL putGroup(:nombreGrupo, :nick)");
@@ -168,7 +171,7 @@ function putGroup(PDO $con, $nombreGrupo, $nick)
 }
 
 //funcion para obtener los usuarios que no esten en un grupo
-function getNoGroupUser(PDO $con, $idGrupo)
+function getNoGroupUser(PDO $con, int $idGrupo)
 {
     try {
         $stmt = $con->prepare("CALL getNoGroupUser(:idGrupo)");
@@ -181,7 +184,7 @@ function getNoGroupUser(PDO $con, $idGrupo)
 }
 
 //funcion para aniadir un miembro a un grupo
-function putGroupMember(PDO $con, $grupoId, $nick, $rolId = "J")
+function putGroupMember(PDO $con, int $grupoId, string $nick, string $rolId = "J")
 {
     try {
         $stmt = $con->prepare("CALL putGroupMembers(:grupoId, :nick, :rolId)");
@@ -196,7 +199,7 @@ function putGroupMember(PDO $con, $grupoId, $nick, $rolId = "J")
 
 
 //funcion para obtener los miembros de un grupo y su rol
-function getGroupMembers(PDO $con, $id)
+function getGroupMembers(PDO $con, int $id)
 {
     try {
         $stmt = $con->prepare("CALL getGroupMembers(:id)");
@@ -209,7 +212,7 @@ function getGroupMembers(PDO $con, $id)
 }
 
 //funcion para obtener la contrasenia de un usuario por su nick
-function getPass(PDO $con, $nick = null)
+function getPass(PDO $con, string|null $nick = null)
 {
     try {
         $stmt = $con->prepare("CALL getPass(:nick)");
@@ -222,7 +225,7 @@ function getPass(PDO $con, $nick = null)
 }
 
 //funcion para obtener una lista de las razas/especies o la informacion de una raza/especie completo
-function getRace(PDO $con, $id = null)
+function getRace(PDO $con, int|null $id = null)
 {
     try {
         $stmt = $con->prepare("CALL getRace(:id)");
@@ -235,7 +238,7 @@ function getRace(PDO $con, $id = null)
 }
 
 //funcion para obtener las subrazas de una raza concreta
-function getSubrace(PDO $con, $raceId, $subraceId = null)
+function getSubrace(PDO $con, int $raceId, int|null $subraceId = null)
 {
     try {
         $stmt = $con->prepare("CALL getSubrace(:raceId, :subraceId)");
@@ -249,7 +252,7 @@ function getSubrace(PDO $con, $raceId, $subraceId = null)
 }
 
 //funcion para obtener los traits de una raza y subraza
-function getTraitRace(PDO $con, $idRaza, $idSubraza = null)
+function getTraitRace(PDO $con, int $idRaza, int|null $idSubraza = null)
 {
     try {
         $stmt = $con->prepare("CALL getTraitRace(:idRaza, :idSubraza)");
@@ -263,7 +266,7 @@ function getTraitRace(PDO $con, $idRaza, $idSubraza = null)
 }
 
 //funcion para obtener las competencias de las razas
-function getProfRace(PDO $con, $idRaza = null)
+function getProfRace(PDO $con, int|null $idRaza = null)
 {
     try {
         $stmt = $con->prepare("CALL getProfRace(:idRaza)");
@@ -276,7 +279,7 @@ function getProfRace(PDO $con, $idRaza = null)
 }
 
 //funcion para obtener el tamanio por su id
-function getSize(PDO $con, $sizeId = null)
+function getSize(PDO $con, int|null $sizeId = null)
 {
     try {
         $stmt = $con->prepare("CALL getSize(:id)");
@@ -289,7 +292,7 @@ function getSize(PDO $con, $sizeId = null)
 }
 
 //funcion para obtener un usuario por su nick
-function getUser(PDO $con, $nick)
+function getUser(PDO $con, string $nick)
 {
     try {
         $stmt = $con->prepare("CALL getUser(:nick)");
@@ -302,7 +305,7 @@ function getUser(PDO $con, $nick)
 }
 
 //funcion para introducir un nuevo usuario en la db
-function putUser(PDO $con, $nick, $username, $mail, $hash)
+function putUser(PDO $con, string $nick, string $username, string $mail, string $hash)
 {
     try {
         $stmt = $con->prepare("CALL putUser(:nick, :username, :mail, :hash)");

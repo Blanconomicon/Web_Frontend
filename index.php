@@ -1,6 +1,7 @@
 <?php
 require_once "./php/utility/utils.php";
 require_once "./php/includes/header.php";
+$_SESSION["personaje"] = null;
 ?>
 <main>
   <!-- Informacion de la Pagina -->

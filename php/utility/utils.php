@@ -33,7 +33,7 @@ function logout()
 }
 
 //fucnion para comprobar el login
-function loginOK($user, $password)
+function loginOK(string $user, string $password)
 {
     global $con;
     $passCorrecta = getPass($con, $user);
@@ -44,7 +44,7 @@ function loginOK($user, $password)
 }
 
 //funcion para registrarse
-function register($user, $email, $nombre, $password, $password2)
+function register(string $user, string $email, string $nombre, string $password, string $password2)
 {
     global $con;
     $usuarioCorrecto = true;
@@ -71,7 +71,7 @@ function register($user, $email, $nombre, $password, $password2)
 //--------------------------------------------
 
 //funcion para obtener los grupos de un usuario concreto y devuelve un array con estos
-function obtenerGrupos($user)
+function obtenerGrupos(string $user)
 {
     global $con;
     $arrGrupos = getGroup($con, $user);
@@ -79,7 +79,7 @@ function obtenerGrupos($user)
 }
 
 //funcion para obtener todos los jugadores de un mismo grupo
-function obtenerJugadores($idGrupo)
+function obtenerJugadores(int $idGrupo)
 {
     global $con;
     $arrJugadores = getGroupMembers($con, $idGrupo);
@@ -87,7 +87,7 @@ function obtenerJugadores($idGrupo)
 }
 
 //funcion para crear un nuevo grupo
-function crearGrupo($nombreGrupo)
+function crearGrupo(string $nombreGrupo)
 {
     global $con;
     $id = putGroup($con, $nombreGrupo, $_SESSION['user'][0]->user_nick);
@@ -99,8 +99,13 @@ function crearGrupo($nombreGrupo)
 //--------------------------------------------
 
 //funcion para obtener todos los personajes de un usuario
-function obtenerPersonajes($user)
+function obtenerPersonajes(string $user)
 {
     $arrPersonajes = getCharacter(getCon(), $user);
     return $arrPersonajes;
+}
+
+function obtenerModificador(int $puntuacion)
+{
+    return floor(($puntuacion - 10) / 2);
 }

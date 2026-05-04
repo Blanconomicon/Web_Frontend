@@ -16,6 +16,8 @@ if (isset($_POST['siguiente'])) {
     $personaje->inteligencia = $_POST["selectInteligencia"];
     $personaje->sabiduria = $_POST["selectSabiduria"];
     $personaje->carisma = $_POST["selectCarisma"];
+    //TODO calcular la ca en funcion de la clase
+    $personaje->ca=10+(int)(obtenerModificador(($_POST["selectDestreza"])-10)/2);
     $_SESSION['personaje'] = $personaje;
     header("Location: ./crearPersonaje2.php");
     exit();
