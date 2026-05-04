@@ -11,18 +11,22 @@ $personaje = getCharacter(getCon(), $_SESSION['user'][0]->user_nick, $_GET['idPe
 $clase = getClass(getCon(), $personaje->class_id)[0]->class_name;
 $dadoDeGolpe = getClass(getCon(), $personaje->class_id)[0]->class_hpdice;
 $raza = getRace(getCon(), $personaje->race_id)[0]->race_name;
-if($personaje->subrace_id!=-1){
-$subraza = getSubrace(getCon(), $personaje->race_id,$personaje->subrace_id)[0]->subrace_name;
-  
+if ($personaje->subrace_id != -1) {
+  $subraza = getSubrace(getCon(), $personaje->race_id, $personaje->subrace_id)[0]->subrace_name;
 }
-$trasfondo=getBackground(getCon(),$personaje->background_id)[0]->background_name;
-$modFuerza=obtenerModificador($personaje->strength);
-$modDestreza=obtenerModificador($personaje->dexterity);
-$modConstitucion=obtenerModificador($personaje->constitution);
-$modInteligencia=obtenerModificador($personaje->intelligence);
-$modSabiduria=obtenerModificador($personaje->wisdom);
-$modCarisma=obtenerModificador($personaje->charisma);
+$trasfondo = getBackground(getCon(), $personaje->background_id)[0]->background_name;
+$modFuerza = obtenerModificador($personaje->strength);
+$modDestreza = obtenerModificador($personaje->dexterity);
+$modConstitucion = obtenerModificador($personaje->constitution);
+$modInteligencia = obtenerModificador($personaje->intelligence);
+$modSabiduria = obtenerModificador($personaje->wisdom);
+$modCarisma = obtenerModificador($personaje->charisma);
 
+$traitsClase = getTraitClass(getCon(), $personaje->class_id, $personaje->character_level);
+$traitsSubraza = getTraitRace(getCon(), $personaje->race_id);
+if ($personaje->subrace_id != -1) {
+  $traitsSubraza = getTraitRace(getCon(), $personaje->race_id, $personaje->subrace_id);
+}
 ?><html lang="es">
 
 <head>
@@ -57,8 +61,8 @@ $modCarisma=obtenerModificador($personaje->charisma);
         <div class="dnd__text">
           <?php
           echo $raza;
-          if($personaje->subrace_id!=-1){
-            echo "<span class='dnd__muted'> - ".$subraza."</span>";
+          if ($personaje->subrace_id != -1) {
+            echo "<span class='dnd__muted'> - " . $subraza . "</span>";
           }
           ?>
         </div>
@@ -71,7 +75,8 @@ $modCarisma=obtenerModificador($personaje->charisma);
         <div class="dnd__stat-box">Iniciativa <br> <?php echo $personaje->initiative ?></div>
         <!--Inspiraciones
         REVISAR TABLA CHARACTER-->
-        <div class="dnd__stat-box">PG <?php echo $personaje->current_hp."/".$personaje->max_hp ?> <br> Dados de golpe <?php echo $personaje->character_level."".$dadoDeGolpe ?></div>
+        <div class="dnd__stat-box">PG <?php echo $personaje->current_hp . "/" . $personaje->max_hp ?> <br> Dados de golpe
+          <?php echo $personaje->character_level . "" . $dadoDeGolpe ?></div>
         <div class="dnd__stat-box">Velocidad <br> <?php echo $personaje->speed ?></div>
         <div class="dnd__stat-box">Bonif. competencia <br> <?php echo $personaje->proficiency_bonus ?></div>
       </div>
@@ -165,9 +170,14 @@ $modCarisma=obtenerModificador($personaje->charisma);
           <div class="dnd__block-title">Características</div>
           <div class="dnd__block-content">
             <ul>
-              <li>feat1</li>
-              <li>feat2</li>
-              <li>feat3</li>
+              <?php
+              foreach ($traitsSubraza as $trait) {
+                echo "<li><b>" . $trait->trait_name . ": </b>" . $trait->trait_desc . "</li>";
+              }
+              foreach ($traitsClase as $trait) {
+                echo "<li><b>" . $trait->trait_name . ": </b>" . $trait->trait_desc . "</li>";
+              }
+              ?>
             </ul>
           </div>
         </div>

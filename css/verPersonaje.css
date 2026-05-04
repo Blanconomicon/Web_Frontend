@@ -17,7 +17,7 @@ body {
 .dnd__sheet {
     max-width: 80%;
     min-height: 80vh;
-    margin: auto;
+    margin: 0 auto;
     padding: 1em;
     background: var(--paper);
     border: .8em solid var(--border);
@@ -50,7 +50,8 @@ body {
 
 /* STATS */
 .dnd__stats {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
     gap: 1em;
 }
 
@@ -67,7 +68,7 @@ body {
 /* COLUMNAS */
 .dnd__columns {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
+    grid-template-columns: 1fr;
     gap: 1em;
 }
 
@@ -129,11 +130,6 @@ body {
 }
 
 /* BLOQUES */
-.dnd__bottom {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 0.9em;
-}
 
 .dnd__block {
     border: 0.2em solid var(--border);
@@ -149,4 +145,35 @@ body {
 
 .dnd__block-content {
     min-height: 10vh;
+}
+
+.dnd__bottom {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    column-gap: 1em;
+    row-gap: 1em;
+}
+
+@media (min-width: 750px) {
+    .dnd__bottom {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dnd__stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1000px) {
+    .dnd__bottom {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .dnd__columns {
+        grid-template-columns: 1fr 1.2fr;
+    }
+
+    .dnd__stats {
+        grid-template-columns: repeat(5, 1fr);
+    }
 }

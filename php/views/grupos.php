@@ -45,9 +45,10 @@ require_once "../includes/header.php";
                     }
                     ?>
                 </table>
+                <br>
                 <button id="btnAniadir" class="centrado">Añadir gente</button>
+                <br>
         <?php
-                // echo "<p><a href='grupos.php?idGrupo=" . $grupo->group_id . "&aniadirGente'>Añadir gente</a></p>";
             }
         }
         ?>
