@@ -9,13 +9,21 @@ if (!isset($_SESSION['personaje']) || isset($_POST["anterior"]) || !isset($_SESS
 }
 $personaje = $_SESSION["personaje"];
 $clase = getClass(getCon(), $personaje->clase);
+if(!isset($personaje->competenciasClase)){
+    $personaje->competenciasClase=[];
+}
 
 if (isset($_POST['siguiente'])) {
-    $personaje->datosClase = $_POST["datosClase"];
-    $personaje->pg = intval(substr($clase[0]->class_hpdice, 1)) + (($personaje->constitucion - 10) / 2);
-    $_SESSION['personaje'] = $personaje;
-    header("Location: ./crearPersonaje4.php");
-    exit();
+    //TODO arreglar cuando se sepa cuantas competencias se pueden seleccionar
+    if (isset($_POST['checkCompetencias'])) {
+
+        $personaje->competenciasClase = $_POST['checkCompetencias'];
+        $personaje->datosClase = $_POST["datosClase"];
+        $personaje->pg = intval(substr($clase[0]->class_hpdice, 1)) + (($personaje->constitucion - 10) / 2);
+        $_SESSION['personaje'] = $personaje;
+        header("Location: ./crearPersonaje4.php");
+        exit();
+    }
 }
 
 $traitsClase = getTraitClass(getCon(), $personaje->clase, 1);
@@ -39,7 +47,8 @@ require_once "../includes/header.php";
             <div class="gridResponsive">
 
                 <?php
-                mostrarCompetencias($competenciasClase);
+                //TODO mostrar las de skill para que se seleccionen las correspondientes
+                mostrarCompetencias($competenciasClase, true,$personaje->competenciasClase);
                 ?>
             </div>
             <!-- TODO cambiar esto por la informacion de la clase -->

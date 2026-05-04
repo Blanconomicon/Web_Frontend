@@ -12,6 +12,13 @@ $personaje = $_SESSION["personaje"];
 if (isset($_POST['finalizar'])) {
     $personaje->equipoClase = $_POST["equipoClase"];
     $personaje->equipoTrasfondo = $_POST["equipoTrasfondo"];
+    $habilidades=$personaje->competenciasClase;
+    foreach ($personaje->competenciasRaza as $habilidad) {
+        if(!in_array($habilidad,$habilidades)){
+            $habilidades[]=$habilidad;
+        }
+    }
+    $personaje->habilidades=$habilidades;
     putCharacter(
         getCon(),
         $_SESSION['user'][0]->user_nick,

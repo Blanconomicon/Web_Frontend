@@ -20,4 +20,15 @@ if (isset($_GET['subraza'])) {
     echo "</div>";
     echo "<ul>";
     echo "</ul>";
+    $competenciasHabilidades = array_filter($competenciasRaza, function ($competencia) {
+        return $competencia->prof_type == "skill";
+    });
+    $personaje->competenciasRaza=[];
+    if(count($competenciasHabilidades)>0){
+        $competenciasRazaSkills=[];
+        foreach ($competenciasHabilidades as $skill) {
+            $competenciasRazaSkills[]=$skill->prof_id;
+        }
+        $personaje->competenciasRaza=$competenciasRazaSkills;
+    }
 }

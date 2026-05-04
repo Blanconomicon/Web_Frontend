@@ -112,8 +112,11 @@ function obtenerModificador(int $puntuacion)
 }
 
 //funcion para mostrar las competencias del source
-function mostrarCompetencias($competenciasSource)
-{
+function mostrarCompetencias(
+    array $competenciasSource,
+    bool $seleccionandoCompetencias = false,
+    array|null $competenciasTiene = null
+) {
     //crear las competencias
     $competenciasArmas = array_filter($competenciasSource, function ($competencia) {
         return $competencia->prof_type == "weapon" || $competencia->prof_type == "group";
@@ -144,11 +147,19 @@ function mostrarCompetencias($competenciasSource)
     if (count($competenciasHabilidades) > 0) {
         echo "<div>";
         echo "<h3>Competencias con habilidades</h3>";
-        echo "<ul>";
-        foreach ($competenciasHabilidades as $competencia) {
-            echo "<li>" . $competencia->prof_name . "</li>";
+        if ($seleccionandoCompetencias) {
+            foreach ($competenciasHabilidades as $competencia) {
+                echo "<input type='checkbox' value='" . $competencia->prof_id . 
+                "' name='checkCompetencias[]'".(in_array($competencia->prof_id,$competenciasTiene)?"checked":"").">"
+                    . $competencia->prof_name . "</input><br>";
+            }
+        } else {
+            echo "<ul>";
+            foreach ($competenciasHabilidades as $competencia) {
+                echo "<li>" . $competencia->prof_name . "</li>";
+            }
+            echo "</ul>";
         }
-        echo "</ul>";
         echo "</div>";
     }
     if (count($competenciasArmaduras) > 0) {
