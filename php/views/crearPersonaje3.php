@@ -63,6 +63,7 @@ require_once "../includes/header.php";
             <?php
             if ($clase[0]->class_spellcaster == 1) {
                 echo "<hr class='ocupaTodo'>";
+                //TODO acabar cuando se sepa la cantidad de spells de cada nivel que se puede elegir
                 //cantrips
                 mostrarTablaSpells("Cantrips", $clase[0]->class_id, 0);
                 //nivel1
