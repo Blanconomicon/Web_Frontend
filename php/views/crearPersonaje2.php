@@ -44,6 +44,7 @@ require_once "../includes/header.php";
                 echo "<input type='hidden' name='subraza' value=-1>";
             }
             ?>
+            <br>
             <select name="tamanio" id="tamanio">
                 <!-- <option value="tamanio">TAMAÑO EN SELECT SOLO SI SE PUEDE ELEGIR</option> -->
                 <?php
@@ -53,12 +54,14 @@ require_once "../includes/header.php";
                 }
                 ?>
             </select>
+            <br>
             <div>
+                <h3 class="centrado">Rasgos de la raza</h3>
                 <ul>
                     <?php
-                    foreach ($raza[0] as $nombreCaracteristica => $caracteristica) {
-                        echo "<li><b>$nombreCaracteristica:</b>$caracteristica</li>";
-                    }
+                    // foreach ($raza[0] as $nombreCaracteristica => $caracteristica) {
+                    //     echo "<li><b>$nombreCaracteristica:</b>$caracteristica</li>";
+                    // }
                     ?>
                 </ul>
                 <div id="traitsSubraza">

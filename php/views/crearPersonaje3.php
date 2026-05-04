@@ -28,7 +28,7 @@ require_once "../includes/header.php";
     <section class="contenedor">
         <form action="" method="post">
             <h2><?php echo $clase[0]->class_name; ?></h2>
-            <h3>Traits de la clase</h3>
+            <h3>Rasgos de la clase</h3>
             <ul>
                 <?php
                 foreach ($traitsClase as $trait) {

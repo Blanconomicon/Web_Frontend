@@ -167,7 +167,7 @@ if ($personaje->subrace_id != -1) {
         </div>
 
         <div class="dnd__block">
-          <div class="dnd__block-title">Características</div>
+          <div class="dnd__block-title">Rasgos</div>
           <div class="dnd__block-content">
             <ul>
               <?php
