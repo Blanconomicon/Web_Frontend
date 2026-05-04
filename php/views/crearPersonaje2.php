@@ -47,7 +47,6 @@ require_once "../includes/header.php";
             ?>
             <br>
             <select name="tamanio" id="tamanio">
-                <!-- <option value="tamanio">TAMAÑO EN SELECT SOLO SI SE PUEDE ELEGIR</option> -->
                 <?php
                 echo "<option value='" . $tamanios[0]->size_id . "'>" . $tamanios[0]->size_name . "</option>";
                 if ($tamanios[0]->size_id == 3 && $raza[0]->race_name != "Enano") {
@@ -56,10 +55,12 @@ require_once "../includes/header.php";
                 ?>
             </select>
             <br>
-            <div>
+            <div class="ocupaTodo" style="width: 80%;">
                 <h3 class="centrado">Rasgos de la raza</h3>
-                <ul>
+                <ul style="margin-bottom: 0;">
                     <?php
+                    echo "<li><b>Longevidad: </b>".$raza[0]->race_age." años</li>";
+                    echo "<li><b>Velocidad: </b>".($raza[0]->race_speed*0.3)." metros</li>";
                     // foreach ($raza[0] as $nombreCaracteristica => $caracteristica) {
                     //     echo "<li><b>$nombreCaracteristica:</b>$caracteristica</li>";
                     // }
