@@ -3,7 +3,7 @@ require_once "../utility/utils.php";
 require_once "../utility/conexion.php";
 
 comprobarLogin();
-if (!isset($_SESSION['personaje']) || isset($_POST["anterior"]) || !isset($_SESSION['personaje']->datosClase)) {
+if (!isset($_SESSION['personaje']) || isset($_POST["anterior"]) || !isset($_SESSION['personaje']->competenciasClase)) {
     header("Location: ./crearPersonaje3.php");
     exit();
 }

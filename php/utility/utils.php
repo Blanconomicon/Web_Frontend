@@ -149,8 +149,8 @@ function mostrarCompetencias(
         echo "<h3>Competencias con habilidades</h3>";
         if ($seleccionandoCompetencias) {
             foreach ($competenciasHabilidades as $competencia) {
-                echo "<input type='checkbox' value='" . $competencia->prof_id . 
-                "' name='checkCompetencias[]'".(in_array($competencia->prof_id,$competenciasTiene)?"checked":"").">"
+                echo "<input type='checkbox' value='" . $competencia->prof_id .
+                    "' name='checkCompetencias[]'" . (in_array($competencia->prof_id, $competenciasTiene) ? "checked" : "") . ">"
                     . $competencia->prof_name . "</input><br>";
             }
         } else {
@@ -192,4 +192,43 @@ function mostrarCompetencias(
         echo "</ul>";
         echo "</div>";
     }
+}
+
+function mostrarTablaSpells(string $titulo, int $idClase, int $nivelSpell)
+{
+    $conjuros = getSpellClass(getCon(), $idClase, $nivelSpell);
+    echo "<h4>$titulo</h4>";
+    echo "<table>";
+    echo "<tr>";
+    echo "<th></th>";
+    echo "<th>Nombre</th>";
+    echo "<th>Tiempo de lanzamiento</th>";
+    echo "<th>Duracion</th>";
+    echo "<th>Distancia</th>";
+    echo "<th>Concentracion</th>";
+    if ($nivelSpell > 0) {
+        echo "<th>Ritual</th>";
+    }
+    echo "</tr>";
+    foreach ($conjuros as $conjuro) {
+        echo "<tr>";
+        if(isset($_SESSION['personaje']->{strtolower($titulo)})){
+            echo "<td><input type='checkbox' value='" . $conjuro->spell_id . "' name='" . $titulo . "[]' " .
+            (in_array($conjuro->spell_id, $_SESSION['personaje']->{strtolower($titulo)}) ? "checked" : "") .
+            "></td>";
+        }else{
+            echo "<td><input type='checkbox' value='" . $conjuro->spell_id . "' name='" . $titulo . "[]' " .
+            "></td>";
+        }
+        echo "<td>" . $conjuro->spell_name . "</td>";
+        echo "<td>" . $conjuro->spell_cast_time . "</td>";
+        echo "<td>" . $conjuro->spell_duration . "</td>";
+        echo "<td>" . $conjuro->spell_range . "</td>";
+        echo "<td><input type='checkbox' " . (($conjuro->spell_concentration == 1) ? "checked" : "") . " disabled></td>";
+        if ($nivelSpell > 0) {
+            echo "<td><input type='checkbox' " . (($conjuro->spell_ritual == 1) ? "checked" : "") . " disabled></td>";
+        }
+        echo "</tr>";
+    }
+    echo "</table>";
 }

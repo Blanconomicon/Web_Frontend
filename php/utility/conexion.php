@@ -291,6 +291,19 @@ function getSize(PDO $con, int|null $sizeId = null)
     }
 }
 
+//funcion para obtener los spells de una clase con un nivel
+function getSpellClass(PDO $con,int $idClase, int|null $nivelConjuro=null){
+    try {
+        $stmt = $con->prepare("CALL getSpellClass(:idClase, :nivelConjuro)");
+        $stmt->bindParam(":idClase", $idClase, PDO::PARAM_INT);
+        $stmt->bindParam(":nivelConjuro", $nivelConjuro, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
 //funcion para obtener un usuario por su nick
 function getUser(PDO $con, string $nick)
 {

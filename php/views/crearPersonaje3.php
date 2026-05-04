@@ -9,16 +9,25 @@ if (!isset($_SESSION['personaje']) || isset($_POST["anterior"]) || !isset($_SESS
 }
 $personaje = $_SESSION["personaje"];
 $clase = getClass(getCon(), $personaje->clase);
-if(!isset($personaje->competenciasClase)){
-    $personaje->competenciasClase=[];
+if (!isset($personaje->competenciasClase)) {
+    $personaje->competenciasClase = [];
 }
 
 if (isset($_POST['siguiente'])) {
-    //TODO arreglar cuando se sepa cuantas competencias se pueden seleccionar
+    //TODO arreglar cuando se sepa cuantas competencias se pueden seleccionar y los spells
     if (isset($_POST['checkCompetencias'])) {
-
         $personaje->competenciasClase = $_POST['checkCompetencias'];
-        $personaje->datosClase = $_POST["datosClase"];
+    }
+    if (isset($_POST['Cantrips'])) {
+        $personaje->cantrips = $_POST['Cantrips'];
+    }
+    if (isset($_POST['Nivel1'])) {
+        $personaje->nivel1 = $_POST['Nivel1'];
+    }
+    $_SESSION['personaje'] = $personaje;
+    if (isset($_POST['checkCompetencias']) && ($clase[0]->class_spellcaster == 0 || $clase[0]->class_spellcaster == 1 &&
+        isset($_POST['Cantrips']) && isset($_POST['Nivel1']))) {
+
         $personaje->pg = intval(substr($clase[0]->class_hpdice, 1)) + (($personaje->constitucion - 10) / 2);
         $_SESSION['personaje'] = $personaje;
         header("Location: ./crearPersonaje4.php");
@@ -47,12 +56,19 @@ require_once "../includes/header.php";
             <div class="gridResponsive">
 
                 <?php
-                //TODO mostrar las de skill para que se seleccionen las correspondientes
-                mostrarCompetencias($competenciasClase, true,$personaje->competenciasClase);
+                //TODO acabar con los checkbox
+                mostrarCompetencias($competenciasClase, true, $personaje->competenciasClase);
                 ?>
             </div>
-            <!-- TODO cambiar esto por la informacion de la clase -->
-            <input type="hidden" name="datosClase" value="datosClase">
+            <?php
+            if ($clase[0]->class_spellcaster == 1) {
+                echo "<hr class='ocupaTodo'>";
+                //cantrips
+                mostrarTablaSpells("Cantrips", $clase[0]->class_id, 0);
+                //nivel1
+                mostrarTablaSpells("Nivel1", $clase[0]->class_id, 1);
+            }
+            ?>
             <hr class="ocupaTodo">
             <div class="centrado">
                 <input type="submit" name="anterior" value="Anterior">
