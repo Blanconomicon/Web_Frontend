@@ -8,13 +8,10 @@ LISTA DE CONTENIDOS
 02. General
 03. Tablas
 04. Barra de Navegacion
-05. Superior a tarjetas
-06. Tarjetas
-07. Footer
-08. Media Tablets
-09. Media Escritorio 
-10. Media Print  
-11. Character Sheet  
+05. Footer
+06. Media Tablets
+07. Media Escritorio 
+08. Media Print   
 */
 
 /*    TODO Cambiar Fuente    */
@@ -32,7 +29,6 @@ LISTA DE CONTENIDOS
   --negro: #000000;
   --apoyo: #d9c7a3;
   --fondo-section: #f2e7dc;
-  --tarjeta: #b2f5f8;
   --fondo-principal: #f4f4f4;
   --fondo: #ffffffc9;
   --fondo-header: #333;
@@ -310,22 +306,6 @@ th {
   }
 }
 
-/******************************/
-/*  05.Superior a tarjetas    */
-/******************************/
-.superior {
-  grid-area: gastado;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.animacionError {
-  opacity: 0;
-  font-size: 2em;
-  animation: animacionError 5s ease-in-out infinite;
-}
-
 @keyframes animacionError {
   0% {
     opacity: 0;
@@ -341,30 +321,7 @@ th {
 }
 
 /******************************/
-/*    06.Tarjetas             */
-/******************************/
-.contenedorTarjetas {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-areas: "gastado";
-}
-
-.tarjeta {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-areas: "tipo tags cantidad"
-    "estadisticas habilidades habilidades"
-    "estadisticas habilidades habilidades"
-    "estadisticas precio precio"
-    "aniadir nada eliminar";
-  background-color: var(--tarjeta);
-  margin: 1em;
-  padding: 0.5em;
-  gap: 0.5em;
-}
-
-/******************************/
-/*    07.Footer               */
+/*    05.Footer               */
 /******************************/
 footer {
   grid-area: footer;
@@ -388,7 +345,7 @@ footer>p {
 }
 
 /******************************/
-/*    08.Media Tablets        */
+/*    06.Media Tablets        */
 /******************************/
 @media (min-width: 750px) {
   main {
@@ -428,18 +385,6 @@ footer>p {
     margin-left: 0.4em;
   }
 
-  .contenedorTarjetas {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas: "gastado gastado";
-  }
-
-  .tarjeta {
-    border-radius: 1em;
-    box-shadow: 0 0.3em 0.6em var(--box-shadow);
-    padding: 1em;
-  }
-
   .compraPuntos {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -457,7 +402,7 @@ footer>p {
 }
 
 /******************************/
-/*    09.Media Escritorio     */
+/*    07.Media Escritorio     */
 /******************************/
 @media (min-width: 1000px) {
 
@@ -553,17 +498,6 @@ footer>p {
     transform: translateY(0);
   }
 
-  .contenedorTarjetas {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-areas: "gastado gastado gastado";
-  }
-
-  .tarjeta {
-    padding: 1.5em;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
   .contenedor {
     margin: auto;
   }
@@ -586,7 +520,7 @@ footer>p {
 }
 
 /******************************/
-/*        10.Media Print      */
+/*        08.Media Print      */
 /******************************/
 @media print {
 
@@ -668,21 +602,6 @@ footer>p {
     background: white !important;
   }
 
-  .contenedorTarjetas {
-    display: block;
-  }
-
-  .tarjeta {
-    border: 1px solid #000;
-    margin-bottom: 1em;
-    padding: 1em;
-    background: white !important;
-  }
-
-  .tarjeta * {
-    color: black !important;
-  }
-
   img {
     max-width: 100%;
     height: auto;
@@ -699,8 +618,7 @@ footer>p {
   table,
   tr,
   img,
-  section,
-  .tarjeta {
+  section {
     page-break-inside: avoid;
   }
 
