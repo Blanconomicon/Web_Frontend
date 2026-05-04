@@ -20,6 +20,21 @@ if (isset($_POST['siguiente'])) {
 
 $traitsClase = getTraitClass(getCon(), $personaje->clase, 1);
 $competenciasClase = getProfClass(getCon(), $personaje->clase, 1);
+$competenciasArmas = array_filter($competenciasClase, function ($competencia) {
+    return $competencia->prof_type == "weapon"||$competencia->prof_type == "group";
+});
+$competenciasHabilidades = array_filter($competenciasClase, function ($competencia) {
+    return $competencia->prof_type == "skill";
+});
+$competenciasArmaduras = array_filter($competenciasClase, function ($competencia) {
+    return $competencia->prof_type == "armor";
+});
+$competenciasHerramientas = array_filter($competenciasClase, function ($competencia) {
+    return $competencia->prof_type == "tool";
+});
+$competenciasIdiomas = array_filter($competenciasClase, function ($competencia) {
+    return $competencia->prof_type == "language";
+});
 
 require_once "../includes/header.php";
 ?>
@@ -28,20 +43,72 @@ require_once "../includes/header.php";
     <section class="contenedor">
         <form action="" method="post">
             <h2><?php echo $clase[0]->class_name; ?></h2>
-            <div>
-                <ul>
-                    <?php
-                    foreach ($traitsClase as $trait) {
-                        echo "<li><b>" . $trait->trait_name . ": </b>" . $trait->trait_desc . "</li>";
+            <h3>Traits de la clase</h3>
+            <ul>
+                <?php
+                foreach ($traitsClase as $trait) {
+                    echo "<li><b>" . $trait->trait_name . ": </b>" . $trait->trait_desc . "</li>";
+                }
+                ?>
+            </ul>
+            <div class="gridResponsive">
+
+                <?php
+                if (count($competenciasArmas) > 0) {
+                    echo "<div>";
+                    echo "<h3>Competencias con armas</h3>";
+                    echo "<ul>";
+                    foreach ($competenciasArmas as $competencia) {
+                        echo "<li>" . $competencia->prof_name . "</li>";
                     }
-                    foreach ($competenciasClase as $competencia) {
-                        echo "<li><b>" . $competencia->prof_type . ": </b>" . $competencia->prof_name . "</li>";
+                    echo "</ul>";
+                    echo "</div>";
+                }
+                if (count($competenciasHabilidades) > 0) {
+                    echo "<div>";
+                    echo "<h3>Competencias con habilidades</h3>";
+                    echo "<ul>";
+                    foreach ($competenciasHabilidades as $competencia) {
+                        echo "<li>" . $competencia->prof_name . "</li>";
                     }
-                    ?>
-                </ul>
+                    echo "</ul>";
+                    echo "</div>";
+                }
+                if (count($competenciasArmaduras) > 0) {
+                    echo "<div>";
+                    echo "<h3>Competencias con armaduras</h3>";
+                    echo "<ul>";
+                    foreach ($competenciasArmaduras as $competencia) {
+                        echo "<li>" . $competencia->prof_name . "</li>";
+                    }
+                    echo "</ul>";
+                    echo "</div>";
+                }
+                if (count($competenciasHerramientas) > 0) {
+                    echo "<div>";
+                    echo "<h3>Competencias con herramientas</h3>";
+                    echo "<ul>";
+                    foreach ($competenciasHerramientas as $competencia) {
+                        echo "<li>" . $competencia->prof_name . "</li>";
+                    }
+                    echo "</ul>";
+                    echo "</div>";
+                }
+                if (count($competenciasIdiomas) > 0) {
+                    echo "<div>";
+                    echo "<h3>Competencias con idiomas</h3>";
+                    echo "<ul>";
+                    foreach ($competenciasIdiomas as $competencia) {
+                        echo "<li>" . $competencia->prof_name . "</li>";
+                    }
+                    echo "</ul>";
+                    echo "</div>";
+                }
+                ?>
             </div>
             <!-- TODO cambiar esto por la informacion de la clase -->
             <input type="hidden" name="datosClase" value="datosClase">
+            <hr class="ocupaTodo">
             <div class="centrado">
                 <input type="submit" name="anterior" value="Anterior">
                 <input type="submit" name="siguiente" value="Siguiente">

@@ -2,7 +2,6 @@
 //variables necesarias
 ///////////////////////////////////////////////////////////////////////////
 let restantes = 27;
-let tdCompraPuntos = document.getElementById("tdCompraPuntos");
 let txtRestantes = document.getElementById("txtRestantes");
 
 let selectFuerza = document.getElementById("selectFuerza");

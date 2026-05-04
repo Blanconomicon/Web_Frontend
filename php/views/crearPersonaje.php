@@ -16,19 +16,18 @@ if (isset($_POST['siguiente'])) {
     $personaje->inteligencia = $_POST["selectInteligencia"];
     $personaje->sabiduria = $_POST["selectSabiduria"];
     $personaje->carisma = $_POST["selectCarisma"];
-    //TODO calcular la ca en funcion de la clase
     switch ($personaje->clase) {
         case 1:
             //barbaro
-            $personaje->ca=10+obtenerModificador($personaje->destreza)+obtenerModificador($personaje->constitucion);
+            $personaje->ca = 10 + obtenerModificador($personaje->destreza) + obtenerModificador($personaje->constitucion);
             break;
         case 7:
             //monje
-            $personaje->ca=10+obtenerModificador($personaje->destreza)+obtenerModificador($personaje->sabiduria);
+            $personaje->ca = 10 + obtenerModificador($personaje->destreza) + obtenerModificador($personaje->sabiduria);
             break;
         default:
-        //otros
-            $personaje->ca=10+obtenerModificador($personaje->destreza);
+            //otros
+            $personaje->ca = 10 + obtenerModificador($personaje->destreza);
             break;
     }
     $_SESSION['personaje'] = $personaje;
@@ -92,10 +91,10 @@ require_once "../includes/header.php";
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2" id="tdCompraPuntos">
+                    <td colspan="2">
                         <h3 class="centrado">Compra de puntos</h3>
                         <p class="centrado"><b id="txtRestantes">27/27</b></p>
-                        <div class="compraPuntos">
+                        <div class="gridResponsive">
                             <div>
                                 <h3 class="centrado">Fuerza</h3>
                                 <select name="selectFuerza" id="selectFuerza">
