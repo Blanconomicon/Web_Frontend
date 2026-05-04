@@ -62,7 +62,7 @@ require_once "../includes/header.php";
                 <ul id="traitsSubraza">
                 </ul>
             </div>
-            <div>
+            <div class="centrado">
                 <input type="submit" name="anterior" value="Anterior">
                 <input type="submit" name="siguiente" value="Siguiente">
             </div>

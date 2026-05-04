@@ -42,7 +42,7 @@ require_once "../includes/header.php";
             </div>
             <!-- TODO cambiar esto por la informacion de la clase -->
             <input type="hidden" name="datosClase" value="datosClase">
-            <div>
+            <div class="centrado">
                 <input type="submit" name="anterior" value="Anterior">
                 <input type="submit" name="siguiente" value="Siguiente">
             </div>

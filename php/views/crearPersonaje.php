@@ -217,7 +217,7 @@ require_once "../includes/header.php";
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input type="submit" id="btnSiguiente" name="siguiente" value="Siguiente"></td>
+                    <td colspan="2"><input type="submit" id="btnSiguiente" name="siguiente" value="Siguiente" class="centrado"></td>
                 </tr>
             </table>
         </form>

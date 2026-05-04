@@ -58,7 +58,7 @@ require_once "../includes/header.php";
                     </td>
                 </tr>
             </table>
-            <div>
+            <div class="centrado">
                 <input type="submit" name="anterior" value="Anterior">
                 <input type="submit" name="finalizar" value="Finalizar">
             </div>
