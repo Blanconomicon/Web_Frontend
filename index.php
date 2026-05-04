@@ -22,8 +22,8 @@ require_once "./php/includes/header.php";
         cooperación y la narrativa compartida cobran verdadero protagonismo.
       </p>
       <div>
-        <img width=300px src="src\img\logo1.png" alt="">
-        <img width=300px src="src\img\logo2.png" alt="">
+        <img width=300px src="src\img\logo1.png" alt="Logo de la app">
+        <img width=300px src="src\img\logo2.png" alt="Logo de la app">
       </div>
     </div>
   </section>

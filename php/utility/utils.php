@@ -6,7 +6,8 @@ session_start();
 
 $con = conexion(RUTA, DBNAME, USER, PASSWORD);
 
-function getCon(){
+function getCon()
+{
     global $con;
     return $con;
 }
@@ -73,7 +74,7 @@ function register($user, $email, $nombre, $password, $password2)
 function obtenerGrupos($user)
 {
     global $con;
-    $arrGrupos = getGroup($con,$user);
+    $arrGrupos = getGroup($con, $user);
     return $arrGrupos;
 }
 
@@ -81,7 +82,7 @@ function obtenerGrupos($user)
 function obtenerJugadores($idGrupo)
 {
     global $con;
-    $arrJugadores = getGroupMembers($con,$idGrupo);
+    $arrJugadores = getGroupMembers($con, $idGrupo);
     return $arrJugadores;
 }
 
@@ -89,8 +90,8 @@ function obtenerJugadores($idGrupo)
 function crearGrupo($nombreGrupo)
 {
     global $con;
-    $id=putGroup($con,$nombreGrupo,$_SESSION['user'][0]->user_nick);
-    putGroupMember($con,$id,$_SESSION['user'][0]->user_nick,"M");
+    $id = putGroup($con, $nombreGrupo, $_SESSION['user'][0]->user_nick);
+    putGroupMember($con, $id, $_SESSION['user'][0]->user_nick, "M");
 }
 
 //--------------------------------------------
@@ -100,6 +101,6 @@ function crearGrupo($nombreGrupo)
 //funcion para obtener todos los personajes de un usuario
 function obtenerPersonajes($user)
 {
-    $arrPersonajes = getCharacter(getCon(),$user);
+    $arrPersonajes = getCharacter(getCon(), $user);
     return $arrPersonajes;
 }
