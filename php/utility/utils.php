@@ -198,7 +198,7 @@ function mostrarTablaSpells(string $titulo, int $idClase, int $nivelSpell)
 {
     $conjuros = getSpellClass(getCon(), $idClase, $nivelSpell);
     echo "<h3>$titulo</h3>";
-    echo "<table>";
+    echo "<table class='ocupaTodo' style='width: 80%;'>";
     echo "<tr>";
     echo "<th></th>";
     echo "<th>Nombre</th>";
@@ -224,9 +224,9 @@ function mostrarTablaSpells(string $titulo, int $idClase, int $nivelSpell)
         echo "<td>" . $conjuro->spell_cast_time . "</td>";
         echo "<td>" . $conjuro->spell_duration . "</td>";
         echo "<td>" . $conjuro->spell_range . "</td>";
-        echo "<td><input type='checkbox' " . (($conjuro->spell_concentration == 1) ? "checked" : "") . " disabled></td>";
+        echo "<td><input type='checkbox' " . (($conjuro->spell_concentration) ? "checked" : "") . " disabled></td>";
         if ($nivelSpell > 0) {
-            echo "<td><input type='checkbox' " . (($conjuro->spell_ritual == 1) ? "checked" : "") . " disabled></td>";
+            echo "<td><input type='checkbox' " . (($conjuro->spell_ritual) ? "checked" : "") . " disabled></td>";
         }
         echo "</tr>";
     }

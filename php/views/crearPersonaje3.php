@@ -25,7 +25,7 @@ if (isset($_POST['siguiente'])) {
         $personaje->nivel1 = $_POST['Nivel1'];
     }
     $_SESSION['personaje'] = $personaje;
-    if (isset($_POST['checkCompetencias']) && ($clase[0]->class_spellcaster == 0 || $clase[0]->class_spellcaster == 1 &&
+    if (isset($_POST['checkCompetencias']) && ($clase[0]->class_spellcaster == 0 || $clase[0]->class_spellcaster &&
         isset($_POST['Cantrips']) && isset($_POST['Nivel1']))) {
 
         $personaje->pg = intval(substr($clase[0]->class_hpdice, 1)) + (($personaje->constitucion - 10) / 2);
@@ -61,7 +61,7 @@ require_once "../includes/header.php";
                 ?>
             </div>
             <?php
-            if ($clase[0]->class_spellcaster == 1) {
+            if ($clase[0]->class_spellcaster) {
                 echo "<hr class='ocupaTodo'>";
                 //TODO acabar cuando se sepa la cantidad de spells de cada nivel que se puede elegir
                 //cantrips
