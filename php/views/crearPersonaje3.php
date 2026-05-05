@@ -1,4 +1,4 @@
-$clase<?php
+<?php
         require_once "../utility/utils.php";
         require_once "../utility/conexion.php";
 
@@ -32,7 +32,6 @@ $clase<?php
                     $error .= "El " . $clase->class_name . " tiene " . $progresion->spells_known . " hechizos conocidos<br>";
                 }
             }
-
             $_SESSION['personaje'] = $personaje;
             if ($error == "") {
                 $personaje->pg = intval(substr($clase->class_hpdice, 1)) + (($personaje->constitucion - 10) / 2);

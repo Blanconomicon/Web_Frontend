@@ -169,7 +169,7 @@ body {
     }
 
     .dnd__columns {
-        grid-template-columns: 1fr 1.2fr;
+        grid-template-columns: 1fr 0.4fr 1.2fr;
     }
 
     .dnd__stats {

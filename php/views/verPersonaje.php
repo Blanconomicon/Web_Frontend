@@ -8,8 +8,9 @@ if (!isset($_GET['idPersonaje'])) {
 }
 
 $personaje = getCharacter(getCon(), $_SESSION['user'][0]->user_nick, $_GET['idPersonaje'])[0];
-$clase = getClass(getCon(), $personaje->class_id)[0]->class_name;
-$dadoDeGolpe = getClass(getCon(), $personaje->class_id)[0]->class_hpdice;
+$clase = getClass(getCon(), $personaje->class_id)[0];
+$claseNombre = $clase->class_name;
+$dadoDeGolpe = $clase->class_hpdice;
 $raza = getRace(getCon(), $personaje->race_id)[0]->race_name;
 if ($personaje->subrace_id != -1) {
   $subraza = getSubrace(getCon(), $personaje->race_id, $personaje->subrace_id)[0]->subrace_name;
@@ -52,7 +53,7 @@ if ($personaje->subrace_id != -1) {
         <div class="dnd__title"><?php echo $personaje->character_name ?></div>
         <div class="dnd__text">
           <?php
-          echo $clase;
+          echo $claseNombre;
           if ($personaje->subclass_id) {
             echo "<span class='dnd__muted'> - Subclase</span>";
           }
@@ -83,7 +84,6 @@ if ($personaje->subrace_id != -1) {
 
       <!-- ATRIBUTOS + HABILIDADES -->
       <div class="dnd__columns">
-
         <!-- ATRIBUTOS -->
         <div class="dnd__attributes">
 
@@ -124,7 +124,63 @@ if ($personaje->subrace_id != -1) {
           </div>
 
         </div>
-
+        <div class="dnd__skills">
+          <h3>Tiradas de salvación</h3>
+          <div class="dnd__skill"><span>Fuerza</span><span class="dnd__skill-mod">
+              <?php
+              $ts = $modFuerza;
+              if ($clase->safe1_ability_id == 1 || $clase->safe2_ability_id == 1) {
+                $ts += $personaje->proficiency_bonus;
+              }
+              echo $ts
+              ?>
+            </span></div>
+          <div class="dnd__skill"><span>Destreza</span><span class="dnd__skill-mod">
+              <?php
+              $ts = $modDestreza;
+              if ($clase->safe1_ability_id == 2 || $clase->safe2_ability_id == 2) {
+                $ts += $personaje->proficiency_bonus;
+              }
+              echo $ts
+              ?>
+            </span></div>
+          <div class="dnd__skill"><span>Constitución</span><span class="dnd__skill-mod">
+              <?php
+              $ts = $modConstitucion;
+              if ($clase->safe1_ability_id == 3 || $clase->safe2_ability_id == 3) {
+                $ts += $personaje->proficiency_bonus;
+              }
+              echo $ts
+              ?>
+            </span></div>
+          <div class="dnd__skill"><span>Inteligencia</span><span class="dnd__skill-mod">
+              <?php
+              $ts = $modInteligencia;
+              if ($clase->safe1_ability_id == 4 || $clase->safe2_ability_id == 4) {
+                $ts += $personaje->proficiency_bonus;
+              }
+              echo $ts
+              ?>
+            </span></div>
+          <div class="dnd__skill"><span>Sabiduria</span><span class="dnd__skill-mod">
+              <?php
+              $ts = $modSabiduria;
+              if ($clase->safe1_ability_id == 5 || $clase->safe2_ability_id == 5) {
+                $ts += $personaje->proficiency_bonus;
+              }
+              echo $ts
+              ?>
+            </span></div>
+          <div class="dnd__skill"><span>Carisma</span><span class="dnd__skill-mod">
+              <?php
+              $ts = $modCarisma;
+              if ($clase->safe1_ability_id == 6 || $clase->safe2_ability_id == 6) {
+                $ts += $personaje->proficiency_bonus;
+              }
+              echo $ts
+              ?>
+            </span></div>
+        </div>
         <!-- TODO hacer que vayan con las caracteristicas -->
         <!-- HABILIDADES -->
         <div class="dnd__skills">
