@@ -3,8 +3,14 @@ require_once "../utility/utils.php";
 require_once "../utility/conexion.php";
 
 comprobarLogin();
-
+$error = "";
 if (isset($_POST['siguiente'])) {
+
+    if ($_POST['habilidad1'] == $_POST['habilidad2'] && $_POST['habilidad1'] == $_POST['habilidad3']) {
+        $error = "No puedes darte todos los +1 a la misma habilidad";
+    }
+
+
     $personaje = new stdClass();
     $personaje->nombre = $_POST["nombrePj"];
     $personaje->raza = $_POST["raza"];
@@ -16,6 +22,9 @@ if (isset($_POST['siguiente'])) {
     $personaje->inteligencia = $_POST["selectInteligencia"];
     $personaje->sabiduria = $_POST["selectSabiduria"];
     $personaje->carisma = $_POST["selectCarisma"];
+    $personaje->habilidad1 = $_POST["habilidad1"];
+    $personaje->habilidad2 = $_POST["habilidad2"];
+    $personaje->habilidad3 = $_POST["habilidad3"];
     switch ($personaje->clase) {
         case 1:
             //barbaro
@@ -31,8 +40,10 @@ if (isset($_POST['siguiente'])) {
             break;
     }
     $_SESSION['personaje'] = $personaje;
-    header("Location: ./crearPersonaje2.php");
-    exit();
+    if ($error == "") {
+        header("Location: ./crearPersonaje2.php");
+        exit();
+    }
 }
 $personaje = null;
 if (isset($_SESSION['personaje'])) {
@@ -49,6 +60,11 @@ require_once "../includes/header.php";
 <main>
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
+        <?php
+        if ($error != "") {
+            echo "<p style='color: red'>$error</p>";
+        }
+        ?>
         <form action="" method="post">
             <table>
                 <tr>
@@ -88,6 +104,14 @@ require_once "../includes/header.php";
                             }
                             ?>
                         </select>
+                        <br>
+                        <br>
+                        <!-- <br> -->
+                        <div id="infoTrafondo">
+                            <select name="habilidad1" id="habilidad1"></select>
+                            <select name="habilidad2" id="habilidad2"></select>
+                            <select name="habilidad3" id="habilidad3"></select>
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -109,11 +133,11 @@ require_once "../includes/header.php";
                                 <table>
                                     <tr>
                                         <th>Total</th>
-                                        <td id="txtFuerzaTotal">8</td>
+                                        <td id="txtFuerzaTotal"><?php echo (isset($personaje->fuerza)) ? $personaje->fuerza : "8" ?></td>
                                     </tr>
                                     <tr>
                                         <th>Modificador</th>
-                                        <td id="txtFuerzaModificador">-1</td>
+                                        <td id="txtFuerzaModificador"><?php echo (isset($personaje->fuerza)) ? obtenerModificador($personaje->fuerza) : "-1" ?></td>
                                     </tr>
                                 </table>
                             </div>
@@ -131,11 +155,11 @@ require_once "../includes/header.php";
                                 <table>
                                     <tr>
                                         <th>Total</th>
-                                        <td id="txtDestrezaTotal">8</td>
+                                        <td id="txtDestrezaTotal"><?php echo (isset($personaje->destreza)) ? $personaje->destreza : "8" ?></td>
                                     </tr>
                                     <tr>
                                         <th>Modificador</th>
-                                        <td id="txtDestrezaModificador">-1</td>
+                                        <td id="txtDestrezaModificador"><?php echo (isset($personaje->destreza)) ? obtenerModificador($personaje->destreza) : "-1" ?></td>
                                     </tr>
                                 </table>
                             </div>
@@ -153,11 +177,11 @@ require_once "../includes/header.php";
                                 <table>
                                     <tr>
                                         <th>Total</th>
-                                        <td id="txtConstitucionTotal">8</td>
+                                        <td id="txtConstitucionTotal"><?php echo (isset($personaje->constitucion)) ? $personaje->constitucion : "8" ?></td>
                                     </tr>
                                     <tr>
                                         <th>Modificador</th>
-                                        <td id="txtConstitucionModificador">-1</td>
+                                        <td id="txtConstitucionModificador"><?php echo (isset($personaje->constitucion)) ? obtenerModificador($personaje->constitucion) : "-1" ?></td>
                                     </tr>
                                 </table>
                             </div>
@@ -175,11 +199,11 @@ require_once "../includes/header.php";
                                 <table>
                                     <tr>
                                         <th>Total</th>
-                                        <td id="txtInteligenciaTotal">8</td>
+                                        <td id="txtInteligenciaTotal"><?php echo (isset($personaje->inteligencia)) ? $personaje->inteligencia : "8" ?></td>
                                     </tr>
                                     <tr>
                                         <th>Modificador</th>
-                                        <td id="txtInteligenciaModificador">-1</td>
+                                        <td id="txtInteligenciaModificador"><?php echo (isset($personaje->inteligencia)) ? obtenerModificador($personaje->inteligencia) : "-1" ?></td>
                                     </tr>
                                 </table>
                             </div>
@@ -197,11 +221,11 @@ require_once "../includes/header.php";
                                 <table>
                                     <tr>
                                         <th>Total</th>
-                                        <td id="txtSabiduriaTotal">8</td>
+                                        <td id="txtSabiduriaTotal"><?php echo (isset($personaje->sabiduria)) ? $personaje->sabiduria : "8" ?></td>
                                     </tr>
                                     <tr>
                                         <th>Modificador</th>
-                                        <td id="txtSabiduriaModificador">-1</td>
+                                        <td id="txtSabiduriaModificador"><?php echo (isset($personaje->sabiduria)) ? obtenerModificador($personaje->sabiduria) : "-1" ?></td>
                                     </tr>
                                 </table>
                             </div>
@@ -219,11 +243,11 @@ require_once "../includes/header.php";
                                 <table>
                                     <tr>
                                         <th>Total</th>
-                                        <td id="txtCarismaTotal">8</td>
+                                        <td id="txtCarismaTotal"><?php echo (isset($personaje->carisma)) ? $personaje->carisma : "8" ?></td>
                                     </tr>
                                     <tr>
                                         <th>Modificador</th>
-                                        <td id="txtCarismaModificador">-1</td>
+                                        <td id="txtCarismaModificador"><?php echo (isset($personaje->carisma)) ? obtenerModificador($personaje->carisma) : "-1" ?></td>
                                     </tr>
                                 </table>
                             </div>
@@ -242,6 +266,24 @@ require_once "../includes/footer.php"
 ?>
 <script src="../../js/menuHamburguesa.js"></script>
 <script src="../../js/compraPuntos.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        cargarDesdeSelect("trasfondo", "infoTrafondo", "<?php echo "../includes/peticiones.php";  ?>", "trasfondo");
+    });
+</script>
+<script>
+    const div = document.getElementById("infoTrafondo");
+
+    const observer = new MutationObserver(function(mutations) {
+        fijarValorTotal();
+    });
+
+    observer.observe(div, {
+        childList: true, // cambios en hijos
+        subtree: true, // también dentro de hijos
+        characterData: true // cambios de texto
+    });
+</script>
 </body>
 
 </html>

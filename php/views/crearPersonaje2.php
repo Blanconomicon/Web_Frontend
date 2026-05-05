@@ -83,7 +83,7 @@ require_once "../includes/footer.php"
 <script src="../../js/menuHamburguesa.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        cargarDesdeSelect("subraza", "traitsSubraza", "<?php echo "../includes/obtenerTraits.php";  ?>", "subraza");
+        cargarDesdeSelect("subraza", "traitsSubraza", "<?php echo "../includes/peticiones.php";  ?>", "subraza");
     });
 </script>
 </body>

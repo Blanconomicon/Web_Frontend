@@ -32,3 +32,21 @@ if (isset($_GET['subraza'])) {
         $personaje->competenciasRaza=$competenciasRazaSkills;
     }
 }
+
+if(isset($_GET['trasfondo'])){
+    $trasfondo=$_GET['trasfondo'];
+    $habilidadesTrasfondo=getBackgroundAbility(getCon(),$trasfondo);
+    $infoTrasfondo=getBackground(getCon(),$trasfondo);
+    echo "<h3 class='centrado'>+1 a las caracteristicas seleccionadas</h3>";
+    echo "<h4 class='centrado'>Ten en cuenta que como mucho puedes darle un +2</h4>";
+    echo "<br>";
+    echo "<div class='gridResponsive'>";
+    for ($i=0; $i < count($habilidadesTrasfondo); $i++)  {
+        echo "<select name='habilidad".($i+1)."' id='habilidad".($i+1)."' onchange='fijarValorTotal()'>";
+        foreach ($habilidadesTrasfondo as $habilidad) {
+            echo "<option value='".$habilidad->ability_id."' ".((isset($personaje)&&($personaje->{"habilidad".($i+1)}==$habilidad->ability_id))?"selected":"").">".$habilidad->ability_name."</option>";
+        }
+        echo "</select>";
+    }
+    echo "</div>";
+}

@@ -24,6 +24,32 @@ function getBackground(PDO $con, int|null $id = null)
     }
 }
 
+//TODO revisar
+function getBackgroundAbility(PDO $con, int|null $id = null)
+{
+    try {
+        $stmt = $con->prepare("CALL getBackgroundAbility(:id)");
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener todos los datos de los trasfondos o de un trasfondo concreto
+function getBackgroundFull(PDO $con, int $id)
+{
+    try {
+        $stmt = $con->prepare("CALL getBackgroundFull(:id)");
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
 //funcion para obtener la informacion de un personaje
 function getCharacter(PDO $con, string $nick, int|null $id = null)
 {
@@ -294,7 +320,8 @@ function getSize(PDO $con, int|null $sizeId = null)
 }
 
 //funcion para obtener los spells de una clase con un nivel
-function getSpellClass(PDO $con,int $idClase, int|null $nivelConjuro=null){
+function getSpellClass(PDO $con, int $idClase, int|null $nivelConjuro = null)
+{
     try {
         $stmt = $con->prepare("CALL getSpellClass(:idClase, :nivelConjuro)");
         $stmt->bindParam(":idClase", $idClase, PDO::PARAM_INT);
