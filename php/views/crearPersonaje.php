@@ -41,6 +41,66 @@ if (isset($_POST['siguiente'])) {
     }
     $_SESSION['personaje'] = $personaje;
     if ($error == "") {
+        switch ($_POST['habilidad1']) {
+            case 1:
+                $personaje->fuerza++;
+                break;
+            case 2:
+                $personaje->destreza++;
+                break;
+            case 3:
+                $personaje->constitucion++;
+                break;
+            case 4:
+                $personaje->inteligencia++;
+                break;
+            case 5:
+                $personaje->sabiduria++;
+                break;
+            case 6:
+                $personaje->carisma++;
+                break;
+        }
+        switch ($_POST['habilidad2']) {
+            case 1:
+                $personaje->fuerza++;
+                break;
+            case 2:
+                $personaje->destreza++;
+                break;
+            case 3:
+                $personaje->constitucion++;
+                break;
+            case 4:
+                $personaje->inteligencia++;
+                break;
+            case 5:
+                $personaje->sabiduria++;
+                break;
+            case 6:
+                $personaje->carisma++;
+                break;
+        }
+        switch ($_POST['habilidad3']) {
+            case 1:
+                $personaje->fuerza++;
+                break;
+            case 2:
+                $personaje->destreza++;
+                break;
+            case 3:
+                $personaje->constitucion++;
+                break;
+            case 4:
+                $personaje->inteligencia++;
+                break;
+            case 5:
+                $personaje->sabiduria++;
+                break;
+            case 6:
+                $personaje->carisma++;
+                break;
+        }
         header("Location: ./crearPersonaje2.php");
         exit();
     }
