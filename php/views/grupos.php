@@ -25,7 +25,7 @@ require_once "../includes/header.php";
         <?php
         // var_dump(obtenerGrupos($_SESSION['user'][0]->user_nick));
         foreach ($grupos as $grupo) {
-            echo "<p><a href='grupos.php?idGrupo=" . $grupo->group_id . "'>" . $grupo->group_name . "</a></p>";
+            echo "<p><a href='grupos.php?idGrupo=" . $grupo->group_id . "' class='centrado'>" . $grupo->group_name . "</a></p>";
             if (isset($_GET['idGrupo']) && $_GET['idGrupo'] == $grupo->group_id) {
                 $jugadores = obtenerJugadores($grupo->group_id);
         ?>
