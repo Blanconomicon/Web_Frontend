@@ -400,13 +400,55 @@ function getBundleItems(PDO $con, int $idBundle)
     }
 }
 
-function getAbility(PDO $con, int|null $idCaracteristica)
+//funcion para obtener la informacion de las caracteristicas o de una caracteristica concreta
+function getAbility(PDO $con, int|null $idCaracteristica = null)
 {
     try {
         $stmt = $con->prepare("CALL getAbility(:idCaracteristica)");
         $stmt->bindParam(":idCaracteristica", $idCaracteristica, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener la informacion de las habilidades o una habilidad concreta
+function getSkill(PDO $con, int|null $idSkill = null)
+{
+    try {
+        $stmt = $con->prepare("CALL getSkill(:idSkill)");
+        $stmt->bindParam(":idSkill", $idSkill, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener las habilidades en las que el personaje es competente
+function getCharacterSkillProficiency(PDO $con, int $idCharacter,int|null $idSkill=null)
+{
+    try {
+        $stmt = $con->prepare("CALL getCharacterSkillProficiency(:idCharacter, :idSkill)");
+        $stmt->bindParam(":idCharacter", $idCharacter, PDO::PARAM_INT);
+        $stmt->bindParam(":idSkill", $idSkill, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para aniadir una competencia o pericia al personaje
+function putCharacterSkillProficiency(PDO $con, int $idCharacter, int $idSkill, string $tipoCompetencia)
+{
+    try {
+        $stmt = $con->prepare("CALL putCharacterSkillProficiency(:idCharacter, :idSkill, :tipoCompetencia)");
+        $stmt->bindParam(":idCharacter", $idCharacter, PDO::PARAM_INT);
+        $stmt->bindParam(":idSkill", $idSkill, PDO::PARAM_INT);
+        $stmt->bindParam(":tipoCompetencia", $tipoCompetencia, PDO::PARAM_STR);
+        return $stmt->execute();
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }

@@ -196,6 +196,7 @@ function mostrarCompetencias(
     }
 }
 
+//funcion para mostrar la tabla de los conjuros de unnivel concreto de una clase
 function mostrarTablaSpells(string $titulo, int $idClase, int $nivelSpell)
 {
     $conjuros = getSpellClass(getCon(), $idClase, $nivelSpell);
@@ -236,4 +237,27 @@ function mostrarTablaSpells(string $titulo, int $idClase, int $nivelSpell)
     }
     echo "</table>";
     echo "</div>";
+}
+
+//funcion para mostrar la lista de las habilidades con sus caracteristicas
+function mostarListaHabilidades(array $modificadores, int $competencia, int $idCharacter)
+{
+    $habilidades = getSkill(getCon());
+    $competencias = getCharacterSkillProficiency(getCon(), $idCharacter);
+    foreach ($habilidades as $habilidad) {
+        echo "<div class='dnd__skill'>";
+        echo "<span>" . $habilidad->skill_name . "</span>";
+        echo "<span class='dnd__skill-mod'>";
+        $puntuacion = $modificadores[$habilidad->ability_id - 1];
+        if (in_array($habilidad->skill_id, $competencias)) {
+            $puntuacion += $competencia;
+            if (getCharacterSkillProficiency(getCon(), $idCharacter, $habilidad->skill_id)[0]->proficiency_type == "expertise") {
+                $puntuacion += $competencia;
+            }
+        }
+
+        echo $puntuacion;
+        echo "</span>";
+        echo "</div>";
+    }
 }

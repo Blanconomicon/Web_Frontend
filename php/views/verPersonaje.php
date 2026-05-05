@@ -22,6 +22,7 @@ $modConstitucion = obtenerModificador($personaje->constitution);
 $modInteligencia = obtenerModificador($personaje->intelligence);
 $modSabiduria = obtenerModificador($personaje->wisdom);
 $modCarisma = obtenerModificador($personaje->charisma);
+$modificadores=[$modFuerza,$modDestreza,$modConstitucion,$modInteligencia,$modSabiduria,$modCarisma];
 
 $traitsClase = getTraitClass(getCon(), $personaje->class_id, $personaje->character_level);
 $traitsSubraza = getTraitRace(getCon(), $personaje->race_id);
@@ -184,8 +185,7 @@ if ($personaje->subrace_id != -1) {
         <!-- TODO hacer que vayan con las caracteristicas -->
         <!-- HABILIDADES -->
         <div class="dnd__skills">
-
-          <div class="dnd__skill"><span>Acrobacias</span><span class="dnd__skill-mod">+3</span></div>
+          <!-- <div class="dnd__skill"><span>Acrobacias</span><span class="dnd__skill-mod">+3</span></div>
           <div class="dnd__skill"><span>Arcanos</span><span class="dnd__skill-mod">+2</span></div>
           <div class="dnd__skill"><span>Atletismo</span><span class="dnd__skill-mod">+2</span></div>
           <div class="dnd__skill"><span>Engaño</span><span class="dnd__skill-mod">+6</span></div>
@@ -201,7 +201,10 @@ if ($personaje->subrace_id != -1) {
           <div class="dnd__skill"><span>Persuasión</span><span class="dnd__skill-mod">+6</span></div>
           <div class="dnd__skill"><span>Religión</span><span class="dnd__skill-mod">+2</span></div>
           <div class="dnd__skill"><span>Sigilo</span><span class="dnd__skill-mod">+3</span></div>
-          <div class="dnd__skill"><span>Supervivencia</span><span class="dnd__skill-mod">+1</span></div>
+          <div class="dnd__skill"><span>Supervivencia</span><span class="dnd__skill-mod">+1</span></div> -->
+          <?php
+            mostarListaHabilidades($modificadores,$personaje->proficiency_bonus,$personaje->character_id);
+          ?>
 
         </div>
 
