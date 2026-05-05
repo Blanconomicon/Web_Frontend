@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-05-2026 a las 19:11:20
+-- Tiempo de generación: 05-05-2026 a las 14:32:35
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `dnd3`
+-- Base de datos: `dbtfg`
 --
 
 DELIMITER $$
@@ -31,15 +31,104 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteCharacter` (IN `p_character_i
       AND user_nick    = CONVERT(p_user_nick    USING utf8mb4);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getAbility` (IN `p_id` INT)   BEGIN
+    IF p_id IS NULL THEN
+        SELECT *
+        FROM ability;
+    ELSE
+        SELECT *
+        FROM ability
+        WHERE ability_id = CONVERT(p_id USING utf8mb4);
+    END IF;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getBackground` (IN `p_id` INT)   BEGIN
     IF p_id IS NULL THEN
         SELECT background_id, background_name
-        FROM background;
+        FROM background
+        ORDER BY background_id;
     ELSE
         SELECT *
         FROM background
         WHERE background_id = CONVERT(p_id USING utf8mb4);
     END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getBackgroundAbility` (IN `p_id` INT)   BEGIN
+    IF p_id IS NULL THEN
+        SELECT ba.background_id, b.background_name,
+               ba.ability_id, a.ability_name, a.ability_abbr
+        FROM background_ability ba
+        INNER JOIN background b ON b.background_id = ba.background_id
+        INNER JOIN ability    a ON a.ability_id    = ba.ability_id
+        ORDER BY ba.background_id, ba.ability_id;
+    ELSE
+        SELECT ba.background_id,
+               ba.ability_id, a.ability_name, a.ability_abbr
+        FROM background_ability ba
+        INNER JOIN ability a ON a.ability_id = ba.ability_id
+        WHERE ba.background_id = CONVERT(p_id USING utf8mb4)
+        ORDER BY ba.ability_id;
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getBackgroundFull` (IN `p_id` INT)   BEGIN 
+-- 1. Datos del trasfondo
+    SELECT b.*
+    FROM background b
+    WHERE b.background_id = CONVERT(p_id USING utf8mb4);
+
+    -- 2. Características que otorga (+2/+1/+1)
+    SELECT ba.ability_id, a.ability_name, a.ability_abbr
+    FROM background_ability ba
+    INNER JOIN ability a ON a.ability_id = ba.ability_id
+    WHERE ba.background_id = CONVERT(p_id USING utf8mb4)
+    ORDER BY ba.ability_id;
+
+    -- 3. Habilidades fijas
+    SELECT bs.skill_id, s.skill_name
+    FROM background_skill bs
+    INNER JOIN skill s ON s.skill_id = bs.skill_id
+    WHERE bs.background_id = CONVERT(p_id USING utf8mb4)
+    ORDER BY s.skill_name;
+
+    -- 4. Competencias de herramienta/idioma/vehículo
+    SELECT bp.prof_id, p.prof_name, p.prof_type
+    FROM background_prof bp
+    INNER JOIN prof p ON p.prof_id = bp.prof_id
+    WHERE bp.background_id = CONVERT(p_id USING utf8mb4)
+    ORDER BY p.prof_type, p.prof_name;
+
+    -- 5. Ítems del bundle asociado
+    SELECT bi.item_id, i.item_name, bi.item_count,
+           i.item_weight, i.item_price
+    FROM background b
+    INNER JOIN bundle_item bi ON bi.bundle_id = b.bundle_id
+    INNER JOIN item        i  ON i.item_id    = bi.item_id
+    WHERE b.background_id = CONVERT(p_id USING utf8mb4)
+    ORDER BY i.item_name;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getBundle` (IN `p_id` INT)   BEGIN
+    IF p_id IS NULL THEN
+        SELECT bundle_id, bundle_name, bundle_price
+        FROM bundle
+        ORDER BY bundle_id;
+    ELSE
+        SELECT *
+        FROM bundle
+        WHERE bundle_id = CONVERT(p_id USING utf8mb4);
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getBundleItems` (IN `p_id` INT)   BEGIN
+	SELECT *
+    FROM item
+    WHERE EXISTS(
+        SELECT *
+    	FROM bundle_item
+    	WHERE item.item_id = bundle_item.item_id
+        AND bundle_item.bundle_id = p_id);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCharacter` (IN `p_id` INT, IN `u_nick` VARCHAR(30))   BEGIN
@@ -55,6 +144,32 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getCharacter` (IN `p_id` INT, IN `u
     END IF;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCharacterSkillProficiency` (IN `char_id` INT, IN `p_id` INT)   BEGIN
+IF p_id IS NULL THEN
+     SELECT *
+       FROM character_skill_proficiency
+        WHERE character_id = CONVERT(char_id USING utf8mb4);
+ELSE
+     SELECT *
+       FROM character_skill_proficiency
+        WHERE character_id = CONVERT(char_id USING utf8mb4) AND
+skill_id=CONVERT(p_id USING utf8mb4);
+END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCharacterSpell` (IN `char_id` INT, IN `spell_id` INT)   BEGIN
+    IF spell_id IS NULL THEN
+        SELECT *
+        FROM character_spell
+WHERE character_id = CONVERT(char_id USING utf8mb4);
+    ELSE
+        SELECT *
+        FROM character_spell
+        WHERE character_id = CONVERT(char_id  USING utf8mb4) AND
+spell_id = CONVERT(spell_id USING utf8mb4);
+    END IF;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getClass` (IN `p_id` INT)   BEGIN
     IF p_id IS NULL THEN
         SELECT class_id, class_name
@@ -65,6 +180,19 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getClass` (IN `p_id` INT)   BEGIN
         FROM class
         WHERE class_id = CONVERT(p_id USING utf8mb4)
         ORDER BY class_name;
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getClassLevelProgression` (IN `p_id` INT, IN `p_level` INT)   BEGIN
+    IF p_level IS NULL THEN
+        SELECT *
+        FROM class_level_progression
+        WHERE class_id=CONVERT(p_id USING utf8mb4);
+    ELSE
+        SELECT *
+        FROM class_level_progression
+        WHERE class_id = CONVERT(p_id USING utf8mb4)
+        AND level=CONVERT(p_level USING utf8mb4);
     END IF;
 END$$
 
@@ -225,6 +353,17 @@ IF p_id IS NULL THEN
     END IF;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getSkill` (IN `p_id` INT)   BEGIN
+    IF p_id IS NULL THEN
+        SELECT *
+        FROM skill;
+    ELSE
+        SELECT *
+        FROM skill
+        WHERE skill_id = CONVERT(p_id USING utf8mb4);
+    END IF;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getSpell` (IN `p_id` INT, IN `p_level` INT)   BEGIN
     IF p_id IS NOT NULL THEN
         SELECT * FROM spell WHERE spell_id = CONVERT(p_id USING utf8mb4);
@@ -262,6 +401,17 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getSpellClass` (IN `p_class_id` INT
         WHERE sc.class_id  = CONVERT(p_class_id USING utf8mb4)
           AND s.spell_level = CONVERT(p_level    USING utf8mb4)
         ORDER BY s.spell_name;
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getSpellSchool` (IN `p_id` INT)   BEGIN
+    IF p_id IS NULL THEN
+        SELECT *
+        FROM spell_school;
+    ELSE
+        SELECT *
+        FROM spell_school
+        WHERE spell_school_id= CONVERT(p_id USING utf8mb4);
     END IF;
 END$$
 
@@ -404,22 +554,32 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getUser` (IN `p_id` VARCHAR(30))   
 	END IF;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `putCharacter` (IN `p_user_nick` VARCHAR(30), IN `p_name` VARCHAR(30), IN `p_race_id` INT, IN `p_subrace_id` INT, IN `p_class_id` INT, IN `p_background_id` INT, IN `p_str` INT, IN `p_dex` INT, IN `p_con` INT, IN `p_int` INT, IN `p_wis` INT, IN `p_cha` INT, IN `p_max_hp` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `putCharacter` (IN `p_user_nick` VARCHAR(30), IN `p_name` VARCHAR(30), IN `p_race_id` INT, IN `p_subrace_id` INT, IN `p_class_id` INT, IN `p_background_id` INT, IN `p_str` INT, IN `p_dex` INT, IN `p_con` INT, IN `p_int` INT, IN `p_wis` INT, IN `p_cha` INT, IN `p_max_hp` INT, IN `p_armor_class` INT, IN `p_initiative` INT)   BEGIN
     INSERT INTO `character` (
         user_nick, character_name, race_id, subrace_id, class_id, background_id,
         strength, dexterity, constitution, intelligence, wisdom, charisma,
-        max_hp, current_hp, armor_class, character_date
+        max_hp, current_hp, armor_class, initiative, character_date
     ) VALUES (
         p_user_nick, p_name, p_race_id, p_subrace_id, p_class_id, p_background_id,
         p_str, p_dex, p_con, p_int, p_wis, p_cha,
-        p_max_hp, p_max_hp, 10, CURDATE()
+        p_max_hp, p_max_hp, p_armor_class, p_initiative, CURDATE()
     );
     SELECT LAST_INSERT_ID() AS character_id;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `putCharacterSkillProficiency` (IN `char_id` INT, IN `p_id` INT, IN `prof_type` VARCHAR(10))   BEGIN
+	INSERT INTO `character_skill_proficiency` (`character_id`, `skill_id`, `proficiency_type`) 
+    VALUES (char_id, p_id, prof_type);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `putCharacterSpell` (IN `char_id` INT, IN `p_id` INT)   BEGIN
+INSERT INTO `character_spell` (`character_id`, `spell_id`) VALUES (char_id, p_id);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `putGroup` (IN `p_group_name` VARCHAR(30), IN `p_user_name` VARCHAR(50))   BEGIN
-	INSERT INTO groups(groups.group_name,groups.user_name)
-	VALUES(p_group_name,p_user_name);
+    INSERT INTO groups(groups.group_name,groups.user_name)
+    VALUES(p_group_name,p_user_name);
+SELECT LAST_INSERT_ID() AS id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `putGroupMembers` (IN `p_id` INT, IN `p_username` VARCHAR(30), IN `p_rol` CHAR(1))   BEGIN
@@ -531,18 +691,18 @@ CREATE TABLE `background` (
 --
 
 INSERT INTO `background` (`background_id`, `background_name`, `background_feat`, `skill_choice_count`, `tool_choice_count`, `language_choice_count`, `bundle_id`, `suggested_personality_trait`, `suggested_ideals`, `suggested_bonds`, `suggested_flaws`, `feature_description`) VALUES
-(1, 'Acólito', 0, 0, 0, 2, 101, 'Soy reverente y respetuoso en presencia de lo sagrado. Cito las escrituras o enseñanzas de mi fe para iluminar cualquier situación.', 'Tradición: los ritos sagrados deben preservarse con exactitud. (Legal)\nCaridad: ayudo a los necesitados sin esperar recompensa. (Bueno)\nPoder: aspiro a alcanzar un cargo elevado en mi fe. (Legal)', 'Protegeré el templo que me acogió cueste lo que cueste.\nBusco recuperar un artefacto sagrado robado a mi congregación.', 'Soy intolerante con las creencias ajenas a mi fe.\nConfío demasiado en la jerarquía religiosa y cuestiono poco las órdenes.', 'Servidor de los Dioses: conoces los ritos y liturgias de tu fe. Puedes realizar los rituales de tu religión. Tú y tus compañeros reciben alojamiento y comida gratis en cualquier templo de tu deidad.'),
-(2, 'Charlatán', 0, 2, 1, 0, 102, 'Siempre tengo una respuesta para todo. Me encantan los cumplidos y la adulación.', 'Libertad. Los grilletes son para ser rotos, como los que atan el corazón. (Caótico)\nAstucia. No soy un villano, solo uso las herramientas que tengo. (Neutral)', 'Me metí en problemas con la ley y ahora debo reponer mis malas acciones.\nAlguien me robó mi identidad falsa favorita y debo recuperarla.', 'Soy un cobarde que huye ante la primera señal de peligro.\nNo puedo resistir estafar a alguien que parece más rico que yo.', 'Puedes crear una segunda identidad que incluye documentación, disfraces y conocidos. Puedes asumir esa identidad como acción adicional.'),
-(3, 'Criminal', 0, 2, 1, 0, 103, 'Siempre tengo un plan por si las cosas salen mal. Nunca muestro miedo.', 'Libertad. Las cadenas son para ser rotas. (Caótico)\nAmbición. Voy a ser rico, cueste lo que cueste. (Cualquiera)', 'Estoy en deuda con mi gremio criminal y debo cumplir sus órdenes.\nProtejo a mi hermano menor de los peligros de nuestra vida.', 'Haré cualquier cosa, sin importar lo despreciable, para conseguir un poco más de poder.\nTraicionaría a mis amigos para salvar mi propia piel.', 'Tienes un contacto confiable que actúa como enlace con una red criminal. Puedes enviar mensajes a contactos en otras ciudades.'),
-(4, 'Héroe del pueblo', 0, 2, 1, 1, 104, 'Soy sincero y directo. Confío en el trabajo duro más que en la suerte.', 'Respeto. La gente merece ser tratada con dignidad y respeto. (Bueno)\nEquidad. Nadie debería obtener ventajas desleales. (Legal)', 'Protegeré a mi pueblo natal de cualquier amenaza.\nSiempre honraré a la persona cuyo ejemplo me inspiró.', 'Soy sospechoso de los extraños y espero lo peor de ellos.\nUna vez que establezco un objetivo, me vuelvo obsesivo.', 'Te sientes cómodo en entornos rurales y naturales. Puedes encontrar comida y agua fresca para ti y hasta cinco personas cada día.'),
-(5, 'Marinero', 0, 2, 1, 0, 105, 'Sigo las órdenes, a menos que sean estúpidas. Me río ante el peligro.', 'Respeto. El capitán es como el rey en su barco. (Legal)\nLibertad. El mar es libertad para ir a cualquier parte. (Caótico)', 'Siempre seré leal a mi capitán y barco, aunque no estén cerca.\nEl mar reclama lo que quiere y siempre le debo algo.', 'Me meto en peleas con frecuencia, especialmente cuando bebo.\nNo confío en la gente de tierra firme.', 'Puedes mover mercancía ilegal sin que las autoridades lo detecten. Puedes esconder pequeños objetos en compartimentos secretos.'),
-(6, 'Noble', 0, 2, 0, 1, 106, 'Mi lenguaje y modales son exquisitos y refinados. Espero que los demás me traten con el respeto que merezco.', 'Responsabilidad. Es mi deber proteger y cuidar a la gente que me sirve. (Legal)\nFamilia. La sangre es más importante que cualquier otra cosa. (Cualquiera)', 'Haré cualquier cosa por proteger a los miembros de mi familia.\nDebo recuperar un objeto de familia perdido que fue robado.', 'Soy condescendiente con aquellos que considero de menor cuna.\nOculto un secreto vergonzoso que podría arruinar mi familia.', 'Gracias a tu nacimiento noble, la gente común te trata con deferencia. Puedes obtener audiencia con nobles locales.'),
-(7, 'Soldado', 0, 2, 1, 0, 107, 'Soy hosco y tengo mal genio. Disciplinado y siempre sigo las órdenes.', 'Unidad. La cadena es tan fuerte como su eslabón más débil. (Legal)\nValentía. Nunca retrocedo, nunca me rindo. (Cualquiera)', 'Protegeré a mis camaradas, vivos o muertos. Nunca olvidaré a mi antiguo regimiento.', 'Haré cualquier cosa, sin importar lo despreciable, para conseguir un poco más de poder.\nObedezco ciegamente a mis superiores, sin importar lo que ordenen.', 'Gracias a tu rango militar, los soldados y oficiales que reconocen tu autoridad te obedecen. Puedes requisitar equipo militar simple.'),
-(8, 'Ermitaño', 0, 2, 1, 1, 108, 'Soy taciturno y reservado. Hablo poco, pero cuando lo hago, mis palabras tienen peso.', 'Conocimiento. El camino hacia el poder y la autoperfección es a través del conocimiento. (Neutral)\nPaciencia. Hay tiempo para todo. (Neutral)', 'Mi aislamiento me dio gran conocimiento que debo compartir.\nDebo proteger el lugar sagrado donde viví como ermitaño.', 'Ahora que he dejado mi aislamiento, me obsesiono con los placeres de la civilización.\nMe cuesta confiar en mis nuevos compañeros.', 'Durante tu tiempo en aislamiento, hiciste un gran descubrimiento filosófico, religioso o histórico. El DM determina los detalles.'),
-(9, 'Artista', 0, 2, 2, 0, 109, 'Conozco una historia relevante para cada situación. Me encanta la atención del público.', 'Belleza. Cuando realizo mi arte, hago del mundo un lugar mejor. (Bueno)\nLibertad. El arte debe ser libre y sin restricciones. (Caótico)', 'Mi instrumento es mi posesión más preciada; me recuerda a alguien que amé.\nBuscaré inspirar a la gente a superar sus problemas.', 'Haré cualquier cosa para alcanzar la fama.\nUna vez que empiezo a actuar, es difícil que me detengan.', 'Puedes conseguir alojamiento y comida gratis donde tu arte sea apreciado, siempre que realices cada noche una interpretación.'),
-(10, 'Sabio', 0, 2, 0, 2, 110, 'Soy distraído y ajeno a mi entorno. Hablo de forma precisa y académica.', 'Conocimiento. El camino al poder y la mejora es a través del conocimiento. (Neutral)\nLogro. Debo probar que soy el más inteligente en la habitación. (Cualquiera)', 'Mi vida de investigación está consagrada a un objetivo mayor.\nDevolveré un artefacto perdido a su legítimo propietario.', 'Soy fácilmente distraído por lo nuevo y desconocido.\nSubestimo a aquellos que no son tan inteligentes como yo.', 'Cuando intentas aprender o recordar información, si no la conoces, usualmente sabes dónde y de quién obtenerla.'),
-(11, 'Huérfano', 0, 2, 1, 0, 111, 'Soy silencioso y sigiloso en las calles. Duermo con un ojo abierto.', 'Libertad. Las cadenas son para ser rotas, como las que atan a los pobres. (Caótico)\nEsperanza. Un día, tendré mi propio negocio y seré respetado. (Bueno)', 'Mi ciudad natal es mi hogar, y lucharé por defenderla.\nDebo proteger a otros huérfanos como yo.', 'Robaré de los ricos para dárselo a los pobres (principalmente a mí).\nNo confío en nadie, especialmente en la autoridad.', 'Puedes pasar desapercibido en ambientes urbanos. Puedes encontrar pasadizos y escondites que otros pasarían por alto.'),
-(12, 'Mercader', 0, 2, 1, 1, 112, 'Siempre estoy buscando una oportunidad de negocio. Soy persuasivo y carismático.', 'Acuerdo. Un contrato firmado es sagrado. (Legal)\nAmistad. Los buenos negocios se basan en relaciones duraderas. (Cualquiera)', 'Mi caravana mercante es mi familia; protegeré a sus miembros.\nDebo recuperar una mercancía perdida que fue robada.', 'Pongo el oro por encima de todo, incluso de mis amigos.\nSiempre estoy buscando el ángulo en cada situación.', 'Puedes conseguir mejores precios en bienes y servicios, y tienes acceso a información sobre movimientos del mercado.');
+(1, 'Acólito', 0, 0, 0, 2, 101, 'Cito las escrituras de mi fe para guiar a quienes me rodean. Veo las señales divinas en los eventos cotidianos.', 'Tradición. Los ritos sagrados deben preservarse exactamente. (Legal)\nCaridad. Sirvo a los necesitados sin esperar recompensa. (Bueno)\nPoder. La fe es el camino hacia la influencia y la grandeza. (Legal)', 'Daría mi vida por proteger el templo que me acogió.\nBusco recuperar un artefacto sagrado robado a mi congregación.', 'Soy intolerante con quienes no comparten mi fe.\nConfío ciegamente en la jerarquía de mi orden.', 'Refugio de los Fieles: tú y tus compañeros recibís alojamiento y comida gratis en cualquier templo de tu deidad o de deidades aliadas. Puedes realizar los ritos sagrados de tu fe.'),
+(2, 'Charlatán', 0, 0, 0, 0, 102, 'Tengo siempre una historia preparada. Nadie sospecha de mi sonrisa. Me adapto a quien tenga delante.', 'Libertad. Nadie debería poder controlarme. (Caótico)\nAspiración. Me ganaré lo que merezco, de una forma u otra. (Cualquiera)', 'Alguien descubrió una de mis mentiras y ahora me persigue.\nProtejo a la única persona que conoce mi verdadera identidad.', 'No puedo evitar mentir, aunque la verdad sea más útil.\nSoy incapaz de resistir estafar a alguien más rico que yo.', 'Identidad Falsa: posees una segunda identidad completa con documentos falsificados, un disfraz convincente y una red de contactos que respaldan tu historia. Crear una nueva identidad requiere 1 semana y 25 po.'),
+(3, 'Criminal', 0, 0, 0, 0, 103, 'Siempre tengo un plan de escape. Nunca muestro mis cartas hasta el momento adecuado.', 'Libertad. Las reglas son para quien no tiene el talento para evitarlas. (Caótico)\nLealtad. Traicionar a los tuyos es lo único imperdonable. (Legal)', 'Tengo una deuda de sangre con alguien del submundo.\nProtejo a mi familia de conocer mi vida real.', 'Traicionaría a casi cualquiera para salvar mi pellejo.\nSi veo una oportunidad de robo, me cuesta resistirla.', 'Contacto Criminal: tienes un enlace fiable en el submundo. Puedes pasar mensajes a otros criminales en la misma región y obtener información de la calle antes que nadie.'),
+(4, 'Héroe del Pueblo', 0, 0, 0, 0, 104, 'Soy directo y prefiero la acción a las palabras largas. Confío en el trabajo duro y en las manos callosas.', 'Pueblo. Mi deber es proteger a los que no pueden protegerse solos. (Bueno)\nDestino. Fui elegido para hacer grandes cosas; lo siento. (Cualquiera)', 'Defiendo mi aldea natal de cualquier amenaza que se acerque.\nEl héroe que me inspiró de niño es mi modelo a seguir.', 'Desconfío de los nobles y los eruditos sin callos en las manos.\nCuando me propongo algo me vuelvo obsesivo hasta lograrlo.', 'Hospitalidad Rústica: la gente común te reconoce como uno de los suyos. Puedes encontrar refugio, comida básica y apoyo entre campesinos y aldeanos, que te ayudarán a ocultarte de nobles o soldados si es preciso.'),
+(5, 'Marinero', 0, 0, 0, 0, 105, 'Me río ante el peligro y tengo una historia de mar para cada ocasión. El horizonte siempre me llama.', 'Respeto. En el mar, el capitán manda y su palabra es ley. (Legal)\nLibertad. Cada puerto es un nuevo comienzo. (Caótico)', 'Mi barco y su tripulación son mi familia; los protegeré siempre.\nDebo vengar la pérdida de un barco querido que naufragó.', 'Bebo demasiado cuando toco tierra y siempre acabo en problemas.\nNo confío en quien nunca ha visto el mar.', 'Pasaje en Barco: mientras no seas un fugitivo, puedes conseguir pasaje gratuito en barcos de vela para ti y hasta cinco compañeros, a cambio de trabajo durante la travesía.'),
+(6, 'Noble', 0, 0, 0, 1, 106, 'Mis modales y lenguaje son impecables. Espero el mismo refinamiento en mis acompañantes.', 'Responsabilidad. El poder conlleva el deber de proteger a los más débiles. (Legal)\nFamilia. La sangre es lo más sagrado que existe. (Cualquiera)', 'Haré cualquier cosa por proteger el honor de mi linaje.\nBusco recuperar un tesoro familiar perdido o robado.', 'Soy condescendiente con quienes considero de menor cuna.\nGuardo un secreto que podría hundir a toda mi familia.', 'Privilegio de Rango: tu posición noble te abre puertas. La gente común te trata con deferencia y puedes obtener audiencia con aristócratas y funcionarios con facilidad, siempre que no estés en desgracia.'),
+(7, 'Soldado', 0, 0, 0, 0, 107, 'Soy directo y disciplinado. Valoro la lealtad y el cumplimiento del deber por encima de todo.', 'Unidad. Solo juntos somos invencibles. (Legal)\nValentía. Nunca abandonar a un compañero en el campo. (Cualquiera)', 'Nunca olvidaré a los camaradas que cayeron a mi lado.\nDebo honrar el sacrificio de mi unidad cumpliendo su misión.', 'Obedezco órdenes sin cuestionarlas, incluso cuando debería.\nBusco peleas para demostrar que no he perdido mi habilidad.', 'Rango Militar: los soldados activos y veteranos reconocen tu autoridad. En territorios aliados puedes requisar equipo básico y alojamiento, y acceder a instalaciones militares.'),
+(8, 'Ermitaño', 0, 0, 0, 1, 108, 'Soy tranquilo y reflexivo. Escucho más de lo que hablo, y cuando hablo, mis palabras pesan.', 'Sabiduría. El conocimiento interior es el camino hacia la verdad. (Neutral)\nVinculación. Debo compartir lo que aprendí con el mundo. (Bueno)', 'Mi retiro me reveló algo que el mundo necesita saber urgentemente.\nDebo proteger el lugar sagrado donde viví.', 'Me obsesiono con cuestiones filosóficas y pierdo el hilo práctico.\nMe cuesta confiar en los demás tras años de soledad.', 'Descubrimiento: durante tu retiro alcanzaste una revelación única, filosófica, espiritual o histórica. El DM decide los detalles; puede tener implicaciones importantes en la campaña.'),
+(9, 'Artista', 0, 0, 0, 0, 109, 'Tengo una historia o canción para cada ocasión. Vivo para la atención y el aplauso del público.', 'Belleza. El arte eleva el alma y hace el mundo mejor. (Bueno)\nLibertad. El arte no puede vivir encadenado. (Caótico)', 'Mi instrumento es lo más preciado que tengo; me recuerda a alguien amado.\nQuiero inspirar a otros a superar sus propios límites con mi arte.', 'Haré cualquier cosa por la fama, incluyendo exagerar mis hazañas.\nUna vez que empiezo a actuar, es difícil que me detenga.', 'Por Amor al Arte: puedes conseguir alojamiento y comida básicos cada noche en tabernas, posadas u otros lugares donde tu arte sea apreciado, a cambio de actuar.'),
+(10, 'Sabio', 0, 0, 0, 2, 110, 'Cito expertos y textos académicos constantemente. Soy preciso y metódico en mi razonamiento.', 'Conocimiento. El saber tiene valor intrínseco independientemente de su uso. (Neutral)\nLogro. Debo demostrar que soy el mejor en mi campo. (Cualquiera)', 'Mi investigación está dedicada a un objetivo más grande que yo mismo.\nDebo devolver un texto antiguo a su legítimo propietario.', 'Me distraen los misterios intelectuales incluso en medio del peligro.\nSubestimo a quienes no tienen mi nivel de formación académica.', 'Investigador: cuando intentas recordar o buscar un dato, si no lo conoces, siempre sabes a qué persona, biblioteca o institución acudir para encontrarlo.'),
+(11, 'Callejero', 0, 0, 0, 0, 111, 'Duermo con un ojo abierto y siempre localizo la salida más cercana. Soy silencioso y observador.', 'Supervivencia. Lo primero es seguir vivo para ver mañana. (Neutral)\nSolidaridad. Protejo a los débiles porque yo fui uno de ellos. (Bueno)', 'La ciudad donde crecí es mi hogar y la defenderé.\nAlguien me ayudó cuando lo necesitaba; le debo lealtad eterna.', 'Tiendo a robar sin pensarlo cuando veo algo que necesito.\nNo confío en nadie, especialmente en figuras de autoridad.', 'Conocimiento de la Ciudad: conoces los callejones, escondites y pasajes secretos de cualquier ciudad donde hayas vivido. Puedes encontrar refugio, comida básica e información en el submundo urbano.'),
+(12, 'Mercader', 0, 0, 0, 1, 112, 'Siempre veo el ángulo rentable en cualquier situación. Soy persuasivo y nunca hago una oferta sin conocer la respuesta.', 'Acuerdo. Un contrato firmado es sagrado; la palabra dada, también. (Legal)\nProsperidad. La riqueza es la medida del éxito personal. (Cualquiera)', 'Mi red de socios es mi familia; los protegeré a cualquier precio.\nDebo recuperar una mercancía valiosa que me fue robada.', 'El oro es mi prioridad, incluso por encima de mis amigos.\nVeo cada interacción como una transacción potencial.', 'Red Comercial: gracias a tus contactos mercantiles puedes conseguir bienes a precio de coste en ciudades importantes y tienes acceso a información sobre el mercado local antes que la mayoría.');
 
 -- --------------------------------------------------------
 
@@ -560,28 +720,40 @@ CREATE TABLE `background_ability` (
 --
 
 INSERT INTO `background_ability` (`background_id`, `ability_id`) VALUES
+(1, 4),
 (1, 5),
 (1, 6),
 (2, 2),
+(2, 4),
 (2, 6),
 (3, 2),
+(3, 3),
 (3, 4),
 (4, 1),
 (4, 3),
+(4, 5),
 (5, 1),
-(5, 3),
+(5, 2),
+(5, 5),
+(6, 1),
 (6, 4),
 (6, 6),
 (7, 1),
 (7, 3),
+(7, 5),
+(8, 3),
 (8, 4),
 (8, 5),
 (9, 2),
+(9, 5),
 (9, 6),
 (10, 4),
 (10, 5),
+(10, 6),
 (11, 2),
+(11, 4),
 (11, 6),
+(12, 3),
 (12, 4),
 (12, 6);
 
@@ -620,11 +792,13 @@ INSERT INTO `background_prof` (`background_id`, `prof_id`) VALUES
 (4, 55),
 (5, 34),
 (5, 59),
+(6, 54),
 (7, 52),
 (7, 55),
-(8, 48),
-(9, 33),
-(9, 48);
+(8, 44),
+(9, 48),
+(11, 31),
+(12, 34);
 
 -- --------------------------------------------------------
 
@@ -642,14 +816,14 @@ CREATE TABLE `background_skill` (
 --
 
 INSERT INTO `background_skill` (`background_id`, `skill_id`) VALUES
-(1, 14),
+(1, 13),
 (1, 15),
 (2, 4),
 (2, 9),
 (3, 4),
 (3, 16),
-(4, 2),
 (4, 17),
+(4, 18),
 (5, 2),
 (5, 12),
 (6, 5),
@@ -845,11 +1019,16 @@ CREATE TABLE `character` (
   `flaws` text DEFAULT NULL,
   `languages` text DEFAULT NULL,
   `proficiency_bonus` int(1) DEFAULT 2,
-  `spellcasting_ability` int(1) DEFAULT NULL,
-  `spell_save_dc` int(2) DEFAULT NULL,
-  `spell_attack_bonus` int(2) DEFAULT NULL,
   `character_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `character`
+--
+
+INSERT INTO `character` (`character_id`, `user_nick`, `character_name`, `character_level`, `race_id`, `subrace_id`, `class_id`, `subclass_id`, `background_id`, `strength`, `dexterity`, `constitution`, `intelligence`, `wisdom`, `charisma`, `max_hp`, `current_hp`, `temp_hp`, `armor_class`, `initiative`, `speed`, `inspiration`, `experience_points`, `alignment`, `deity`, `personality_trait`, `ideals`, `bonds`, `flaws`, `languages`, `proficiency_bonus`, `character_date`) VALUES
+(12, 'pako', 'otrdgrfgvfdgvfdzgv', 1, 7, 3, 2, NULL, 1, 15, 15, 15, 10, 8, 9, 10, 10, 0, 12, 2, 30, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2026-05-05'),
+(13, 'pako', 'b', 1, 7, 3, 1, NULL, 1, 15, 15, 15, 10, 9, 8, 14, 14, 0, 14, 2, 30, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2026-05-05');
 
 -- --------------------------------------------------------
 
@@ -900,6 +1079,40 @@ CREATE TABLE `character_skill_proficiency` (
   `proficiency_type` enum('proficient','expertise') DEFAULT 'proficient'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `character_skill_proficiency`
+--
+
+INSERT INTO `character_skill_proficiency` (`character_id`, `skill_id`, `proficiency_type`) VALUES
+(12, 1, 'proficient'),
+(12, 4, 'proficient'),
+(12, 6, 'proficient'),
+(13, 7, 'proficient'),
+(13, 12, 'proficient');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `character_spell`
+--
+
+CREATE TABLE `character_spell` (
+  `character_id` int(11) NOT NULL,
+  `spell_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `character_spell`
+--
+
+INSERT INTO `character_spell` (`character_id`, `spell_id`) VALUES
+(12, 1),
+(12, 8),
+(12, 101),
+(12, 102),
+(12, 103),
+(12, 109);
+
 -- --------------------------------------------------------
 
 --
@@ -910,27 +1123,31 @@ CREATE TABLE `class` (
   `class_id` int(2) NOT NULL,
   `class_name` varchar(30) NOT NULL,
   `class_hpdice` varchar(4) NOT NULL,
-  `skill_id` int(1) NOT NULL,
-  `class_spellcaster` tinyint(1) NOT NULL
+  `safe1_ability_id` int(1) NOT NULL,
+  `safe2_ability_id` int(11) NOT NULL,
+  `class_spellcaster` tinyint(1) NOT NULL,
+  `spellcasting_ability` int(11) DEFAULT NULL,
+  `class_bundle_id` int(4) NOT NULL,
+  `prof_cuantity` int(11) NOT NULL DEFAULT 2
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `class`
 --
 
-INSERT INTO `class` (`class_id`, `class_name`, `class_hpdice`, `skill_id`, `class_spellcaster`) VALUES
-(1, 'Bárbaro', 'd12', 2, 0),
-(2, 'Bardo', 'd8', 14, 1),
-(3, 'Clérigo', 'd8', 15, 1),
-(4, 'Druida', 'd8', 17, 1),
-(5, 'Guerrero', 'd10', 2, 0),
-(6, 'Mago', 'd6', 3, 1),
-(7, 'Monje', 'd8', 1, 0),
-(8, 'Paladín', 'd10', 15, 1),
-(9, 'Pícaro', 'd8', 9, 0),
-(10, 'Explorador', 'd10', 12, 0),
-(11, 'Hechicero', 'd6', 4, 1),
-(12, 'Brujo', 'd8', 7, 1);
+INSERT INTO `class` (`class_id`, `class_name`, `class_hpdice`, `safe1_ability_id`, `safe2_ability_id`, `class_spellcaster`, `spellcasting_ability`, `class_bundle_id`, `prof_cuantity`) VALUES
+(1, 'Bárbaro', 'd12', 1, 3, 0, NULL, 0, 2),
+(2, 'Bardo', 'd8', 2, 6, 1, 6, 0, 3),
+(3, 'Clérigo', 'd8', 5, 6, 1, 5, 0, 2),
+(4, 'Druida', 'd8', 4, 5, 1, 5, 0, 2),
+(5, 'Guerrero', 'd10', 1, 3, 0, 4, 0, 2),
+(6, 'Mago', 'd6', 4, 5, 1, 4, 0, 2),
+(7, 'Monje', 'd8', 1, 2, 0, NULL, 0, 2),
+(8, 'Paladín', 'd10', 5, 6, 1, 6, 0, 2),
+(9, 'Pícaro', 'd8', 2, 4, 0, 4, 0, 4),
+(10, 'Explorador', 'd10', 1, 2, 0, 5, 0, 3),
+(11, 'Hechicero', 'd6', 3, 6, 1, 6, 0, 2),
+(12, 'Brujo', 'd8', 5, 6, 1, 6, 0, 2);
 
 -- --------------------------------------------------------
 
@@ -1290,7 +1507,8 @@ CREATE TABLE `groups` (
 INSERT INTO `groups` (`group_id`, `group_name`, `user_name`) VALUES
 (1, 'Los Buscadores del Amanecer', 'dm_carlos'),
 (2, 'La Orden del Fénix', 'dm_carlos'),
-(3, 'Mesa de Pruebas', 'admin');
+(3, 'Mesa de Pruebas', 'admin'),
+(4, 'grupoPako', 'pako');
 
 -- --------------------------------------------------------
 
@@ -1533,7 +1751,8 @@ INSERT INTO `pass` (`user_nick`, `pass_hash`) VALUES
 ('dm_carlos', '$2y$10$DEF789GHI012$hashedpassword2'),
 ('jugador_ana', '$2y$10$JKL345MNO678$hashedpassword3'),
 ('jugador_luis', '$2y$10$PQR901STU234$hashedpassword4'),
-('jugador_sofia', '$2y$10$VWX567YZA890$hashedpassword5');
+('jugador_sofia', '$2y$10$VWX567YZA890$hashedpassword5'),
+('pako', '$argon2id$v=19$m=65536,t=4,p=1$V2lubG90aWFaNFJHSzd2TQ$kPT3zzyyo/m9SLuBQFaUpkFcLmH6gwvqg6ryi0KrCd0');
 
 -- --------------------------------------------------------
 
@@ -2070,32 +2289,33 @@ INSERT INTO `size` (`size_id`, `size_name`, `size_desc`) VALUES
 
 CREATE TABLE `skill` (
   `skill_id` int(3) NOT NULL,
-  `skill_name` varchar(20) NOT NULL
+  `skill_name` varchar(20) NOT NULL,
+  `ability_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `skill`
 --
 
-INSERT INTO `skill` (`skill_id`, `skill_name`) VALUES
-(1, 'Acrobacias'),
-(2, 'Atletismo'),
-(3, 'Arcano'),
-(4, 'Engaño'),
-(5, 'Historia'),
-(6, 'Interpretación'),
-(7, 'Intimidación'),
-(8, 'Investigación'),
-(9, 'Juego de manos'),
-(10, 'Medicina'),
-(11, 'Naturaleza'),
-(12, 'Percepción'),
-(13, 'Perspicacia'),
-(14, 'Persuasión'),
-(15, 'Religión'),
-(16, 'Sigilo'),
-(17, 'Supervivencia'),
-(18, 'Trato con animales');
+INSERT INTO `skill` (`skill_id`, `skill_name`, `ability_id`) VALUES
+(1, 'Acrobacias', 2),
+(2, 'Atletismo', 1),
+(3, 'Arcano', 4),
+(4, 'Engaño', 6),
+(5, 'Historia', 5),
+(6, 'Interpretación', 6),
+(7, 'Intimidación', 6),
+(8, 'Investigación', 4),
+(9, 'Juego de manos', 2),
+(10, 'Medicina', 5),
+(11, 'Naturaleza', 5),
+(12, 'Percepción', 5),
+(13, 'Perspicacia', 5),
+(14, 'Persuasión', 6),
+(15, 'Religión', 5),
+(16, 'Sigilo', 2),
+(17, 'Supervivencia', 5),
+(18, 'Trato con animales', 5);
 
 -- --------------------------------------------------------
 
@@ -2942,17 +3162,71 @@ INSERT INTO `trait_subrace` (`trait_id`, `race_id`, `subrace_id`, `subrace_lv`) 
 (3, 2, 1, 1),
 (3, 2, 2, 1),
 (3, 2, 3, 1),
+(4, 3, 1, 1),
+(4, 3, 2, 1),
 (5, 4, 1, 1),
 (5, 4, 2, 1),
 (6, 4, 1, 1),
+(7, 5, 1, 1),
+(7, 5, 2, 1),
+(7, 5, 3, 1),
+(7, 5, 4, 1),
+(7, 5, 5, 1),
+(7, 5, 6, 1),
+(7, 5, 7, 1),
+(7, 5, 8, 1),
+(7, 5, 9, 1),
+(7, 5, 10, 1),
 (8, 6, 1, 1),
 (8, 6, 2, 1),
+(9, 9, 1, 1),
+(9, 9, 2, 1),
+(9, 9, 3, 1),
+(9, 9, 4, 1),
+(9, 9, 5, 1),
+(9, 9, 6, 1),
+(9, 9, 7, 1),
+(9, 9, 8, 1),
+(9, 9, 9, 1),
+(9, 9, 10, 1),
+(10, 7, 1, 1),
+(10, 7, 2, 1),
+(10, 7, 3, 1),
+(11, 8, 1, 1),
+(11, 8, 2, 1),
+(11, 8, 3, 1),
+(12, 7, 1, 1),
+(12, 7, 2, 1),
+(12, 7, 3, 1),
 (13, 7, 1, 3),
 (14, 7, 2, 3),
 (15, 7, 3, 3),
+(16, 8, 1, 1),
+(16, 8, 2, 1),
+(16, 8, 3, 1),
 (17, 8, 1, 1),
 (18, 8, 2, 1),
 (19, 8, 3, 1),
+(30, 5, 1, 1),
+(30, 5, 2, 1),
+(30, 5, 3, 1),
+(30, 5, 4, 1),
+(30, 5, 5, 1),
+(30, 5, 6, 1),
+(30, 5, 7, 1),
+(30, 5, 8, 1),
+(30, 5, 9, 1),
+(30, 5, 10, 1),
+(31, 5, 1, 1),
+(31, 5, 2, 1),
+(31, 5, 3, 1),
+(31, 5, 4, 1),
+(31, 5, 5, 1),
+(31, 5, 6, 1),
+(31, 5, 7, 1),
+(31, 5, 8, 1),
+(31, 5, 9, 1),
+(31, 5, 10, 1),
 (40, 9, 1, 1),
 (41, 9, 2, 1),
 (42, 9, 3, 1),
@@ -2963,6 +3237,16 @@ INSERT INTO `trait_subrace` (`trait_id`, `race_id`, `subrace_id`, `subrace_lv`) 
 (47, 9, 8, 1),
 (48, 9, 9, 1),
 (49, 9, 10, 1),
+(50, 2, 1, 1),
+(50, 2, 2, 1),
+(50, 2, 3, 1),
+(51, 2, 1, 1),
+(51, 2, 2, 1),
+(51, 2, 3, 1),
+(52, 3, 1, 1),
+(52, 3, 2, 1),
+(53, 3, 1, 1),
+(53, 3, 2, 1),
 (54, 2, 3, 1),
 (55, 2, 3, 1),
 (56, 2, 3, 1),
@@ -2976,6 +3260,10 @@ INSERT INTO `trait_subrace` (`trait_id`, `race_id`, `subrace_id`, `subrace_lv`) 
 (64, 6, 2, 1),
 (65, 3, 1, 1),
 (66, 3, 2, 1),
+(67, 4, 1, 1),
+(67, 4, 2, 1),
+(68, 4, 1, 1),
+(68, 4, 2, 1),
 (3003, 2, 1, 1);
 
 -- --------------------------------------------------------
@@ -2999,7 +3287,8 @@ INSERT INTO `users` (`user_nick`, `user_name`, `user_mail`) VALUES
 ('dm_carlos', 'Carlos, el Dungeon Master', 'carlos@dndcampaign.com'),
 ('jugador_ana', 'Ana, la Guerrero', 'ana@dndcampaign.com'),
 ('jugador_luis', 'Luis, el Mago', 'luis@dndcampaign.com'),
-('jugador_sofia', 'Sofía, la Clériga', 'sofia@dndcampaign.com');
+('jugador_sofia', 'Sofía, la Clériga', 'sofia@dndcampaign.com'),
+('pako', 'Pako', 'administracion@geograma.com');
 
 -- --------------------------------------------------------
 
@@ -3019,11 +3308,13 @@ CREATE TABLE `users_groups` (
 
 INSERT INTO `users_groups` (`user_nick`, `group_id`, `rol_id`) VALUES
 ('admin', 3, 'A'),
+('admin', 4, 'J'),
 ('jugador_ana', 1, 'J'),
 ('jugador_luis', 1, 'J'),
 ('jugador_sofia', 1, 'J'),
 ('dm_carlos', 1, 'M'),
-('dm_carlos', 2, 'M');
+('dm_carlos', 2, 'M'),
+('pako', 4, 'M');
 
 --
 -- Índices para tablas volcadas
@@ -3128,11 +3419,20 @@ ALTER TABLE `character_skill_proficiency`
   ADD KEY `skill_id` (`skill_id`);
 
 --
+-- Indices de la tabla `character_spell`
+--
+ALTER TABLE `character_spell`
+  ADD PRIMARY KEY (`character_id`,`spell_id`),
+  ADD KEY `character_spell_fk_2` (`spell_id`);
+
+--
 -- Indices de la tabla `class`
 --
 ALTER TABLE `class`
   ADD PRIMARY KEY (`class_id`),
-  ADD KEY `skill_id` (`skill_id`);
+  ADD KEY `safe1_ability_id` (`safe1_ability_id`) USING BTREE,
+  ADD KEY `safe2_ability_id` (`safe2_ability_id`) USING BTREE,
+  ADD KEY `spellcasting_ability` (`spellcasting_ability`) USING BTREE;
 
 --
 -- Indices de la tabla `class_level_progression`
@@ -3270,7 +3570,8 @@ ALTER TABLE `size`
 -- Indices de la tabla `skill`
 --
 ALTER TABLE `skill`
-  ADD PRIMARY KEY (`skill_id`);
+  ADD PRIMARY KEY (`skill_id`),
+  ADD KEY `ability_id` (`ability_id`);
 
 --
 -- Indices de la tabla `spell`
@@ -3396,13 +3697,13 @@ ALTER TABLE `users_groups`
 -- AUTO_INCREMENT de la tabla `character`
 --
 ALTER TABLE `character`
-  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `groups`
 --
 ALTER TABLE `groups`
-  MODIFY `group_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `group_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `item`
@@ -3512,14 +3813,23 @@ ALTER TABLE `character_proficiency`
 -- Filtros para la tabla `character_skill_proficiency`
 --
 ALTER TABLE `character_skill_proficiency`
-  ADD CONSTRAINT `character_skill_proficiency_ibfk_1` FOREIGN KEY (`character_id`) REFERENCES `character` (`character_id`),
-  ADD CONSTRAINT `character_skill_proficiency_ibfk_2` FOREIGN KEY (`skill_id`) REFERENCES `skill` (`skill_id`);
+  ADD CONSTRAINT `character_skill_proficiency_ibfk_1` FOREIGN KEY (`character_id`) REFERENCES `character` (`character_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `character_skill_proficiency_ibfk_2` FOREIGN KEY (`skill_id`) REFERENCES `skill` (`skill_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `character_spell`
+--
+ALTER TABLE `character_spell`
+  ADD CONSTRAINT `character_spell_fk_1` FOREIGN KEY (`character_id`) REFERENCES `character` (`character_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `character_spell_fk_2` FOREIGN KEY (`spell_id`) REFERENCES `spell` (`spell_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `class`
 --
 ALTER TABLE `class`
-  ADD CONSTRAINT `class_ibfk_1` FOREIGN KEY (`skill_id`) REFERENCES `skill` (`skill_id`);
+  ADD CONSTRAINT `class_ibfk_1` FOREIGN KEY (`safe1_ability_id`) REFERENCES `ability` (`ability_id`),
+  ADD CONSTRAINT `class_ibfk_2` FOREIGN KEY (`safe2_ability_id`) REFERENCES `ability` (`ability_id`),
+  ADD CONSTRAINT `class_ibfk_3` FOREIGN KEY (`spellcasting_ability`) REFERENCES `ability` (`ability_id`);
 
 --
 -- Filtros para la tabla `class_level_progression`
@@ -3601,6 +3911,12 @@ ALTER TABLE `prof_subrace`
 --
 ALTER TABLE `race`
   ADD CONSTRAINT `race_ibfk_1` FOREIGN KEY (`size_id`) REFERENCES `size` (`size_id`);
+
+--
+-- Filtros para la tabla `skill`
+--
+ALTER TABLE `skill`
+  ADD CONSTRAINT `skill_abfk_1` FOREIGN KEY (`ability_id`) REFERENCES `ability` (`ability_id`);
 
 --
 -- Filtros para la tabla `spell`
