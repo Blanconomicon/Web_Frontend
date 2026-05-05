@@ -154,7 +154,7 @@ input[type="submit"] {
 
 .grid-2{
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 1fr;
   column-gap: 1em;
   row-gap: 1.5em;
   width: 80%;

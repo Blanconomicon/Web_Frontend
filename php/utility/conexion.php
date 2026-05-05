@@ -166,8 +166,9 @@ function getProfClass(PDO $con, int $idClase, int|null $nivelClase = null)
 }
 
 //funcion para obtener la tabla de la clase o una linea de la tabla
-function getClassLevelProgression(PDO $con, int $idClase, int|null $nivelClase=null){
-try {
+function getClassLevelProgression(PDO $con, int $idClase, int|null $nivelClase = null)
+{
+    try {
         $stmt = $con->prepare("CALL getClassLevelProgression(:idClase, :nivelClase)");
         $stmt->bindParam("idClase", $idClase, PDO::PARAM_INT);
         $stmt->bindParam("nivelClase", $nivelClase, PDO::PARAM_INT);
@@ -374,8 +375,9 @@ function putUser(PDO $con, string $nick, string $username, string $mail, string 
 }
 
 //funcion para obtener los bundle o un bundle concreto
-function getBundle(PDO $con,int|null $idBundle=null){
-        try {
+function getBundle(PDO $con, int|null $idBundle = null)
+{
+    try {
         $stmt = $con->prepare("CALL getBundle(:idBundle)");
         $stmt->bindParam(":idBundle", $idBundle, PDO::PARAM_INT);
         $stmt->execute();
@@ -386,10 +388,23 @@ function getBundle(PDO $con,int|null $idBundle=null){
 }
 
 //funcion para obtener los objetos de un bundle concreto
-function getBundleItems(PDO $con,int $idBundle){
-        try {
+function getBundleItems(PDO $con, int $idBundle)
+{
+    try {
         $stmt = $con->prepare("CALL getBundleItems(:idBundle)");
         $stmt->bindParam(":idBundle", $idBundle, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+function getAbility(PDO $con, int|null $idCaracteristica)
+{
+    try {
+        $stmt = $con->prepare("CALL getAbility(:idCaracteristica)");
+        $stmt->bindParam(":idCaracteristica", $idCaracteristica, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {

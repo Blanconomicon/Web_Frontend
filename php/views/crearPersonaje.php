@@ -108,66 +108,66 @@ if (isset($_POST['siguiente'])) {
 $personaje = null;
 if (isset($_SESSION['personaje'])) {
     $personaje = $_SESSION['personaje'];
-}
-switch ($personaje->habilidad1) {
-    case 1:
-        $personaje->fuerza--;
-        break;
-    case 2:
-        $personaje->destreza--;
-        break;
-    case 3:
-        $personaje->constitucion--;
-        break;
-    case 4:
-        $personaje->inteligencia--;
-        break;
-    case 5:
-        $personaje->sabiduria--;
-        break;
-    case 6:
-        $personaje->carisma--;
-        break;
-}
-switch ($personaje->habilidad2) {
-    case 1:
-        $personaje->fuerza--;
-        break;
-    case 2:
-        $personaje->destreza--;
-        break;
-    case 3:
-        $personaje->constitucion--;
-        break;
-    case 4:
-        $personaje->inteligencia--;
-        break;
-    case 5:
-        $personaje->sabiduria--;
-        break;
-    case 6:
-        $personaje->carisma--;
-        break;
-}
-switch ($personaje->habilidad3) {
-    case 1:
-        $personaje->fuerza--;
-        break;
-    case 2:
-        $personaje->destreza--;
-        break;
-    case 3:
-        $personaje->constitucion--;
-        break;
-    case 4:
-        $personaje->inteligencia--;
-        break;
-    case 5:
-        $personaje->sabiduria--;
-        break;
-    case 6:
-        $personaje->carisma--;
-        break;
+    switch ($personaje->habilidad1) {
+        case 1:
+            $personaje->fuerza--;
+            break;
+        case 2:
+            $personaje->destreza--;
+            break;
+        case 3:
+            $personaje->constitucion--;
+            break;
+        case 4:
+            $personaje->inteligencia--;
+            break;
+        case 5:
+            $personaje->sabiduria--;
+            break;
+        case 6:
+            $personaje->carisma--;
+            break;
+    }
+    switch ($personaje->habilidad2) {
+        case 1:
+            $personaje->fuerza--;
+            break;
+        case 2:
+            $personaje->destreza--;
+            break;
+        case 3:
+            $personaje->constitucion--;
+            break;
+        case 4:
+            $personaje->inteligencia--;
+            break;
+        case 5:
+            $personaje->sabiduria--;
+            break;
+        case 6:
+            $personaje->carisma--;
+            break;
+    }
+    switch ($personaje->habilidad3) {
+        case 1:
+            $personaje->fuerza--;
+            break;
+        case 2:
+            $personaje->destreza--;
+            break;
+        case 3:
+            $personaje->constitucion--;
+            break;
+        case 4:
+            $personaje->inteligencia--;
+            break;
+        case 5:
+            $personaje->sabiduria--;
+            break;
+        case 6:
+            $personaje->carisma--;
+            break;
+    }
 }
 
 $razas = getRace(getCon());

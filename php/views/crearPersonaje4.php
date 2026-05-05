@@ -51,7 +51,7 @@ require_once "../includes/header.php";
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
         <form action="" method="post">
-            <h2><?php echo $personaje->nombre; ?></h2>
+            <h2>Equipo</h2>
             <table>
                 <tr>
                     <td>

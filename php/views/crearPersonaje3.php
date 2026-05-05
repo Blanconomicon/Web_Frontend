@@ -56,8 +56,13 @@ $clase<?php
         }
         ?>
         <form action="" method="post">
-            <h2><?php echo $clase->class_name; ?></h2>
-            <h3>Rasgos de la clase</h3>
+            <h2 class="centrado"><?php echo $clase->class_name; ?></h2>
+            <h3 class="centrado">Salvaciones</h3>
+            <div class="grid-2">
+                <h4 class="centrado"><?php echo getAbility(getCon(),$clase->safe1_ability_id )[0]->ability_name ?></h4>
+                <h4 class="centrado"><?php echo getAbility(getCon(),$clase->safe2_ability_id )[0]->ability_name ?></h4>
+            </div>
+            <h3 class="centrado">Rasgos de la clase</h3>
             <ul>
                 <?php
                 foreach ($traitsClase as $trait) {
@@ -68,14 +73,13 @@ $clase<?php
             <div class="gridResponsive">
 
                 <?php
-                //TODO acabar con los checkbox
                 mostrarCompetencias($competenciasClase, true, $personaje->competenciasClase, $clase->prof_cuantity);
                 ?>
             </div>
             <?php
             if ($clase->class_spellcaster) {
                 echo "<hr class='ocupaTodo'>";
-                //TODO acabar cuando se sepa la cantidad de spells de cada nivel que se puede elegir
+                echo "<h3>".getAbility(getCon(),$clase->spellcasting_ability)[0]->ability_name." es tu aptitud de lanzamiento de conjuros</h3>";
                 //cantrips
                 mostrarTablaSpells("Trucos", $clase->class_id, 0);
                 //nivel1
