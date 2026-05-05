@@ -7,6 +7,7 @@ body {
     --ink: #2a1a0a;
     --border: #5a3e1b;
     --accent: #7a5528;
+    --brown: brown;
 
     background: var(--bg);
     font-family: "Garamond", serif;
@@ -151,6 +152,11 @@ body {
     grid-template-columns: repeat(1, 1fr);
     column-gap: 1em;
     row-gap: 1em;
+}
+
+a {
+    color: var(--brown);
+    text-decoration: none;
 }
 
 @media (min-width: 750px) {

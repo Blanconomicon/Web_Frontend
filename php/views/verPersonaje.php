@@ -22,7 +22,7 @@ $modConstitucion = obtenerModificador($personaje->constitution);
 $modInteligencia = obtenerModificador($personaje->intelligence);
 $modSabiduria = obtenerModificador($personaje->wisdom);
 $modCarisma = obtenerModificador($personaje->charisma);
-$modificadores=[$modFuerza,$modDestreza,$modConstitucion,$modInteligencia,$modSabiduria,$modCarisma];
+$modificadores = [$modFuerza, $modDestreza, $modConstitucion, $modInteligencia, $modSabiduria, $modCarisma];
 
 $traitsClase = getTraitClass(getCon(), $personaje->class_id, $personaje->character_level);
 $traitsSubraza = getTraitRace(getCon(), $personaje->race_id);
@@ -79,7 +79,7 @@ if ($personaje->subrace_id != -1) {
         REVISAR TABLA CHARACTER-->
         <div class="dnd__stat-box">PG <?php echo $personaje->current_hp . "/" . $personaje->max_hp ?> <br> Dados de golpe
           <?php echo $personaje->character_level . "" . $dadoDeGolpe ?></div>
-        <div class="dnd__stat-box">Velocidad <br> <?php echo $personaje->speed ?></div>
+        <div class="dnd__stat-box">Velocidad <br> <?php echo $personaje->speed ?> pies / <?php echo ($personaje->speed*0.3) ?> metros</div>
         <div class="dnd__stat-box">Bonif. competencia <br> <?php echo $personaje->proficiency_bonus ?></div>
       </div>
 
@@ -182,28 +182,10 @@ if ($personaje->subrace_id != -1) {
               ?>
             </span></div>
         </div>
-        <!-- TODO hacer que vayan con las caracteristicas -->
         <!-- HABILIDADES -->
         <div class="dnd__skills">
-          <!-- <div class="dnd__skill"><span>Acrobacias</span><span class="dnd__skill-mod">+3</span></div>
-          <div class="dnd__skill"><span>Arcanos</span><span class="dnd__skill-mod">+2</span></div>
-          <div class="dnd__skill"><span>Atletismo</span><span class="dnd__skill-mod">+2</span></div>
-          <div class="dnd__skill"><span>Engaño</span><span class="dnd__skill-mod">+6</span></div>
-          <div class="dnd__skill"><span>Historia</span><span class="dnd__skill-mod">+2</span></div>
-          <div class="dnd__skill"><span>Interpretación</span><span class="dnd__skill-mod">+6</span></div>
-          <div class="dnd__skill"><span>Intimidación</span><span class="dnd__skill-mod">+4</span></div>
-          <div class="dnd__skill"><span>Investigación</span><span class="dnd__skill-mod">+2</span></div>
-          <div class="dnd__skill"><span>Juego de manos</span><span class="dnd__skill-mod">+5</span></div>
-          <div class="dnd__skill"><span>Medicina</span><span class="dnd__skill-mod">+1</span></div>
-          <div class="dnd__skill"><span>Naturaleza</span><span class="dnd__skill-mod">+2</span></div>
-          <div class="dnd__skill"><span>Percepción</span><span class="dnd__skill-mod">+3</span></div>
-          <div class="dnd__skill"><span>Perspicacia</span><span class="dnd__skill-mod">+3</span></div>
-          <div class="dnd__skill"><span>Persuasión</span><span class="dnd__skill-mod">+6</span></div>
-          <div class="dnd__skill"><span>Religión</span><span class="dnd__skill-mod">+2</span></div>
-          <div class="dnd__skill"><span>Sigilo</span><span class="dnd__skill-mod">+3</span></div>
-          <div class="dnd__skill"><span>Supervivencia</span><span class="dnd__skill-mod">+1</span></div> -->
           <?php
-            mostarListaHabilidades($modificadores,$personaje->proficiency_bonus,$personaje->character_id);
+          mostarListaHabilidades($modificadores, $personaje->proficiency_bonus, $personaje->character_id);
           ?>
 
         </div>
@@ -244,11 +226,47 @@ if ($personaje->subrace_id != -1) {
         <div class="dnd__block">
           <div class="dnd__block-title">Hechizos</div>
           <div class="dnd__block-content">
-            <ul>
-              <li>spell1</li>
-              <li>spell2</li>
-              <li>spell3</li>
-            </ul>
+            <?php
+            $conjuros = getCharacterSpell(getCon(), $personaje->character_id);
+            if (count($conjuros) > 0) {
+              echo "<ul>";
+              $url = basename($_SERVER['PHP_SELF']) . "?idPersonaje=" . $personaje->character_id;
+              foreach ($conjuros as $conjuro) {
+                $url .= '&descripcionSpell=' . $conjuro->spell_id;
+                $spell = getSpell(getCon(), $conjuro->spell_id)[0];
+                if ($spell->spell_level > 0) {
+                  echo "<li><a href='" . $url . "'>" . $spell->spell_name . " - Nivel " . $spell->spell_level . "</a></li>";
+                } else {
+                  echo "<li><a href='" . $url . "'>" . $spell->spell_name . " - Truco</a></li>";
+                }
+                $url = basename($_SERVER['PHP_SELF']) . "?idPersonaje=" . $personaje->character_id;
+                if (isset($_GET['descripcionSpell'])) {
+                  if ($conjuro->spell_id == $_GET['descripcionSpell']) {
+                    echo "<ul>";
+                    //TODO cambiar por el nombre de la escuela
+                    echo "<li><b>Esculea: </b>" . getSpellSchool(getCon(),$spell->spell_school_id)[0]->spell_school_name . "</li>";
+                    echo "<li><b>Ritual: </b>" . (($spell->spell_ritual) ? "Es ritual" : "No es ritual") . "</li>";
+                    echo "<li><b>Tiempo de lanzamiento: </b>" . $spell->spell_cast_time . "</li>";
+                    echo "<li><b>Distancia: </b>" . $spell->spell_range . "</li>";
+                    echo "<li><b>Duracion: </b>" . $spell->spell_duration . "<li>";
+                    echo "<li><b>Concentracion: </b>" . (($spell->spell_concentration) ? "Requiere concentracion" : "No requiere concentracion") . "</li>";
+                    echo "<li><b>Descripcion: </b>" . $spell->spell_desc . "</li>";
+                    if ($spell->spell_level > 0) {
+                      if ($spell->spell_higher_level) {
+                        echo "<li><b>A niveles superiores: </b>" . $spell->spell_higher_level . "</li>";
+                      } else {
+                        echo "<li><b>A niveles superiores: </b>Lanzar este hechizo a niveles superiores no otorga ninguna ventaja adicional</li>";
+                      }
+                    }
+                    echo "</ul>";
+                  }
+                }
+              }
+              echo "</ul>";
+            } else {
+              echo "<p>No tienes conjuros</p>";
+            }
+            ?>
           </div>
         </div>
 

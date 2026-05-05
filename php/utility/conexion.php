@@ -347,6 +347,33 @@ function getSpellClass(PDO $con, int $idClase, int|null $nivelConjuro = null)
     }
 }
 
+//funcion para obtener los spells 
+function getSpell(PDO $con, int|null $idSpell=null, int|null $nivelConjuro = null)
+{
+    try {
+        $stmt = $con->prepare("CALL getSpell(:idSpell, :nivelConjuro)");
+        $stmt->bindParam(":idSpell", $idSpell, PDO::PARAM_INT);
+        $stmt->bindParam(":nivelConjuro", $nivelConjuro, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener los spells 
+function getSpellSchool(PDO $con, int|null $idSpellSchool=null)
+{
+    try {
+        $stmt = $con->prepare("CALL getSpellSchool(:idSpellSchool)");
+        $stmt->bindParam(":idSpellSchool", $idSpellSchool, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
 //funcion para obtener un usuario por su nick
 function getUser(PDO $con, string $nick)
 {
@@ -449,6 +476,33 @@ function putCharacterSkillProficiency(PDO $con, int $idCharacter, int $idSkill, 
         $stmt->bindParam(":idCharacter", $idCharacter, PDO::PARAM_INT);
         $stmt->bindParam(":idSkill", $idSkill, PDO::PARAM_INT);
         $stmt->bindParam(":tipoCompetencia", $tipoCompetencia, PDO::PARAM_STR);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener los conjuros de un perosnaje
+function getCharacterSpell(PDO $con, int $idCharacter, int|null $idSpell = null)
+{
+    try {
+        $stmt = $con->prepare("CALL getCharacterSpell(:idCharacter, :idSpell)");
+        $stmt->bindParam(":idCharacter", $idCharacter, PDO::PARAM_INT);
+        $stmt->bindParam(":idSpell", $idSpell, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para aniadir un conjuro al personaje
+function putCharacterSpell(PDO $con, int $idCharacter, int $idSpell)
+{
+    try {
+        $stmt = $con->prepare("CALL putCharacterSpell(:idCharacter, :idSpell)");
+        $stmt->bindParam(":idCharacter", $idCharacter, PDO::PARAM_INT);
+        $stmt->bindParam(":idSpell", $idSpell, PDO::PARAM_INT);
         return $stmt->execute();
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();

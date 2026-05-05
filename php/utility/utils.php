@@ -197,11 +197,12 @@ function mostrarCompetencias(
 }
 
 //funcion para mostrar la tabla de los conjuros de unnivel concreto de una clase
-function mostrarTablaSpells(string $titulo, int $idClase, int $nivelSpell)
+function mostrarTablaSpells(string $titulo, int $idClase, int $nivelSpell, int $cantidad)
 {
     $conjuros = getSpellClass(getCon(), $idClase, $nivelSpell);
     echo "<div class='conScroll'>";
     echo "<h3 class='centrado'>$titulo</h3>";
+    echo "<h4 class='centrado'>Tienes que elegir $cantidad</h4>";
     echo "<br>";
     echo "<table style='width: 80%;'>";
     echo "<tr>";
@@ -259,7 +260,6 @@ function mostarListaHabilidades(array $modificadores, int $competencia, int $idC
                 $puntuacion += $competencia;
             }
         }
-
         echo $puntuacion;
         echo "</span>";
         echo "</div>";

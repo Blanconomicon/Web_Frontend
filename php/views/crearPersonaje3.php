@@ -80,9 +80,9 @@
                 echo "<hr class='ocupaTodo'>";
                 echo "<h3>".getAbility(getCon(),$clase->spellcasting_ability)[0]->ability_name." es tu aptitud de lanzamiento de conjuros</h3>";
                 //cantrips
-                mostrarTablaSpells("Trucos", $clase->class_id, 0);
+                mostrarTablaSpells("Trucos", $clase->class_id, 0,$progresion->cantrips_known);
                 //nivel1
-                mostrarTablaSpells("Nivel1", $clase->class_id, 1);
+                mostrarTablaSpells("Nivel1", $clase->class_id, 1,$progresion->spells_known);
             }
             ?>
             <hr class="ocupaTodo">
