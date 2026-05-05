@@ -199,8 +199,10 @@ function mostrarCompetencias(
 function mostrarTablaSpells(string $titulo, int $idClase, int $nivelSpell)
 {
     $conjuros = getSpellClass(getCon(), $idClase, $nivelSpell);
-    echo "<h3>$titulo</h3>";
-    echo "<table class='ocupaTodo' style='width: 80%;'>";
+    echo "<div class='conScroll'>";
+    echo "<h3 class='centrado'>$titulo</h3>";
+    echo "<br>";
+    echo "<table style='width: 80%;'>";
     echo "<tr>";
     echo "<th></th>";
     echo "<th>Nombre</th>";
@@ -233,4 +235,5 @@ function mostrarTablaSpells(string $titulo, int $idClase, int $nivelSpell)
         echo "</tr>";
     }
     echo "</table>";
+    echo "</div>";
 }

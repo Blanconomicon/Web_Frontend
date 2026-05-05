@@ -194,9 +194,10 @@ th {
   text-align: center;
 }
 
-.equipo>tr:hover {
-  background-color: var(--granate);
-  color: var(--hueso);
+.conScroll{
+  margin: 0.6em;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 /******************************/
