@@ -109,7 +109,66 @@ $personaje = null;
 if (isset($_SESSION['personaje'])) {
     $personaje = $_SESSION['personaje'];
 }
-
+switch ($personaje->habilidad1) {
+    case 1:
+        $personaje->fuerza--;
+        break;
+    case 2:
+        $personaje->destreza--;
+        break;
+    case 3:
+        $personaje->constitucion--;
+        break;
+    case 4:
+        $personaje->inteligencia--;
+        break;
+    case 5:
+        $personaje->sabiduria--;
+        break;
+    case 6:
+        $personaje->carisma--;
+        break;
+}
+switch ($personaje->habilidad2) {
+    case 1:
+        $personaje->fuerza--;
+        break;
+    case 2:
+        $personaje->destreza--;
+        break;
+    case 3:
+        $personaje->constitucion--;
+        break;
+    case 4:
+        $personaje->inteligencia--;
+        break;
+    case 5:
+        $personaje->sabiduria--;
+        break;
+    case 6:
+        $personaje->carisma--;
+        break;
+}
+switch ($personaje->habilidad3) {
+    case 1:
+        $personaje->fuerza--;
+        break;
+    case 2:
+        $personaje->destreza--;
+        break;
+    case 3:
+        $personaje->constitucion--;
+        break;
+    case 4:
+        $personaje->inteligencia--;
+        break;
+    case 5:
+        $personaje->sabiduria--;
+        break;
+    case 6:
+        $personaje->carisma--;
+        break;
+}
 
 $razas = getRace(getCon());
 $clases = getClass(getCon());
@@ -192,7 +251,9 @@ require_once "../includes/header.php";
                                 <table>
                                     <tr>
                                         <th>Total</th>
-                                        <td id="txtFuerzaTotal"><?php echo (isset($personaje->fuerza)) ? $personaje->fuerza : "8" ?></td>
+                                        <td id="txtFuerzaTotal">
+                                            <?php echo (isset($personaje->fuerza)) ? $personaje->fuerza : "8" ?>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Modificador</th>
