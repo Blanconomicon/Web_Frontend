@@ -115,7 +115,8 @@ function obtenerModificador(int $puntuacion)
 function mostrarCompetencias(
     array $competenciasSource,
     bool $seleccionandoCompetencias = false,
-    array|null $competenciasTiene = null
+    array|null $competenciasTiene = null,
+    int|null $cantidadCompetencias = null
 ) {
     //crear las competencias
     $competenciasArmas = array_filter($competenciasSource, function ($competencia) {
@@ -148,6 +149,7 @@ function mostrarCompetencias(
         echo "<div>";
         echo "<h3>Competencias con habilidades</h3>";
         if ($seleccionandoCompetencias) {
+            echo "<h4>Puedes elegir " . $cantidadCompetencias . " competencias</h4>";
             foreach ($competenciasHabilidades as $competencia) {
                 echo "<input type='checkbox' value='" . $competencia->prof_id .
                     "' name='checkCompetencias[]'" . (in_array($competencia->prof_id, $competenciasTiene) ? "checked" : "") . ">"
@@ -212,13 +214,13 @@ function mostrarTablaSpells(string $titulo, int $idClase, int $nivelSpell)
     echo "</tr>";
     foreach ($conjuros as $conjuro) {
         echo "<tr>";
-        if(isset($_SESSION['personaje']->{strtolower($titulo)})){
+        if (isset($_SESSION['personaje']->{strtolower($titulo)})) {
             echo "<td><input type='checkbox' value='" . $conjuro->spell_id . "' name='" . $titulo . "[]' " .
-            (in_array($conjuro->spell_id, $_SESSION['personaje']->{strtolower($titulo)}) ? "checked" : "") .
-            "></td>";
-        }else{
+                (in_array($conjuro->spell_id, $_SESSION['personaje']->{strtolower($titulo)}) ? "checked" : "") .
+                "></td>";
+        } else {
             echo "<td><input type='checkbox' value='" . $conjuro->spell_id . "' name='" . $titulo . "[]' " .
-            "></td>";
+                "></td>";
         }
         echo "<td>" . $conjuro->spell_name . "</td>";
         echo "<td>" . $conjuro->spell_cast_time . "</td>";

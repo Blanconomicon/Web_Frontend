@@ -165,6 +165,19 @@ function getProfClass(PDO $con, int $idClase, int|null $nivelClase = null)
     }
 }
 
+//funcion para obtener la tabla de la clase o una linea de la tabla
+function getClassLevelProgression(PDO $con, int $idClase, int|null $nivelClase=null){
+try {
+        $stmt = $con->prepare("CALL getClassLevelProgression(:idClase, :nivelClase)");
+        $stmt->bindParam("idClase", $idClase, PDO::PARAM_INT);
+        $stmt->bindParam("nivelClase", $nivelClase, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
 //funcion para obtener los grupos de un usuario
 function getGroup(PDO $con, string $nick, int|null $id = null)
 {
