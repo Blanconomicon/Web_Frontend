@@ -166,7 +166,6 @@ require_once "../includes/header.php";
                         </select>
                         <br>
                         <br>
-                        <!-- <br> -->
                         <div id="infoTrafondo">
                             <select name="habilidad1" id="habilidad1"></select>
                             <select name="habilidad2" id="habilidad2"></select>

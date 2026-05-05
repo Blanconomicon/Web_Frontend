@@ -41,6 +41,10 @@ if (isset($_POST['finalizar'])) {
     exit();
 }
 
+//TODO acabar cuando esten relacionados en la db
+// $equipoClase;
+// $equipoTrasfondo;
+
 require_once "../includes/header.php";
 ?>
 <main>

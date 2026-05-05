@@ -24,7 +24,7 @@ function getBackground(PDO $con, int|null $id = null)
     }
 }
 
-//TODO revisar
+//funcion para obtener las caracteristicas que aumenta un trasfondo
 function getBackgroundAbility(PDO $con, int|null $id = null)
 {
     try {
@@ -65,7 +65,6 @@ function getCharacter(PDO $con, string $nick, int|null $id = null)
 }
 
 // funcion para crar un personaje
-//TODO aniadir la ca y la iniciativa a la db
 function putCharacter(
     PDO $con,
     string $nick,
@@ -356,6 +355,30 @@ function putUser(PDO $con, string $nick, string $username, string $mail, string 
         $stmt->bindParam(":mail", $mail, PDO::PARAM_STR);
         $stmt->bindParam(":hash", $hash, PDO::PARAM_STR);
         return $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener los bundle o un bundle concreto
+function getBundle(PDO $con,int|null $idBundle=null){
+        try {
+        $stmt = $con->prepare("CALL getBundle(:idBundle)");
+        $stmt->bindParam(":idBundle", $idBundle, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener los objetos de un bundle concreto
+function getBundleItems(PDO $con,int $idBundle){
+        try {
+        $stmt = $con->prepare("CALL getBundleItems(:idBundle)");
+        $stmt->bindParam(":idBundle", $idBundle, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
