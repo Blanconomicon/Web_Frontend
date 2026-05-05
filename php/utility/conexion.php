@@ -61,7 +61,7 @@ function putCharacter(
     try {
         $stmt = $con->prepare("CALL putCharacter(:nick, :nombrePersonaje, 
         :idRaza, :idSubraza, :idClase, :idTrasfondo, :str, :dex, :constitucion, 
-        :int, :wis, :cha, :maxHP)");
+        :int, :wis, :cha, :maxHP, :ca, :iniciativa)");
         $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
         $stmt->bindParam(":nombrePersonaje", $nombrePersonaje, PDO::PARAM_STR);
         $stmt->bindParam(":idRaza", $idRaza, PDO::PARAM_INT);
@@ -75,6 +75,8 @@ function putCharacter(
         $stmt->bindParam(":wis", $wis, PDO::PARAM_INT);
         $stmt->bindParam(":cha", $cha, PDO::PARAM_INT);
         $stmt->bindParam(":maxHP", $maxHP, PDO::PARAM_INT);
+        $stmt->bindParam(":ca", $ca, PDO::PARAM_INT);
+        $stmt->bindParam(":iniciativa", $iniciativa, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
