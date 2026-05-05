@@ -19,7 +19,7 @@ if (isset($_POST['finalizar'])) {
         }
     }
     $personaje->habilidades=$habilidades;
-    putCharacter(
+    $idPersonaje=putCharacter(
         getCon(),
         $_SESSION['user'][0]->user_nick,
         $personaje->nombre,
@@ -37,6 +37,10 @@ if (isset($_POST['finalizar'])) {
         $personaje->iniciativa,
         $personaje->subraza
     );
+
+    foreach ($personaje->habilidades as $habilidad) {
+        putCharacterSkillProficiency(getCon(),$idPersonaje,$habilidad,"proficient");
+    }
     header("Location: ./personajes.php");
     exit();
 }

@@ -103,7 +103,8 @@ function putCharacter(
         $stmt->bindParam(":ca", $ca, PDO::PARAM_INT);
         $stmt->bindParam(":iniciativa", $iniciativa, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_OBJ);
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['character_id'];
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
@@ -427,7 +428,7 @@ function getSkill(PDO $con, int|null $idSkill = null)
 }
 
 //funcion para obtener las habilidades en las que el personaje es competente
-function getCharacterSkillProficiency(PDO $con, int $idCharacter,int|null $idSkill=null)
+function getCharacterSkillProficiency(PDO $con, int $idCharacter, int|null $idSkill = null)
 {
     try {
         $stmt = $con->prepare("CALL getCharacterSkillProficiency(:idCharacter, :idSkill)");

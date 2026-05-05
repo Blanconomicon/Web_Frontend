@@ -151,8 +151,8 @@ function mostrarCompetencias(
         if ($seleccionandoCompetencias) {
             echo "<h4>Puedes elegir " . $cantidadCompetencias . " competencias</h4>";
             foreach ($competenciasHabilidades as $competencia) {
-                echo "<input type='checkbox' value='" . $competencia->prof_id .
-                    "' name='checkCompetencias[]'" . (in_array($competencia->prof_id, $competenciasTiene) ? "checked" : "") . ">"
+                echo "<input type='checkbox' value='" . ($competencia->prof_id - 100) .
+                    "' name='checkCompetencias[]'" . (in_array(($competencia->prof_id - 100), $competenciasTiene) ? "checked" : "") . ">"
                     . $competencia->prof_name . "</input><br>";
             }
         } else {
@@ -243,7 +243,11 @@ function mostrarTablaSpells(string $titulo, int $idClase, int $nivelSpell)
 function mostarListaHabilidades(array $modificadores, int $competencia, int $idCharacter)
 {
     $habilidades = getSkill(getCon());
-    $competencias = getCharacterSkillProficiency(getCon(), $idCharacter);
+    $skills = getCharacterSkillProficiency(getCon(), $idCharacter);
+    $competencias = [];
+    foreach ($skills as $skill) {
+        $competencias[] = $skill->skill_id;
+    }
     foreach ($habilidades as $habilidad) {
         echo "<div class='dnd__skill'>";
         echo "<span>" . $habilidad->skill_name . "</span>";
