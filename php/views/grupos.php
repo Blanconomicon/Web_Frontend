@@ -12,7 +12,10 @@ if (isset($_POST['aniadirAGrupo'])) {
     putGroupMember(getCon(), $_GET['idGrupo'], $_POST['selectPersonas']);
 }
 
-// $grupos = obtenerGrupos("admin");
+if (isset($_GET['grupoBorrar'])) {
+    deleteGroup(getCon(), $_GET['grupoBorrar'], $_SESSION['user'][0]->user_nick);
+}
+
 $grupos = obtenerGrupos($_SESSION['user'][0]->user_nick);
 $posibles = [];
 
@@ -23,9 +26,12 @@ require_once "../includes/header.php";
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
         <?php
-        // var_dump(obtenerGrupos($_SESSION['user'][0]->user_nick));
         foreach ($grupos as $grupo) {
-            echo "<p><a href='grupos.php?idGrupo=" . $grupo->group_id . "' class='centrado'>" . $grupo->group_name . "</a></p>";
+            echo "<div class='grid-2'>";
+            echo "<p class='centrado'><a href='grupos.php?idGrupo=" . $grupo->group_id . "' class='centrado' style='margin: 0;'>" . $grupo->group_name . "</a></p>";
+            echo "<a href='grupos.php?grupoBorrar=" . $grupo->group_id . "' class='centrado ocupaTodo'><button class='ocupaTodo'>ELIMINAR</button></a>";
+            echo "</div>";
+            echo "<br>";
             if (isset($_GET['idGrupo']) && $_GET['idGrupo'] == $grupo->group_id) {
                 $jugadores = obtenerJugadores($grupo->group_id);
         ?>
