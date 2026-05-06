@@ -4,7 +4,7 @@ require_once "../utility/utils.php";
 comprobarLogin();
 $_SESSION["personaje"] = null;
 
-if (isset($_POST['crearGrupo'])) {
+if (isset($_POST['crearGrupo']) && trim($_POST['nombreGrupo']) != "") {
     crearGrupo($_POST['nombreGrupo']);
 }
 
@@ -16,7 +16,7 @@ if (isset($_GET['grupoBorrar'])) {
     deleteGroup(getCon(), $_GET['grupoBorrar'], $_SESSION['user'][0]->user_nick);
 }
 
-if(isset($_GET['salirDelGrupo'])){
+if (isset($_GET['salirDelGrupo'])) {
     deleteGroupMember(getCon(), $_GET['salirDelGrupo'], $_SESSION['user'][0]->user_nick);
 }
 
@@ -61,7 +61,7 @@ require_once "../includes/header.php";
                     ?>
                 </table>
                 <br>
-                <button id="btnAniadir" class="centrado" <?php echo ($grupo->user_nick == $_SESSION['user'][0]->user_nick)?"":"disabled"; ?>>Añadir gente</button>
+                <button id="btnAniadir" class="centrado" <?php echo ($grupo->user_nick == $_SESSION['user'][0]->user_nick) ? "" : "disabled"; ?>>Añadir gente</button>
                 <br>
         <?php
             }
