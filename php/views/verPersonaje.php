@@ -2,12 +2,13 @@
 require_once "../utility/utils.php";
 
 comprobarLogin();
-if (!isset($_GET['idPersonaje'])) {
+$personajeArr = getCharacter(getCon(), $_SESSION['user'][0]->user_nick, $_GET['idPersonaje']);
+if (!isset($_GET['idPersonaje'])||count($personajeArr)==0) {
   header("Location: ./personajes.php");
   exit();
 }
 
-$personaje = getCharacter(getCon(), $_SESSION['user'][0]->user_nick, $_GET['idPersonaje'])[0];
+$personaje=$personajeArr[0];
 $clase = getClass(getCon(), $personaje->class_id)[0];
 $claseNombre = $clase->class_name;
 $dadoDeGolpe = $clase->class_hpdice;
