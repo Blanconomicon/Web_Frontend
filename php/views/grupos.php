@@ -61,7 +61,7 @@ require_once "../includes/header.php";
                     ?>
                 </table>
                 <br>
-                <button id="btnAniadir" class="centrado">Añadir gente</button>
+                <button id="btnAniadir" class="centrado" <?php echo ($grupo->user_nick == $_SESSION['user'][0]->user_nick)?"":"disabled"; ?>>Añadir gente</button>
                 <br>
         <?php
             }
