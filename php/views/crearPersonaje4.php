@@ -56,7 +56,6 @@ if (isset($_POST['finalizar'])) {
 
 //TODO acabar cuando esten relacionados en la db
 // $equipoClase;
-// $equipoTrasfondo;
 
 require_once "../includes/header.php";
 ?>
@@ -69,24 +68,31 @@ require_once "../includes/header.php";
                 <tr>
                     <td>
                         <select name="equipoClase" id="equipoClase">
-                            <option value="equipoClase">equipoClase</option>
+                            <?php
+                            if ($personaje->clase == 5) {
+                                echo "<option value='items'>Objetos (A)</option>";
+                                echo "<option value='items2'>Objetos (B)</option>";
+                            } else {
+                                echo "<option value='items'>Objetos</option>";
+                            }
+                            ?>
+                            <option value="oro">Oro</option>
                         </select>
                     </td>
                     <td>
                         <select name="equipoTrasfondo" id="equipoTrasfondo">
-                            <option value="equipoTrasfondo">equipoTrasfondo</option>
+                            <option value="items">Objetos</option>
+                            <option value="oro">Oro</option>
                         </select>
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <div>
-                            ITEMS CLASE
+                    <td style="width: 50%;">
+                        <div id='itemsClase'>
                         </div>
                     </td>
-                    <td>
-                        <div>
-                            ITEMS TRASONFO
+                    <td style="width: 50%;">
+                        <div id="itemsTrasfondo">
                         </div>
                     </td>
                 </tr>
@@ -103,6 +109,12 @@ require_once "../includes/header.php";
 require_once "../includes/footer.php"
 ?>
 <script src="../../js/menuHamburguesa.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        cargarDesdeSelect("equipoTrasfondo", "itemsTrasfondo", "<?php echo "../includes/peticiones.php";  ?>", "itemsTrasfondo");
+        cargarDesdeSelect("equipoClase", "itemsClase", "<?php echo "../includes/peticiones.php";  ?>", "itemsClase");
+    });
+</script>
 </body>
 
 </html>

@@ -3,6 +3,7 @@ require_once "../utility/utils.php";
 
 $personaje = $_SESSION["personaje"];
 
+//elegir subraza
 if (isset($_GET['subraza'])) {
     $competenciasRaza = getProfRace(getCon(), $personaje->raza);
     $subrazaElegida = $_GET['subraza'];
@@ -23,30 +24,71 @@ if (isset($_GET['subraza'])) {
     $competenciasHabilidades = array_filter($competenciasRaza, function ($competencia) {
         return $competencia->prof_type == "skill";
     });
-    $personaje->competenciasRaza=[];
-    if(count($competenciasHabilidades)>0){
-        $competenciasRazaSkills=[];
+    $personaje->competenciasRaza = [];
+    if (count($competenciasHabilidades) > 0) {
+        $competenciasRazaSkills = [];
         foreach ($competenciasHabilidades as $skill) {
-            $competenciasRazaSkills[]=$skill->prof_id;
+            $competenciasRazaSkills[] = $skill->prof_id;
         }
-        $personaje->competenciasRaza=$competenciasRazaSkills;
+        $personaje->competenciasRaza = $competenciasRazaSkills;
     }
 }
 
-if(isset($_GET['trasfondo'])){
-    $trasfondo=$_GET['trasfondo'];
-    $habilidadesTrasfondo=getBackgroundAbility(getCon(),$trasfondo);
-    $infoTrasfondo=getBackground(getCon(),$trasfondo);
+//elegir trasfondo
+if (isset($_GET['trasfondo'])) {
+    $trasfondo = $_GET['trasfondo'];
+    $habilidadesTrasfondo = getBackgroundAbility(getCon(), $trasfondo);
+    $infoTrasfondo = getBackground(getCon(), $trasfondo);
     echo "<h3 class='centrado'>+1 a las caracteristicas seleccionadas</h3>";
     echo "<h4 class='centrado'>Ten en cuenta que como mucho puedes darle un +2</h4>";
     echo "<br>";
     echo "<div class='gridResponsive'>";
-    for ($i=0; $i < count($habilidadesTrasfondo); $i++)  {
-        echo "<select name='habilidad".($i+1)."' id='habilidad".($i+1)."' onchange='fijarValorTotal()'>";
+    for ($i = 0; $i < count($habilidadesTrasfondo); $i++) {
+        echo "<select name='habilidad" . ($i + 1) . "' id='habilidad" . ($i + 1) . "' onchange='fijarValorTotal()'>";
         foreach ($habilidadesTrasfondo as $habilidad) {
-            echo "<option value='".$habilidad->ability_id."' ".((isset($personaje)&&($personaje->{"habilidad".($i+1)}==$habilidad->ability_id))?"selected":"").">".$habilidad->ability_name."</option>";
+            echo "<option value='" . $habilidad->ability_id . "' " . ((isset($personaje) && ($personaje->{"habilidad" . ($i + 1)} == $habilidad->ability_id)) ? "selected" : "") . ">" . $habilidad->ability_name . "</option>";
         }
         echo "</select>";
     }
     echo "</div>";
+}
+
+//elegir items del trasfondo
+if (isset($_GET['itemsTrasfondo'])) {
+    $seleccion = $_GET['itemsTrasfondo'];
+    $trasfondo = getBackground(getCon(), $personaje->trasfondo)[0];
+    $equipoTrasfondo = getBundle(getCon(), $trasfondo->bundle_id)[0];
+    $itemsTrasfondo = getBundleItems(getCon(), $trasfondo->bundle_id);
+    if ($seleccion == "items") {
+        echo "<ul>";
+        foreach ($itemsTrasfondo as $item) {
+            echo "<li>";
+            echo $item->item_name . " (" . $item->item_count . ")";
+            echo "</li>";
+        }
+        echo "</ul>";
+    } else {
+        //oro
+        echo "<p>" . $equipoTrasfondo->bundle_price . " po</p>";
+    }
+}
+
+if (isset($_GET['itemsClase'])) {
+    $seleccion = $_GET['itemsClase'];
+    $claseBundle = getClassBundle(getCon(), $personaje->clase);
+    if ($seleccion == "oro") {
+        $precio = getBundle(getCon(), $claseBundle[0]->bundle_id)[0];
+        echo "<p>" . $precio->bundle_price . " po</p>";
+    } else {
+        foreach ($claseBundle as $bundle) {
+            $items = getBundleItems(getCon(), $bundle->bundle_id);
+            echo "<ul>";
+            foreach ($items as $item) {
+                echo "<li>";
+                echo $item->item_name . " (" . $item->item_count . ")";
+                echo "</li>";
+            }
+            echo "</ul>";
+        }
+    }
 }

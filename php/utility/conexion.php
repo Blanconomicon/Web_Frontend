@@ -348,7 +348,7 @@ function getSpellClass(PDO $con, int $idClase, int|null $nivelConjuro = null)
 }
 
 //funcion para obtener los spells 
-function getSpell(PDO $con, int|null $idSpell=null, int|null $nivelConjuro = null)
+function getSpell(PDO $con, int|null $idSpell = null, int|null $nivelConjuro = null)
 {
     try {
         $stmt = $con->prepare("CALL getSpell(:idSpell, :nivelConjuro)");
@@ -362,7 +362,7 @@ function getSpell(PDO $con, int|null $idSpell=null, int|null $nivelConjuro = nul
 }
 
 //funcion para obtener los spells 
-function getSpellSchool(PDO $con, int|null $idSpellSchool=null)
+function getSpellSchool(PDO $con, int|null $idSpellSchool = null)
 {
     try {
         $stmt = $con->prepare("CALL getSpellSchool(:idSpellSchool)");
@@ -421,6 +421,19 @@ function getBundleItems(PDO $con, int $idBundle)
     try {
         $stmt = $con->prepare("CALL getBundleItems(:idBundle)");
         $stmt->bindParam(":idBundle", $idBundle, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener los bundle de una clase
+function getClassBundle(PDO $con, int $idClase)
+{
+    try {
+        $stmt = $con->prepare("CALL getClassBundle(:idClase)");
+        $stmt->bindParam(":idClase", $idClase, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
