@@ -230,7 +230,6 @@ if ($personaje->subrace_id != -1) {
               echo "<div class='dnd__skill'><span>" . $itemCompleto->item_name . "</span><span class='dnd__skill-mod'>" . $item->quantity . "</span></div>";
             }
             ?>
-            <!-- <p class="dnd__skill">objeto1</p> -->
           </div>
         </div>
 
@@ -245,6 +244,7 @@ if ($personaje->subrace_id != -1) {
               foreach ($traitsClase as $trait) {
                 echo "<li><b>" . $trait->trait_name . ": </b>" . $trait->trait_desc . "</li>";
               }
+              //TODO aniadir la dote de origen
               ?>
             </ul>
           </div>
