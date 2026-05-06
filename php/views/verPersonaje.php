@@ -198,13 +198,37 @@ if ($personaje->subrace_id != -1) {
 
         <div class="dnd__block">
           <h3 class="centrado">Equipo</h3>
+          <br>
+          <div class="grid-dinero">
+            <div class="dnd__attribute">
+              <div class="dnd__attr-name">PC</div>
+              <div class="dnd__attr-score"><?php echo $personaje->cp ?></div>
+            </div>
+            <div class="dnd__attribute">
+              <div class="dnd__attr-name">PP</div>
+              <div class="dnd__attr-score"><?php echo $personaje->sp ?></div>
+            </div>
+            <div class="dnd__attribute">
+              <div class="dnd__attr-name">PO</div>
+              <div class="dnd__attr-score"><?php echo $personaje->gp ?></div>
+            </div>
+            <div class="dnd__attribute">
+              <div class="dnd__attr-name">PE</div>
+              <div class="dnd__attr-score"><?php echo $personaje->ep ?></div>
+            </div>
+            <div class="dnd__attribute">
+              <div class="dnd__attr-name">PPT</div>
+              <div class="dnd__attr-score"><?php echo $personaje->pp ?></div>
+            </div>
+          </div>
+          <br>
           <div class="dnd__block-content">
             <div class='dnd__skill' style="border-width: 0.3em;"><span>Nombre</span><span class='dnd__skill-mod'>Cantidad</span></div>
             <?php
-            $items=getCharacterInventory(getCon(),$personaje->character_id);
+            $items = getCharacterInventory(getCon(), $personaje->character_id);
             foreach ($items as $item) {
-              $itemCompleto=getItem(getCon(),$item->item_id)[0];
-              echo "<div class='dnd__skill'><span>".$itemCompleto->item_name."</span><span class='dnd__skill-mod'>".$item->quantity."</span></div>";
+              $itemCompleto = getItem(getCon(), $item->item_id)[0];
+              echo "<div class='dnd__skill'><span>" . $itemCompleto->item_name . "</span><span class='dnd__skill-mod'>" . $item->quantity . "</span></div>";
             }
             ?>
             <!-- <p class="dnd__skill">objeto1</p> -->

@@ -76,6 +76,12 @@ body {
     gap: 1em;
 }
 
+.grid-dinero{
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+    gap: 0.3em;
+}
+
 /* ATRIBUTOS */
 .dnd__attributes {
     display: grid;
@@ -162,7 +168,7 @@ a {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .dnd__stats {
+    .dnd__stats, .grid-dinero {
         grid-template-columns: repeat(3, 1fr);
     }
 }
@@ -176,7 +182,7 @@ a {
         grid-template-columns: 1fr 0.4fr 1.2fr;
     }
 
-    .dnd__stats {
+    .dnd__stats, .grid-dinero {
         grid-template-columns: repeat(5, 1fr);
     }
 }
