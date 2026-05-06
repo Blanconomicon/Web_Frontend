@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-05-2026 a las 11:15:43
+-- Tiempo de generación: 06-05-2026 a las 13:03:54
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -28,6 +28,12 @@ DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteCharacter` (IN `p_character_id` INT, IN `p_user_nick` VARCHAR(30))   BEGIN
     DELETE FROM `character`
     WHERE character_id = CONVERT(p_character_id USING utf8mb4)
+      AND user_nick    = CONVERT(p_user_nick    USING utf8mb4);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteGroup` (IN `p_group_id` INT, IN `p_user_nick` VARCHAR(30))   BEGIN
+    DELETE FROM `groups`
+    WHERE group_id = CONVERT(p_group_id USING utf8mb4)
       AND user_nick    = CONVERT(p_user_nick    USING utf8mb4);
 END$$
 
@@ -211,7 +217,7 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getGroup` (IN `p_id` INT, IN `u_nick` VARCHAR(20))   BEGIN
     IF p_id IS NULL THEN
-        SELECT group_id, group_name
+        SELECT *
         FROM groups
         WHERE exists 
         	(SELECT * 
@@ -224,7 +230,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getGroup` (IN `p_id` INT, IN `u_nic
         WHERE exists
         	(SELECT * 
              FROM users_groups 
-             WHERE users.user_nick = users_groups.user_nick
+             WHERE groups.user_nick = users_groups.user_nick
              AND group_id = CONVERT(p_id USING utf8mb4) 
              AND user_nick = CONVERT(u_nick USING utf8mb4));
     END IF;
@@ -600,9 +606,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `putCharacterSpell` (IN `char_id` IN
 INSERT INTO `character_spell` (`character_id`, `spell_id`) VALUES (char_id, p_id);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `putGroup` (IN `p_group_name` VARCHAR(30), IN `p_user_name` VARCHAR(50))   BEGIN
-    INSERT INTO groups(groups.group_name,groups.user_name)
-    VALUES(p_group_name,p_user_name);
+CREATE DEFINER=`root`@`localhost` PROCEDURE `putGroup` (IN `p_group_name` VARCHAR(30), IN `p_user_nick` VARCHAR(50))   BEGIN
+    INSERT INTO groups(groups.group_name,groups.user_nick)
+    VALUES(p_group_name,p_user_nick);
 SELECT LAST_INSERT_ID() AS id;
 END$$
 
@@ -1052,6 +1058,13 @@ CREATE TABLE `character` (
   `pp` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `character`
+--
+
+INSERT INTO `character` (`character_id`, `user_nick`, `character_name`, `character_level`, `race_id`, `subrace_id`, `class_id`, `subclass_id`, `background_id`, `strength`, `dexterity`, `constitution`, `intelligence`, `wisdom`, `charisma`, `max_hp`, `current_hp`, `temp_hp`, `armor_class`, `initiative`, `speed`, `inspiration`, `experience_points`, `alignment`, `deity`, `personality_trait`, `ideals`, `bonds`, `flaws`, `languages`, `proficiency_bonus`, `character_date`, `cp`, `sp`, `gp`, `ep`, `pp`) VALUES
+(35, 'pako', 'afsdfsafesfdsgtdsgednhjykjdyjt', 1, 7, 3, 1, NULL, 1, 15, 15, 15, 10, 9, 8, 14, 14, 0, 14, 2, 30, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2026-05-06 11:43:14', 0, 0, 19, 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -1077,6 +1090,19 @@ CREATE TABLE `character_inventory` (
   `notes` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `character_inventory`
+--
+
+INSERT INTO `character_inventory` (`character_id`, `item_id`, `quantity`, `equipped`, `notes`) VALUES
+(35, 704, 1, 0, NULL),
+(35, 705, 1, 0, NULL),
+(35, 706, 1, 0, NULL),
+(35, 707, 1, 0, NULL),
+(35, 708, 1, 0, NULL),
+(35, 709, 1, 0, NULL),
+(35, 731, 1, 0, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -1100,6 +1126,14 @@ CREATE TABLE `character_skill_proficiency` (
   `skill_id` int(1) NOT NULL,
   `proficiency_type` enum('proficient','expertise') DEFAULT 'proficient'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `character_skill_proficiency`
+--
+
+INSERT INTO `character_skill_proficiency` (`character_id`, `skill_id`, `proficiency_type`) VALUES
+(35, 2, 'proficient'),
+(35, 12, 'proficient');
 
 -- --------------------------------------------------------
 
@@ -1147,6 +1181,17 @@ INSERT INTO `class` (`class_id`, `class_name`, `class_hpdice`, `safe1_ability_id
 (10, 'Explorador', 'd10', 1, 2, 0, 5, 0, 3),
 (11, 'Hechicero', 'd6', 3, 6, 1, 6, 0, 2),
 (12, 'Brujo', 'd8', 5, 6, 1, 6, 0, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `class_bundle`
+--
+
+CREATE TABLE `class_bundle` (
+  `class_id` int(11) NOT NULL,
+  `bundle_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1496,18 +1541,19 @@ CREATE TABLE `feat_prerequisite` (
 CREATE TABLE `groups` (
   `group_id` int(11) NOT NULL,
   `group_name` varchar(50) NOT NULL,
-  `user_name` varchar(30) NOT NULL
+  `user_nick` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `groups`
 --
 
-INSERT INTO `groups` (`group_id`, `group_name`, `user_name`) VALUES
+INSERT INTO `groups` (`group_id`, `group_name`, `user_nick`) VALUES
 (1, 'Los Buscadores del Amanecer', 'dm_carlos'),
 (2, 'La Orden del Fénix', 'dm_carlos'),
 (3, 'Mesa de Pruebas', 'admin'),
-(4, 'grupoPako', 'pako');
+(5, 'grupoJuan', 'juan'),
+(6, 'grupoPako', 'pako');
 
 -- --------------------------------------------------------
 
@@ -1748,6 +1794,7 @@ CREATE TABLE `pass` (
 INSERT INTO `pass` (`user_nick`, `pass_hash`) VALUES
 ('admin', '$2y$10$ABC123XYZ456$hashedpassword1'),
 ('dm_carlos', '$2y$10$DEF789GHI012$hashedpassword2'),
+('juan', '$argon2id$v=19$m=65536,t=4,p=1$dmR5WFBhMGttZVZlaGdkNQ$JJWZonJ/3FebV2TN/qQwAqufXt/+X5wLKCgwaAL5VHY'),
 ('jugador_ana', '$2y$10$JKL345MNO678$hashedpassword3'),
 ('jugador_luis', '$2y$10$PQR901STU234$hashedpassword4'),
 ('jugador_sofia', '$2y$10$VWX567YZA890$hashedpassword5'),
@@ -3284,6 +3331,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`user_nick`, `user_name`, `user_mail`) VALUES
 ('admin', 'Administrador del Sistema', 'admin@dndcampaign.com'),
 ('dm_carlos', 'Carlos, el Dungeon Master', 'carlos@dndcampaign.com'),
+('juan', 'juan', 'administracion@geograma.com'),
 ('jugador_ana', 'Ana, la Guerrero', 'ana@dndcampaign.com'),
 ('jugador_luis', 'Luis, el Mago', 'luis@dndcampaign.com'),
 ('jugador_sofia', 'Sofía, la Clériga', 'sofia@dndcampaign.com'),
@@ -3313,7 +3361,10 @@ INSERT INTO `users_groups` (`user_nick`, `group_id`, `rol_id`) VALUES
 ('jugador_sofia', 1, 'J'),
 ('dm_carlos', 1, 'M'),
 ('dm_carlos', 2, 'M'),
-('pako', 4, 'M');
+('juan', 5, 'M'),
+('pako', 4, 'M'),
+('pako', 6, 'M'),
+('pako', 7, 'M');
 
 --
 -- Índices para tablas volcadas
@@ -3434,6 +3485,13 @@ ALTER TABLE `class`
   ADD KEY `spellcasting_ability` (`spellcasting_ability`) USING BTREE;
 
 --
+-- Indices de la tabla `class_bundle`
+--
+ALTER TABLE `class_bundle`
+  ADD PRIMARY KEY (`class_id`,`bundle_id`),
+  ADD KEY `character_bundle_fk_2` (`bundle_id`);
+
+--
 -- Indices de la tabla `class_level_progression`
 --
 ALTER TABLE `class_level_progression`
@@ -3469,7 +3527,8 @@ ALTER TABLE `feat_prerequisite`
 -- Indices de la tabla `groups`
 --
 ALTER TABLE `groups`
-  ADD PRIMARY KEY (`group_id`);
+  ADD PRIMARY KEY (`group_id`),
+  ADD KEY `user_nick` (`user_nick`);
 
 --
 -- Indices de la tabla `item`
@@ -3696,13 +3755,13 @@ ALTER TABLE `users_groups`
 -- AUTO_INCREMENT de la tabla `character`
 --
 ALTER TABLE `character`
-  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT de la tabla `groups`
 --
 ALTER TABLE `groups`
-  MODIFY `group_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `group_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `item`
@@ -3831,6 +3890,13 @@ ALTER TABLE `class`
   ADD CONSTRAINT `class_ibfk_3` FOREIGN KEY (`spellcasting_ability`) REFERENCES `ability` (`ability_id`);
 
 --
+-- Filtros para la tabla `class_bundle`
+--
+ALTER TABLE `class_bundle`
+  ADD CONSTRAINT `character_bundle_fk_1` FOREIGN KEY (`class_id`) REFERENCES `class` (`class_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `character_bundle_fk_2` FOREIGN KEY (`bundle_id`) REFERENCES `bundle` (`bundle_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `class_level_progression`
 --
 ALTER TABLE `class_level_progression`
@@ -3848,6 +3914,12 @@ ALTER TABLE `feat_ability`
 --
 ALTER TABLE `feat_prerequisite`
   ADD CONSTRAINT `feat_prerequisite_ibfk_1` FOREIGN KEY (`feat_id`) REFERENCES `feat` (`feat_id`);
+
+--
+-- Filtros para la tabla `groups`
+--
+ALTER TABLE `groups`
+  ADD CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`user_nick`) REFERENCES `users` (`user_nick`);
 
 --
 -- Filtros para la tabla `item_armor`
