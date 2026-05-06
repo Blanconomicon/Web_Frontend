@@ -12,7 +12,7 @@ $personaje = $_SESSION["personaje"];
 if (isset($_POST['siguiente'])) {
     $personaje->subraza = $_POST["subraza"];
     //TODO calcular la inciativa, se hace aqui por si se elige humano y la dote de alerta
-    $personaje->iniciativa=obtenerModificador($personaje->destreza);
+    $personaje->iniciativa = obtenerModificador($personaje->destreza);
     $personaje->tamanio = $_POST["tamanio"];
     $_SESSION['personaje'] = $personaje;
     header("Location: ./crearPersonaje3.php");
@@ -59,8 +59,8 @@ require_once "../includes/header.php";
                 <h3 class="centrado">Rasgos de la raza</h3>
                 <ul style="margin-bottom: 0;">
                     <?php
-                    echo "<li><b>Longevidad: </b>".$raza[0]->race_age." años</li>";
-                    echo "<li><b>Velocidad: </b>".($raza[0]->race_speed*0.3)." metros</li>";
+                    echo "<li><b>Longevidad: </b>" . $raza[0]->race_age . " años</li>";
+                    echo "<li><b>Velocidad: </b>" . ($raza[0]->race_speed * 0.3) . " metros</li>";
                     // foreach ($raza[0] as $nombreCaracteristica => $caracteristica) {
                     //     echo "<li><b>$nombreCaracteristica:</b>$caracteristica</li>";
                     // }

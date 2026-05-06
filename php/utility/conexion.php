@@ -81,12 +81,13 @@ function putCharacter(
     int $maxHP,
     int $ca,
     int $iniciativa,
+    int $gp,
     int|null $idSubraza = null
 ) {
     try {
         $stmt = $con->prepare("CALL putCharacter(:nick, :nombrePersonaje, 
         :idRaza, :idSubraza, :idClase, :idTrasfondo, :str, :dex, :constitucion, 
-        :int, :wis, :cha, :maxHP, :ca, :iniciativa)");
+        :int, :wis, :cha, :maxHP, :ca, :iniciativa, :gp)");
         $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
         $stmt->bindParam(":nombrePersonaje", $nombrePersonaje, PDO::PARAM_STR);
         $stmt->bindParam(":idRaza", $idRaza, PDO::PARAM_INT);
@@ -102,6 +103,7 @@ function putCharacter(
         $stmt->bindParam(":maxHP", $maxHP, PDO::PARAM_INT);
         $stmt->bindParam(":ca", $ca, PDO::PARAM_INT);
         $stmt->bindParam(":iniciativa", $iniciativa, PDO::PARAM_INT);
+        $stmt->bindParam(":gp", $gp, PDO::PARAM_INT);
         $stmt->execute();
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
         return $resultado['character_id'];
@@ -468,11 +470,11 @@ function getSkill(PDO $con, int|null $idSkill = null)
 }
 
 //funcion para obtener las habilidades en las que el personaje es competente
-function getCharacterSkillProficiency(PDO $con, int $idCharacter, int|null $idSkill = null)
+function getCharacterSkillProficiency(PDO $con, int $idPersonaje, int|null $idSkill = null)
 {
     try {
-        $stmt = $con->prepare("CALL getCharacterSkillProficiency(:idCharacter, :idSkill)");
-        $stmt->bindParam(":idCharacter", $idCharacter, PDO::PARAM_INT);
+        $stmt = $con->prepare("CALL getCharacterSkillProficiency(:idPersonaje, :idSkill)");
+        $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
         $stmt->bindParam(":idSkill", $idSkill, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -482,11 +484,11 @@ function getCharacterSkillProficiency(PDO $con, int $idCharacter, int|null $idSk
 }
 
 //funcion para aniadir una competencia o pericia al personaje
-function putCharacterSkillProficiency(PDO $con, int $idCharacter, int $idSkill, string $tipoCompetencia)
+function putCharacterSkillProficiency(PDO $con, int $idPersonaje, int $idSkill, string $tipoCompetencia)
 {
     try {
-        $stmt = $con->prepare("CALL putCharacterSkillProficiency(:idCharacter, :idSkill, :tipoCompetencia)");
-        $stmt->bindParam(":idCharacter", $idCharacter, PDO::PARAM_INT);
+        $stmt = $con->prepare("CALL putCharacterSkillProficiency(:idPersonaje, :idSkill, :tipoCompetencia)");
+        $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
         $stmt->bindParam(":idSkill", $idSkill, PDO::PARAM_INT);
         $stmt->bindParam(":tipoCompetencia", $tipoCompetencia, PDO::PARAM_STR);
         return $stmt->execute();
@@ -496,11 +498,11 @@ function putCharacterSkillProficiency(PDO $con, int $idCharacter, int $idSkill, 
 }
 
 //funcion para obtener los conjuros de un perosnaje
-function getCharacterSpell(PDO $con, int $idCharacter, int|null $idSpell = null)
+function getCharacterSpell(PDO $con, int $idPersonaje, int|null $idSpell = null)
 {
     try {
-        $stmt = $con->prepare("CALL getCharacterSpell(:idCharacter, :idSpell)");
-        $stmt->bindParam(":idCharacter", $idCharacter, PDO::PARAM_INT);
+        $stmt = $con->prepare("CALL getCharacterSpell(:idPersonaje, :idSpell)");
+        $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
         $stmt->bindParam(":idSpell", $idSpell, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -510,12 +512,25 @@ function getCharacterSpell(PDO $con, int $idCharacter, int|null $idSpell = null)
 }
 
 //funcion para aniadir un conjuro al personaje
-function putCharacterSpell(PDO $con, int $idCharacter, int $idSpell)
+function putCharacterSpell(PDO $con, int $idPersonaje, int $idSpell)
 {
     try {
-        $stmt = $con->prepare("CALL putCharacterSpell(:idCharacter, :idSpell)");
-        $stmt->bindParam(":idCharacter", $idCharacter, PDO::PARAM_INT);
+        $stmt = $con->prepare("CALL putCharacterSpell(:idPersonaje, :idSpell)");
+        $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
         $stmt->bindParam(":idSpell", $idSpell, PDO::PARAM_INT);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para insertar un item en el inventario de un personaje
+function putCharacterInventory(PDO $con,int $idPersonaje, int $idItem, int $cantidad){
+    try {
+        $stmt = $con->prepare("CALL putCharacterInventory(:idPersonaje, :idItem, :cantidad)");
+        $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
+        $stmt->bindParam(":idItem", $idItem, PDO::PARAM_INT);
+        $stmt->bindParam(":cantidad", $cantidad, PDO::PARAM_INT);
         return $stmt->execute();
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();

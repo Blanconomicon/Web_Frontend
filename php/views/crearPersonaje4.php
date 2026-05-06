@@ -10,8 +10,43 @@ if (!isset($_SESSION['personaje']) || isset($_POST["anterior"]) || !isset($_SESS
 $personaje = $_SESSION["personaje"];
 
 if (isset($_POST['finalizar'])) {
-    $personaje->equipoClase = $_POST["equipoClase"];
-    $personaje->equipoTrasfondo = $_POST["equipoTrasfondo"];
+    $trasfondo = getBackground(getCon(), $personaje->trasfondo)[0];
+    $gp = 0;
+    $items = [];
+    $bundleTrasfondo = getBundle(getCon(), $trasfondo->bundle_id)[0];
+    if ($_POST["equipoTrasfondo"] == "oro") {
+        $gp += $bundleTrasfondo->bundle_price;
+    } else {
+        $gp += $bundleTrasfondo->extra_gp;
+        $itemsTrasfondo = getBundleItems(getCon(), $trasfondo->bundle_id);
+        foreach ($itemsTrasfondo as $item) {
+            $items[] = $item;
+        }
+    }
+    $claseBundle = getClassBundle(getCon(), $personaje->clase);
+    $precio = getBundle(getCon(), $claseBundle[0]->bundle_id)[0];
+    $itemsClase = [];
+    if ($_POST["equipoClase"] == "oro") {
+        $gp += $precio->bundle_price;
+    } else {
+        if ($_POST["equipoClase"] == "items") {
+            $itemsClase = getBundleItems(getCon(), $claseBundle[0]->bundle_id);
+        } else {
+            $itemsClase = getBundleItems(getCon(), $claseBundle[1]->bundle_id);
+            $precio = getBundle(getCon(), $claseBundle[1]->bundle_id)[0];
+        }
+        $gp += $precio->extra_gp;
+        foreach ($itemsClase as $item) {
+            foreach ($items as $key => $existingItem) {
+                if ($existingItem->item_id === $item->item_id) {
+                    $item->item_count += $existingItem->item_count;
+                    unset($items[$key]);
+                    break;
+                }
+            }
+            $items[] = $item;
+        }
+    }
     $habilidades = $personaje->competenciasClase;
     foreach ($personaje->competenciasRaza as $habilidad) {
         if (!in_array($habilidad, $habilidades)) {
@@ -35,6 +70,7 @@ if (isset($_POST['finalizar'])) {
         $personaje->pg,
         $personaje->ca,
         $personaje->iniciativa,
+        $gp,
         $personaje->subraza
     );
 
@@ -50,7 +86,11 @@ if (isset($_POST['finalizar'])) {
         }
     }
 
-    header("Location: ./personajes.php");
+    foreach ($items as $item) {
+        echo "<p>INTENTO</p>";
+        putCharacterInventory(getCon(), $idPersonaje, $item->item_id, $item->item_count);
+    }
+    // header("Location: ./personajes.php");
     exit();
 }
 

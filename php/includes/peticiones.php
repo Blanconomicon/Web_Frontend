@@ -28,6 +28,9 @@ if (isset($_GET['subraza'])) {
     if (count($competenciasHabilidades) > 0) {
         $competenciasRazaSkills = [];
         foreach ($competenciasHabilidades as $skill) {
+            if($skill->prof_type=="skill"){
+                $skill->prof_id=$skill->prof_id-100;
+            }
             $competenciasRazaSkills[] = $skill->prof_id;
         }
         $personaje->competenciasRaza = $competenciasRazaSkills;
@@ -66,6 +69,7 @@ if (isset($_GET['itemsTrasfondo'])) {
             echo $item->item_name . " (" . $item->item_count . ")";
             echo "</li>";
         }
+        echo "<li>" . $equipoTrasfondo->extra_gp . " po</li>";
         echo "</ul>";
     } else {
         //oro
@@ -76,18 +80,31 @@ if (isset($_GET['itemsTrasfondo'])) {
 if (isset($_GET['itemsClase'])) {
     $seleccion = $_GET['itemsClase'];
     $claseBundle = getClassBundle(getCon(), $personaje->clase);
+    $precio = getBundle(getCon(), $claseBundle[0]->bundle_id)[0];
     if ($seleccion == "oro") {
-        $precio = getBundle(getCon(), $claseBundle[0]->bundle_id)[0];
         echo "<p>" . $precio->bundle_price . " po</p>";
     } else {
-        foreach ($claseBundle as $bundle) {
-            $items = getBundleItems(getCon(), $bundle->bundle_id);
+        if ($seleccion == "items") {
+            $items = getBundleItems(getCon(), $claseBundle[0]->bundle_id);
             echo "<ul>";
             foreach ($items as $item) {
                 echo "<li>";
                 echo $item->item_name . " (" . $item->item_count . ")";
                 echo "</li>";
             }
+            echo "<li>" . $precio->extra_gp . " po</li>";
+            echo "</ul>";
+        } else {
+            //items2 solo en caso del guerrero
+            $precio = getBundle(getCon(), $claseBundle[1]->bundle_id)[0];
+            $items = getBundleItems(getCon(), $claseBundle[1]->bundle_id);
+            echo "<ul>";
+            foreach ($items as $item) {
+                echo "<li>";
+                echo $item->item_name . " (" . $item->item_count . ")";
+                echo "</li>";
+            }
+            echo "<li>" . $precio->extra_gp . " po</li>";
             echo "</ul>";
         }
     }
