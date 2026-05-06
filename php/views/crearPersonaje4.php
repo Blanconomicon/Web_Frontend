@@ -90,12 +90,9 @@ if (isset($_POST['finalizar'])) {
         echo "<p>INTENTO</p>";
         putCharacterInventory(getCon(), $idPersonaje, $item->item_id, $item->item_count);
     }
-    // header("Location: ./personajes.php");
+    header("Location: ./personajes.php");
     exit();
 }
-
-//TODO acabar cuando esten relacionados en la db
-// $equipoClase;
 
 require_once "../includes/header.php";
 ?>

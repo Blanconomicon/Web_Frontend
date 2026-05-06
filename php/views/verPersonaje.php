@@ -79,7 +79,7 @@ if ($personaje->subrace_id != -1) {
         REVISAR TABLA CHARACTER-->
         <div class="dnd__stat-box">PG <?php echo $personaje->current_hp . "/" . $personaje->max_hp ?> <br> Dados de golpe
           <?php echo $personaje->character_level . "" . $dadoDeGolpe ?></div>
-        <div class="dnd__stat-box">Velocidad <br> <?php echo $personaje->speed ?> pies / <?php echo ($personaje->speed*0.3) ?> metros</div>
+        <div class="dnd__stat-box">Velocidad <br> <?php echo $personaje->speed ?> pies / <?php echo ($personaje->speed * 0.3) ?> metros</div>
         <div class="dnd__stat-box">Bonif. competencia <br> <?php echo $personaje->proficiency_bonus ?></div>
       </div>
 
@@ -197,18 +197,22 @@ if ($personaje->subrace_id != -1) {
       <div class="dnd__bottom">
 
         <div class="dnd__block">
-          <div class="dnd__block-title">Equipo</div>
+          <h3 class="centrado">Equipo</h3>
           <div class="dnd__block-content">
-            <ul>
-              <li>objeto1</li>
-              <li>objeto2</li>
-              <li>objeto3</li>
-            </ul>
+            <div class='dnd__skill' style="border-width: 0.3em;"><span>Nombre</span><span class='dnd__skill-mod'>Cantidad</span></div>
+            <?php
+            $items=getCharacterInventory(getCon(),$personaje->character_id);
+            foreach ($items as $item) {
+              $itemCompleto=getItem(getCon(),$item->item_id)[0];
+              echo "<div class='dnd__skill'><span>".$itemCompleto->item_name."</span><span class='dnd__skill-mod'>".$item->quantity."</span></div>";
+            }
+            ?>
+            <!-- <p class="dnd__skill">objeto1</p> -->
           </div>
         </div>
 
         <div class="dnd__block">
-          <div class="dnd__block-title">Rasgos</div>
+          <h3 class="centrado">Rasgos</h3>
           <div class="dnd__block-content">
             <ul>
               <?php
@@ -224,7 +228,7 @@ if ($personaje->subrace_id != -1) {
         </div>
 
         <div class="dnd__block">
-          <div class="dnd__block-title">Hechizos</div>
+          <h3 class="centrado">Hechizos</h3>
           <div class="dnd__block-content">
             <?php
             $conjuros = getCharacterSpell(getCon(), $personaje->character_id);
@@ -243,8 +247,7 @@ if ($personaje->subrace_id != -1) {
                 if (isset($_GET['descripcionSpell'])) {
                   if ($conjuro->spell_id == $_GET['descripcionSpell']) {
                     echo "<ul>";
-                    //TODO cambiar por el nombre de la escuela
-                    echo "<li><b>Esculea: </b>" . getSpellSchool(getCon(),$spell->spell_school_id)[0]->spell_school_name . "</li>";
+                    echo "<li><b>Esculea: </b>" . getSpellSchool(getCon(), $spell->spell_school_id)[0]->spell_school_name . "</li>";
                     echo "<li><b>Ritual: </b>" . (($spell->spell_ritual) ? "Es ritual" : "No es ritual") . "</li>";
                     echo "<li><b>Tiempo de lanzamiento: </b>" . $spell->spell_cast_time . "</li>";
                     echo "<li><b>Distancia: </b>" . $spell->spell_range . "</li>";

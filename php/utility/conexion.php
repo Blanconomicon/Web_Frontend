@@ -524,8 +524,35 @@ function putCharacterSpell(PDO $con, int $idPersonaje, int $idSpell)
     }
 }
 
+//funcion para obtener un item concreto
+function getItem(PDO $con, int $idObjeto)
+{
+    try {
+        $stmt = $con->prepare("CALL getItem(:idObjeto)");
+        $stmt->bindParam(":idObjeto", $idObjeto, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener los objetos que posee un personaje
+function getCharacterInventory(PDO $con, int $idPersonaje)
+{
+    try {
+        $stmt = $con->prepare("CALL getCharacterInventory(:idPersonaje)");
+        $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
 //funcion para insertar un item en el inventario de un personaje
-function putCharacterInventory(PDO $con,int $idPersonaje, int $idItem, int $cantidad){
+function putCharacterInventory(PDO $con, int $idPersonaje, int $idItem, int $cantidad)
+{
     try {
         $stmt = $con->prepare("CALL putCharacterInventory(:idPersonaje, :idItem, :cantidad)");
         $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
