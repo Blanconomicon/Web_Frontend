@@ -193,7 +193,6 @@ if ($personaje->subrace_id != -1) {
       </div>
 
       <!-- BLOQUES INFERIORES -->
-      <!-- TODO meter los datos del personaje -->
       <div class="dnd__bottom">
 
         <div class="dnd__block">
