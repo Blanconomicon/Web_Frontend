@@ -16,6 +16,10 @@ if (isset($_GET['grupoBorrar'])) {
     deleteGroup(getCon(), $_GET['grupoBorrar'], $_SESSION['user'][0]->user_nick);
 }
 
+if(isset($_GET['salirDelGrupo'])){
+    deleteGroupMember(getCon(), $_GET['salirDelGrupo'], $_SESSION['user'][0]->user_nick);
+}
+
 $grupos = obtenerGrupos($_SESSION['user'][0]->user_nick);
 $posibles = [];
 
@@ -33,7 +37,7 @@ require_once "../includes/header.php";
             if ($grupo->user_nick == $_SESSION['user'][0]->user_nick) {
                 echo "<a href='grupos.php?grupoBorrar=" . $grupo->group_id . "' class='centrado ocupaTodo'><button class='ocupaTodo'>ELIMINAR</button></a>";
             } else {
-                echo "<a href='grupos.php?grupoBorrar=" . $grupo->group_id . "' class='centrado ocupaTodo'><button class='ocupaTodo'>ELIMINAR</button></a>";
+                echo "<a href='grupos.php?salirDelGrupo=" . $grupo->group_id . "' class='centrado ocupaTodo'><button class='ocupaTodo'>SALIR</button></a>";
             }
             echo "</div>";
             echo "<br>";

@@ -631,6 +631,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `updateCharacterHP` (IN `p_character
     WHERE character_id = CONVERT(p_character_id USING utf8mb4);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `dndTFG`.`deleteGroupMember`(IN `p_group_id` INT, IN `p_user_nick` VARCHAR(30))
+BEGIN
+    DELETE FROM `users_groups`
+    WHERE group_id = CONVERT(p_group_id USING utf8mb4)
+      AND user_nick    = CONVERT(p_user_nick    USING utf8mb4);
+END$$
+
 --
 -- Funciones
 --

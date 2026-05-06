@@ -269,6 +269,20 @@ function getGroupMembers(PDO $con, int $id)
     }
 }
 
+//funcion para borrar un grupo por su id
+function deleteGroupMember(PDO $con, int $idGrupo, string $nick)
+{
+    try {
+        $stmt = $con->prepare("CALL deleteGroupMember(:idGrupo,:nick)");
+        $stmt->bindParam(":idGrupo", $idGrupo, PDO::PARAM_INT);
+        $stmt->bindParam(":nick", $nick, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
 //funcion para obtener la contrasenia de un usuario por su nick
 function getPass(PDO $con, string|null $nick = null)
 {
