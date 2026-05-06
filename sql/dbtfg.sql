@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-05-2026 a las 14:32:35
+-- Tiempo de generación: 06-05-2026 a las 11:15:43
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -128,20 +128,27 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getBundleItems` (IN `p_id` INT)   B
         SELECT *
     	FROM bundle_item
     	WHERE item.item_id = bundle_item.item_id
-        AND bundle_item.bundle_id = p_id);
+        AND bundle_item.bundle_id = CONVERT(p_id USING utf8mb4));
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCharacter` (IN `p_id` INT, IN `u_nick` VARCHAR(30))   BEGIN
     IF p_id IS NULL THEN
         SELECT character_id, character_name
         FROM `character`
-        WHERE user_nick = CONVERT(u_nick USING utf8mb4);
+        WHERE user_nick = CONVERT(u_nick USING utf8mb4)
+        ORDER BY character_date DESC;
     ELSE
         SELECT *
         FROM `character`
         WHERE character_id = CONVERT(p_id USING utf8mb4)
         AND user_nick = CONVERT(u_nick USING utf8mb4);
     END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCharacterInventory` (IN `p_id` INT)   BEGIN
+        SELECT *
+        FROM character_inventory
+        WHERE character_id = CONVERT(p_id USING utf8mb4);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCharacterSkillProficiency` (IN `char_id` INT, IN `p_id` INT)   BEGIN
@@ -181,6 +188,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getClass` (IN `p_id` INT)   BEGIN
         WHERE class_id = CONVERT(p_id USING utf8mb4)
         ORDER BY class_name;
     END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getClassBundle` (IN `p_id` INT)   BEGIN
+        SELECT *
+        FROM class_bundle
+        WHERE class_id = CONVERT(p_id USING utf8mb4);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getClassLevelProgression` (IN `p_id` INT, IN `p_level` INT)   BEGIN
@@ -226,6 +239,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getGroupMembers` (IN `p_id` INT)   
 	INNER JOIN rol r 
         ON r.rol_id = ug.rol_id
 	WHERE ug.group_id = CONVERT(p_id USING utf8mb4);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getItem` (IN `p_id` INT)   BEGIN
+        SELECT *
+        FROM item
+        WHERE item_id = CONVERT(p_id USING utf8mb4);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getNoGroupUser` (IN `p_id` INT)   BEGIN
@@ -554,17 +573,22 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getUser` (IN `p_id` VARCHAR(30))   
 	END IF;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `putCharacter` (IN `p_user_nick` VARCHAR(30), IN `p_name` VARCHAR(30), IN `p_race_id` INT, IN `p_subrace_id` INT, IN `p_class_id` INT, IN `p_background_id` INT, IN `p_str` INT, IN `p_dex` INT, IN `p_con` INT, IN `p_int` INT, IN `p_wis` INT, IN `p_cha` INT, IN `p_max_hp` INT, IN `p_armor_class` INT, IN `p_initiative` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `putCharacter` (IN `p_user_nick` VARCHAR(30), IN `p_name` VARCHAR(30), IN `p_race_id` INT, IN `p_subrace_id` INT, IN `p_class_id` INT, IN `p_background_id` INT, IN `p_str` INT, IN `p_dex` INT, IN `p_con` INT, IN `p_int` INT, IN `p_wis` INT, IN `p_cha` INT, IN `p_max_hp` INT, IN `p_armor_class` INT, IN `p_initiative` INT, IN `p_gp` INT)   BEGIN
     INSERT INTO `character` (
         user_nick, character_name, race_id, subrace_id, class_id, background_id,
         strength, dexterity, constitution, intelligence, wisdom, charisma,
-        max_hp, current_hp, armor_class, initiative, character_date
+        max_hp, current_hp, armor_class, initiative, gp, character_date
     ) VALUES (
         p_user_nick, p_name, p_race_id, p_subrace_id, p_class_id, p_background_id,
         p_str, p_dex, p_con, p_int, p_wis, p_cha,
-        p_max_hp, p_max_hp, p_armor_class, p_initiative, CURDATE()
+        p_max_hp, p_max_hp, p_armor_class, p_initiative, p_gp, NOW()
     );
     SELECT LAST_INSERT_ID() AS character_id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `putCharacterInventory` (IN `p_id` INT, IN `item_id` INT, IN `cuantity` INT)   BEGIN
+    INSERT INTO character_inventory(`character_id`, `item_id`, `quantity`)
+    VALUES(p_id,item_id,cuantity);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `putCharacterSkillProficiency` (IN `char_id` INT, IN `p_id` INT, IN `prof_type` VARCHAR(10))   BEGIN
@@ -850,31 +874,32 @@ INSERT INTO `background_skill` (`background_id`, `skill_id`) VALUES
 CREATE TABLE `bundle` (
   `bundle_id` int(4) NOT NULL,
   `bundle_name` varchar(50) NOT NULL,
-  `bundle_price` float(11,2) NOT NULL
+  `bundle_price` float(11,2) NOT NULL,
+  `extra_gp` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `bundle`
 --
 
-INSERT INTO `bundle` (`bundle_id`, `bundle_name`, `bundle_price`) VALUES
-(1, 'Equipo de Aventurero', 19.00),
-(2, 'Equipo de Explorador', 12.00),
-(3, 'Equipo de Diplomático', 25.00),
-(4, 'Equipo de Guerrero Básico', 50.00),
-(5, 'Equipo de Mago Iniciado', 35.00),
-(101, 'Equipo del Devoto (Acólito)', 15.00),
-(102, 'Equipo del Estafador (Charlatán)', 20.00),
-(103, 'Equipo del Infractor (Criminal)', 25.00),
-(104, 'Equipo del Campesino Heroico (Héroe del pueblo)', 12.00),
-(105, 'Equipo del Navegante (Marinero)', 18.00),
-(106, 'Equipo del Aristócrata (Noble)', 30.00),
-(107, 'Equipo del Veterano (Soldado)', 18.00),
-(108, 'Equipo del Recluso (Ermitaño)', 10.00),
-(109, 'Equipo del Artista Errante (Artista)', 22.00),
-(110, 'Equipo del Erudito (Sabio)', 15.00),
-(111, 'Equipo del Callejero (Huérfano)', 15.00),
-(112, 'Equipo del Comerciante (Mercader)', 20.00);
+INSERT INTO `bundle` (`bundle_id`, `bundle_name`, `bundle_price`, `extra_gp`) VALUES
+(1, 'Equipo de Aventurero', 19.00, 0),
+(2, 'Equipo de Explorador', 12.00, 0),
+(3, 'Equipo de Diplomático', 25.00, 0),
+(4, 'Equipo de Guerrero Básico', 50.00, 0),
+(5, 'Equipo de Mago Iniciado', 35.00, 0),
+(101, 'Equipo del Devoto (Acólito)', 15.00, 0),
+(102, 'Equipo del Estafador (Charlatán)', 20.00, 0),
+(103, 'Equipo del Infractor (Criminal)', 25.00, 0),
+(104, 'Equipo del Campesino Heroico (Héroe del pueblo)', 12.00, 0),
+(105, 'Equipo del Navegante (Marinero)', 18.00, 0),
+(106, 'Equipo del Aristócrata (Noble)', 30.00, 0),
+(107, 'Equipo del Veterano (Soldado)', 18.00, 0),
+(108, 'Equipo del Recluso (Ermitaño)', 10.00, 0),
+(109, 'Equipo del Artista Errante (Artista)', 22.00, 0),
+(110, 'Equipo del Erudito (Sabio)', 15.00, 0),
+(111, 'Equipo del Callejero (Huérfano)', 15.00, 0),
+(112, 'Equipo del Comerciante (Mercader)', 20.00, 0);
 
 -- --------------------------------------------------------
 
@@ -1019,16 +1044,13 @@ CREATE TABLE `character` (
   `flaws` text DEFAULT NULL,
   `languages` text DEFAULT NULL,
   `proficiency_bonus` int(1) DEFAULT 2,
-  `character_date` date NOT NULL
+  `character_date` datetime NOT NULL,
+  `cp` int(11) NOT NULL DEFAULT 0,
+  `sp` int(11) NOT NULL DEFAULT 0,
+  `gp` int(11) NOT NULL DEFAULT 0,
+  `ep` int(11) NOT NULL DEFAULT 0,
+  `pp` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `character`
---
-
-INSERT INTO `character` (`character_id`, `user_nick`, `character_name`, `character_level`, `race_id`, `subrace_id`, `class_id`, `subclass_id`, `background_id`, `strength`, `dexterity`, `constitution`, `intelligence`, `wisdom`, `charisma`, `max_hp`, `current_hp`, `temp_hp`, `armor_class`, `initiative`, `speed`, `inspiration`, `experience_points`, `alignment`, `deity`, `personality_trait`, `ideals`, `bonds`, `flaws`, `languages`, `proficiency_bonus`, `character_date`) VALUES
-(12, 'pako', 'otrdgrfgvfdgvfdzgv', 1, 7, 3, 2, NULL, 1, 15, 15, 15, 10, 8, 9, 10, 10, 0, 12, 2, 30, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2026-05-05'),
-(13, 'pako', 'b', 1, 7, 3, 1, NULL, 1, 15, 15, 15, 10, 9, 8, 14, 14, 0, 14, 2, 30, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2026-05-05');
 
 -- --------------------------------------------------------
 
@@ -1079,17 +1101,6 @@ CREATE TABLE `character_skill_proficiency` (
   `proficiency_type` enum('proficient','expertise') DEFAULT 'proficient'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `character_skill_proficiency`
---
-
-INSERT INTO `character_skill_proficiency` (`character_id`, `skill_id`, `proficiency_type`) VALUES
-(12, 1, 'proficient'),
-(12, 4, 'proficient'),
-(12, 6, 'proficient'),
-(13, 7, 'proficient'),
-(13, 12, 'proficient');
-
 -- --------------------------------------------------------
 
 --
@@ -1100,18 +1111,6 @@ CREATE TABLE `character_spell` (
   `character_id` int(11) NOT NULL,
   `spell_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `character_spell`
---
-
-INSERT INTO `character_spell` (`character_id`, `spell_id`) VALUES
-(12, 1),
-(12, 8),
-(12, 101),
-(12, 102),
-(12, 103),
-(12, 109);
 
 -- --------------------------------------------------------
 
@@ -3697,7 +3696,7 @@ ALTER TABLE `users_groups`
 -- AUTO_INCREMENT de la tabla `character`
 --
 ALTER TABLE `character`
-  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de la tabla `groups`
@@ -3799,8 +3798,8 @@ ALTER TABLE `character_feat`
 -- Filtros para la tabla `character_inventory`
 --
 ALTER TABLE `character_inventory`
-  ADD CONSTRAINT `character_inventory_ibfk_1` FOREIGN KEY (`character_id`) REFERENCES `character` (`character_id`),
-  ADD CONSTRAINT `character_inventory_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `item` (`item_id`);
+  ADD CONSTRAINT `character_inventory_ibfk_1` FOREIGN KEY (`character_id`) REFERENCES `character` (`character_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `character_inventory_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `item` (`item_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `character_proficiency`
