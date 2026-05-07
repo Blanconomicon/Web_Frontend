@@ -36,22 +36,25 @@ function cargarPericias(formId, divId) {
 //funcion para mostrar las pericias disponibles
 function mostrarPericias(formulario, divId) {
     let div = document.getElementById(divId);
-    let checkboxes = formulario.querySelectorAll(
-        'input[type="checkbox"]'
-    );
-    let txtMostrar = "";
-    checkboxes.forEach(checkbox => {
-        if (checkbox.checked) {
-            txtMostrar += `
+    if (div != null) {
+        let checkboxes = formulario.querySelectorAll(
+            'input[type="checkbox"]'
+        );
+        let txtMostrar = "";
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                txtMostrar += `
                 <input 
                     type="checkbox"
                     name="pericias[]"
-                    value="${checkbox.value-100}"
+                    value="${checkbox.value - 100}"
                 >
                 ${checkbox.id}
                 <br>
             `;
-        }
-    });
-    div.innerHTML = txtMostrar;
+            }
+        });
+        div.innerHTML = txtMostrar;
+    }
+
 }

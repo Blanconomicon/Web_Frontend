@@ -15,6 +15,7 @@ $personaje = $_SESSION["personaje"];
 
 //si se ha pulsado el boton para avanzar
 if (isset($_POST['siguiente'])) {
+    $pg=0;
     //cargar la subraza
     $personaje->subraza = $_POST["subraza"];
     if (isset($_POST['dote'])) {
@@ -25,6 +26,13 @@ if (isset($_POST['siguiente'])) {
     if (in_array(1, $personaje->dotes)) {
         $iniciativa += 2;
     }
+    if($personaje->raza==4){
+        $pg++;
+    }
+    if (in_array(5, $personaje->dotes)) {
+        $pg += 2;
+    }
+    $personaje->pg=$pg;
     $personaje->iniciativa = $iniciativa;
     $personaje->tamanio = $_POST["tamanio"];
     $_SESSION['personaje'] = $personaje;

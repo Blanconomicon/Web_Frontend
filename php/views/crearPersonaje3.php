@@ -77,7 +77,7 @@ if (isset($_POST['siguiente'])) {
     $_SESSION['personaje'] = $personaje;
     if ($error == "") {
         //guardar la vida en el personaje
-        $personaje->pg = intval(substr($clase->class_hpdice, 1)) + (obtenerModificador($personaje->constitucion));
+        $personaje->pg += intval(substr($clase->class_hpdice, 1)) + (obtenerModificador($personaje->constitucion));
         $_SESSION['personaje'] = $personaje;
         header("Location: ./crearPersonaje4.php");
         exit();
