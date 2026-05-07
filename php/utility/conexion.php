@@ -591,3 +591,29 @@ function putCharacterInventory(PDO $con, int $idPersonaje, int $idItem, int $can
         echo "Error: " . $e->getMessage();
     }
 }
+
+//funcion para obtener las dotes o una dote concreta
+function getFeat(PDO $con, int|null $idDote = null)
+{
+    try {
+        $stmt = $con->prepare("CALL getFeat(:idDote)");
+        $stmt->bindParam(":idDote", $idDote, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener la dote del trasfondo
+function getBackgroundFeat(PDO $con, int $idTrasfondo)
+{
+    try {
+        $stmt = $con->prepare("CALL getBackgroundFeat(:idTrasfondo)");
+        $stmt->bindParam(":idTrasfondo", $idTrasfondo, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}

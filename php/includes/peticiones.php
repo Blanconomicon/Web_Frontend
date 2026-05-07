@@ -54,6 +54,11 @@ if (isset($_GET['trasfondo'])) {
         echo "</select>";
     }
     echo "</div>";
+    echo "<br>";
+    $idDote=getBackgroundFeat(getCon(),$trasfondo)[0]->feat_id;
+    $dote=getFeat(getCon(),$idDote)[0];
+    echo "<h3 class='centrado'>".$dote->feat_name."</h3>";
+    echo "<p>".$dote->feat_desc."</p>";
 }
 
 //elegir items del trasfondo
