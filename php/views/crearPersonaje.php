@@ -8,109 +8,119 @@ $error = "";
 //si se ha pulsado el boton para avanzar
 if (isset($_POST['siguiente'])) {
 
-    //comporbar que las habilidades no esten las 3 igual
-    if ($_POST['habilidad1'] == $_POST['habilidad2'] && $_POST['habilidad1'] == $_POST['habilidad3']) {
-        $error = "No puedes darte todos los +1 a la misma habilidad";
+    //comprobar que no haya otro personaje con el mismo nombre
+    $personajes = getCharacter(getCon(), $_SESSION['user'][0]->user_nick);
+    $nombresPersonajes = [];
+    foreach ($personajes as $personaje) {
+        $nombresPersonajes[] = $personaje->character_name;
     }
+    if (!in_array($_POST['nombrePj'], $nombresPersonajes)) {
+        //comporbar que las habilidades no esten las 3 igual
+        if ($_POST['habilidad1'] == $_POST['habilidad2'] && $_POST['habilidad1'] == $_POST['habilidad3']) {
+            $error = "No puedes darte todos los +1 a la misma habilidad";
+        }
 
-    //crear el objeto del personaje
-    $personaje = new stdClass();
-    $personaje->nombre = $_POST["nombrePj"];
-    $personaje->raza = $_POST["raza"];
-    $personaje->clase = $_POST["clase"];
-    $personaje->trasfondo = $_POST["trasfondo"];
-    $personaje->fuerza = $_POST["selectFuerza"];
-    $personaje->destreza = $_POST["selectDestreza"];
-    $personaje->constitucion = $_POST["selectConstitucion"];
-    $personaje->inteligencia = $_POST["selectInteligencia"];
-    $personaje->sabiduria = $_POST["selectSabiduria"];
-    $personaje->carisma = $_POST["selectCarisma"];
-    $personaje->habilidad1 = $_POST["habilidad1"];
-    $personaje->habilidad2 = $_POST["habilidad2"];
-    $personaje->habilidad3 = $_POST["habilidad3"];
-    $dotes = [];
-    $dotes[] = getBackgroundFeat(getCon(), $_POST["trasfondo"])[0]->feat_id;
-    $personaje->dotes = $dotes;
-    //calcular la ca en funcion de la clase
-    switch ($personaje->clase) {
-        case 1:
-            //barbaro
-            $personaje->ca = 10 + obtenerModificador($personaje->destreza) + obtenerModificador($personaje->constitucion);
-            break;
-        case 7:
-            //monje
-            $personaje->ca = 10 + obtenerModificador($personaje->destreza) + obtenerModificador($personaje->sabiduria);
-            break;
-        default:
-            //otros
-            $personaje->ca = 10 + obtenerModificador($personaje->destreza);
-            break;
-    }
-    $_SESSION['personaje'] = $personaje;
-    if ($error == "") {
-        //aumentar la habilidad seleccionada
-        switch ($_POST['habilidad1']) {
+        //crear el objeto del personaje
+        $personaje = new stdClass();
+        $personaje->nombre = $_POST["nombrePj"];
+        $personaje->raza = $_POST["raza"];
+        $personaje->clase = $_POST["clase"];
+        $personaje->trasfondo = $_POST["trasfondo"];
+        $personaje->fuerza = $_POST["selectFuerza"];
+        $personaje->destreza = $_POST["selectDestreza"];
+        $personaje->constitucion = $_POST["selectConstitucion"];
+        $personaje->inteligencia = $_POST["selectInteligencia"];
+        $personaje->sabiduria = $_POST["selectSabiduria"];
+        $personaje->carisma = $_POST["selectCarisma"];
+        $personaje->habilidad1 = $_POST["habilidad1"];
+        $personaje->habilidad2 = $_POST["habilidad2"];
+        $personaje->habilidad3 = $_POST["habilidad3"];
+        $dotes = [];
+        $dotes[] = getBackgroundFeat(getCon(), $_POST["trasfondo"])[0]->feat_id;
+        $personaje->dotes = $dotes;
+        //calcular la ca en funcion de la clase
+        switch ($personaje->clase) {
             case 1:
-                $personaje->fuerza++;
+                //barbaro
+                $personaje->ca = 10 + obtenerModificador($personaje->destreza) + obtenerModificador($personaje->constitucion);
                 break;
-            case 2:
-                $personaje->destreza++;
+            case 7:
+                //monje
+                $personaje->ca = 10 + obtenerModificador($personaje->destreza) + obtenerModificador($personaje->sabiduria);
                 break;
-            case 3:
-                $personaje->constitucion++;
-                break;
-            case 4:
-                $personaje->inteligencia++;
-                break;
-            case 5:
-                $personaje->sabiduria++;
-                break;
-            case 6:
-                $personaje->carisma++;
+            default:
+                //otros
+                $personaje->ca = 10 + obtenerModificador($personaje->destreza);
                 break;
         }
-        switch ($_POST['habilidad2']) {
-            case 1:
-                $personaje->fuerza++;
-                break;
-            case 2:
-                $personaje->destreza++;
-                break;
-            case 3:
-                $personaje->constitucion++;
-                break;
-            case 4:
-                $personaje->inteligencia++;
-                break;
-            case 5:
-                $personaje->sabiduria++;
-                break;
-            case 6:
-                $personaje->carisma++;
-                break;
+        $_SESSION['personaje'] = $personaje;
+        if ($error == "") {
+            //aumentar la habilidad seleccionada
+            switch ($_POST['habilidad1']) {
+                case 1:
+                    $personaje->fuerza++;
+                    break;
+                case 2:
+                    $personaje->destreza++;
+                    break;
+                case 3:
+                    $personaje->constitucion++;
+                    break;
+                case 4:
+                    $personaje->inteligencia++;
+                    break;
+                case 5:
+                    $personaje->sabiduria++;
+                    break;
+                case 6:
+                    $personaje->carisma++;
+                    break;
+            }
+            switch ($_POST['habilidad2']) {
+                case 1:
+                    $personaje->fuerza++;
+                    break;
+                case 2:
+                    $personaje->destreza++;
+                    break;
+                case 3:
+                    $personaje->constitucion++;
+                    break;
+                case 4:
+                    $personaje->inteligencia++;
+                    break;
+                case 5:
+                    $personaje->sabiduria++;
+                    break;
+                case 6:
+                    $personaje->carisma++;
+                    break;
+            }
+            switch ($_POST['habilidad3']) {
+                case 1:
+                    $personaje->fuerza++;
+                    break;
+                case 2:
+                    $personaje->destreza++;
+                    break;
+                case 3:
+                    $personaje->constitucion++;
+                    break;
+                case 4:
+                    $personaje->inteligencia++;
+                    break;
+                case 5:
+                    $personaje->sabiduria++;
+                    break;
+                case 6:
+                    $personaje->carisma++;
+                    break;
+            }
+            header("Location: ./crearPersonaje2.php");
+            exit();
         }
-        switch ($_POST['habilidad3']) {
-            case 1:
-                $personaje->fuerza++;
-                break;
-            case 2:
-                $personaje->destreza++;
-                break;
-            case 3:
-                $personaje->constitucion++;
-                break;
-            case 4:
-                $personaje->inteligencia++;
-                break;
-            case 5:
-                $personaje->sabiduria++;
-                break;
-            case 6:
-                $personaje->carisma++;
-                break;
-        }
-        header("Location: ./crearPersonaje2.php");
-        exit();
+    }else{
+        $error="ya tienes otro personaje con ese nombre";
     }
 }
 //asegurarse de que los bonificadores no se suman si se recarga la pagina

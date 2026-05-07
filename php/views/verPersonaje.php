@@ -54,8 +54,7 @@ foreach (getCharacterFeat(getCon(), $personaje->character_id) as $dote) {
   <link rel="stylesheet" href="../../css/verPersonaje.css">
   <link rel="icon" href="../../src/img/logo1.png" type="image/x-icon">
   <?php
-  echo "<title>Blanconomicon | " . ucfirst(substr(basename($_SERVER['PHP_SELF']), 0, strlen(basename($_SERVER['PHP_SELF'])) - 4))
-    . "</title>"
+  echo "<title>" . $personaje->character_name . "</title>"
   ?>
 </head>
 
