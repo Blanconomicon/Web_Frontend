@@ -30,6 +30,11 @@ $traitsSubraza = getTraitRace(getCon(), $personaje->race_id);
 if ($personaje->subrace_id != -1) {
   $traitsSubraza = getTraitRace(getCon(), $personaje->race_id, $personaje->subrace_id);
 }
+
+$dotes=[];
+foreach (getCharacterFeat(getCon(),$personaje->character_id) as $dote) {
+  $dotes[]=getFeat(getCon(),$dote->feat_id)[0];
+}
 ?><html lang="es">
 
 <head>
@@ -246,6 +251,9 @@ if ($personaje->subrace_id != -1) {
                 echo "<li><b>" . $trait->trait_name . ": </b>" . $trait->trait_desc . "</li>";
               }
               //TODO aniadir la dote de origen
+              foreach ($dotes as $dote) {
+                echo "<li><b>" . $dote->feat_name . ": </b>" . $dote->feat_desc . "</li>";
+              }
               ?>
             </ul>
           </div>

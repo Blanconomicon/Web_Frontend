@@ -617,3 +617,29 @@ function getBackgroundFeat(PDO $con, int $idTrasfondo)
         echo "Error: " . $e->getMessage();
     }
 }
+
+//funcion para obtener las dotes de un personaje
+function getCharacterFeat(PDO $con, int $idPersonaje)
+{
+    try {
+        $stmt = $con->prepare("CALL getCharacterFeat(:idPersonaje)");
+        $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para aniadir una dote a un personaje
+function putCharacterFeat(PDO $con, int $idPersonaje, int $idDote)
+{
+    try {
+        $stmt = $con->prepare("CALL putCharacterFeat(:idPersonaje, :idDote)");
+        $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
+        $stmt->bindParam(":idDote", $idDote, PDO::PARAM_INT);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}

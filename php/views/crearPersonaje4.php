@@ -85,10 +85,12 @@ if (isset($_POST['finalizar'])) {
             putCharacterSpell(getCon(), $idPersonaje, $spell);
         }
     }
-
     foreach ($items as $item) {
-        echo "<p>INTENTO</p>";
         putCharacterInventory(getCon(), $idPersonaje, $item->item_id, $item->item_count);
+    }
+    foreach ($personaje->dotes as $dote) {
+        echo "<p>$dote</p>";
+        putCharacterFeat(getCon(), $idPersonaje, $dote);
     }
     header("Location: ./personajes.php");
     exit();
