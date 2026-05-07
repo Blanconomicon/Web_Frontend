@@ -1,6 +1,8 @@
 <?php
 require_once "../utility/utils.php";
 $error = "";
+
+//si se quiere registrar
 if (isset($_POST['register'])) {
     if (
         trim($_POST['user']) != "" && trim($_POST['email']) != "" && trim($_POST['nombre']) != "" &&

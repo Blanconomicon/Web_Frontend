@@ -1,12 +1,15 @@
 <?php
 require_once "../utility/utils.php";
 
+//comprobar si se ha hecho login
 comprobarLogin();
 
+//si se quiere borrar el personaje
 if (isset($_GET['idPersonajeBorrar'])) {
     deleteCharacter(getCon(), $_GET['idPersonajeBorrar'], $_SESSION['user'][0]->user_nick);
 }
 
+//obtener los personajes
 $personajes = obtenerPersonajes($_SESSION['user'][0]->user_nick);
 $_SESSION["personaje"] = null;
 
@@ -17,6 +20,7 @@ require_once "../includes/header.php";
     <section class="contenedor">
         <div class="grid-2">
             <?php
+            //mostrar personajes
             foreach ($personajes as $personaje) {
                 echo "<p class='centrado'><a href='verPersonaje.php?idPersonaje=" . $personaje->character_id . "' target='_blank'>"
                     . $personaje->character_name . "</a></p>";

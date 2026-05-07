@@ -1,5 +1,5 @@
 <?php
-
+//comprobar que se ha realizado el login
 if (isset($_GET['logout'])) {
     logout();
 }
@@ -15,6 +15,7 @@ if (isset($_GET['logout'])) {
     <meta name="author" content="Daniel Alvarez Burgo">
     <meta name="description" content="Pagina principal en la cual, se muestra una breve descripcion de que es Blanconomicon">
     <?php
+    //comprobar si se esta en el index para cargar el logo y las fotos
     if (basename($_SERVER['PHP_SELF']) == "index.php") {
     ?>
         <link rel="stylesheet" href="./css/style.css">
@@ -26,6 +27,7 @@ if (isset($_GET['logout'])) {
         <link rel="icon" href="../../src/img/logo1.png" type="image/x-icon">
     <?php
     }
+    //poner el tittle en funcion de la pagina en la que nos encontramos
     echo "<title>Blanconomicon | " . ucfirst(substr(basename($_SERVER['PHP_SELF']), 0, strlen(basename($_SERVER['PHP_SELF'])) - 4))
         . "</title>"
     ?>
@@ -36,6 +38,7 @@ if (isset($_GET['logout'])) {
     <header>
         <h1>Blanconomicon</h1>
         <?php
+        //comprobar si hay sesion iniciada para mostrar el header
         if (isset($_SESSION['user'])) {
         ?>
             <div class="menu-hamburguesa" id="menu-hamburguesa">
@@ -56,6 +59,7 @@ if (isset($_GET['logout'])) {
                 </div>
                 <div class="menu--items">
                     <?php
+                    //poner los enlaces del menu de navegacion en funcion de donde se encuentre
                     switch (basename($_SERVER['PHP_SELF'])) {
                         case 'index.php':
                             echo "<div class='menu--item activo'>Index</div>";
@@ -89,6 +93,7 @@ if (isset($_GET['logout'])) {
         ?>
         <div class="derecha-header">
             <?php
+            //poner la informacion del usuario o el enlace para hacer login
             if (isset($_SESSION['user'])) {
                 echo "<span>Usuario: <b>" . $_SESSION['user'][0]->user_nick . "</b></span>";
                 if (basename($_SERVER['PHP_SELF']) == "index.php") {

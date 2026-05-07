@@ -1,13 +1,19 @@
 <?php
 require_once "../utility/utils.php";
 
+//comprobar si se ha hecho login
 comprobarLogin();
+
+//cargar el personaje
 $personajeArr = getCharacter(getCon(), $_SESSION['user'][0]->user_nick, $_GET['idPersonaje']);
+
+//comprobar que el personaje sea valido
 if (!isset($_GET['idPersonaje'])||count($personajeArr)==0) {
   header("Location: ./personajes.php");
   exit();
 }
 
+//guardar informacion del personaje
 $personaje=$personajeArr[0];
 $clase = getClass(getCon(), $personaje->class_id)[0];
 $claseNombre = $clase->class_name;
@@ -205,6 +211,7 @@ foreach (getCharacterFeat(getCon(),$personaje->character_id) as $dote) {
         <div class="dnd__block">
           <h3 class="centrado">Equipo</h3>
           <br>
+          <!-- div del dinero -->
           <div class="grid-dinero">
             <div class="dnd__attribute">
               <div class="dnd__attr-name">PC</div>
@@ -228,6 +235,7 @@ foreach (getCharacterFeat(getCon(),$personaje->character_id) as $dote) {
             </div>
           </div>
           <br>
+          <!-- div con los objetos del inventario -->
           <div class="dnd__block-content">
             <div class='dnd__skill' style="border-width: 0.3em;"><span>Nombre</span><span class='dnd__skill-mod'>Cantidad</span></div>
             <?php
@@ -240,6 +248,7 @@ foreach (getCharacterFeat(getCon(),$personaje->character_id) as $dote) {
           </div>
         </div>
 
+        <!-- div de las competencias -->
         <div class="dnd__block">
           <h3 class="centrado">Competencias</h3>
           <br>
@@ -255,6 +264,7 @@ foreach (getCharacterFeat(getCon(),$personaje->character_id) as $dote) {
           </div>
         </div>
 
+        <!-- div de los rasgos y dotes -->
         <div class="dnd__block">
           <h3 class="centrado">Rasgos</h3>
           <div class="dnd__block-content">
@@ -280,8 +290,9 @@ foreach (getCharacterFeat(getCon(),$personaje->character_id) as $dote) {
           </div>
         </div>
 
+        <!-- div de los conjuros -->
         <div class="dnd__block">
-          <h3 class="centrado">Hechizos</h3>
+          <h3 class="centrado">Conjuros</h3>
           <div class="dnd__block-content">
             <?php
             $conjuros = getCharacterSpell(getCon(), $personaje->character_id);
@@ -298,6 +309,7 @@ foreach (getCharacterFeat(getCon(),$personaje->character_id) as $dote) {
                 }
                 $url = basename($_SERVER['PHP_SELF']) . "?idPersonaje=" . $personaje->character_id;
                 if (isset($_GET['descripcionSpell'])) {
+                  //mostrar informacion del conjuro seleccionado
                   if ($conjuro->spell_id == $_GET['descripcionSpell']) {
                     echo "<ul>";
                     echo "<li><b>Esculea: </b>" . getSpellSchool(getCon(), $spell->spell_school_id)[0]->spell_school_name . "</li>";
@@ -311,7 +323,7 @@ foreach (getCharacterFeat(getCon(),$personaje->character_id) as $dote) {
                       if ($spell->spell_higher_level) {
                         echo "<li><b>A niveles superiores: </b>" . $spell->spell_higher_level . "</li>";
                       } else {
-                        echo "<li><b>A niveles superiores: </b>Lanzar este hechizo a niveles superiores no otorga ninguna ventaja adicional</li>";
+                        echo "<li><b>A niveles superiores: </b>Lanzar este conjuro a niveles superiores no otorga ninguna ventaja adicional</li>";
                       }
                     }
                     echo "</ul>";

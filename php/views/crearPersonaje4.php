@@ -2,14 +2,21 @@
 require_once "../utility/utils.php";
 require_once "../utility/conexion.php";
 
+//comprobar si se ha hecho login
 comprobarLogin();
+
+//volver atras
 if (!isset($_SESSION['personaje']) || isset($_POST["anterior"]) || !isset($_SESSION['personaje']->competenciasClase)) {
     header("Location: ./crearPersonaje3.php");
     exit();
 }
+
+//cargar el personaje
 $personaje = $_SESSION["personaje"];
 
+//si se quiere finalizar la creacion
 if (isset($_POST['finalizar'])) {
+    //cargar equipo trasfondo
     $trasfondo = getBackground(getCon(), $personaje->trasfondo)[0];
     $gp = 0;
     $items = [];
@@ -23,6 +30,8 @@ if (isset($_POST['finalizar'])) {
             $items[] = $item;
         }
     }
+
+    //cargar equipo clase
     $claseBundle = getClassBundle(getCon(), $personaje->clase);
     $precio = getBundle(getCon(), $claseBundle[0]->bundle_id)[0];
     $itemsClase = [];
@@ -47,6 +56,8 @@ if (isset($_POST['finalizar'])) {
             $items[] = $item;
         }
     }
+
+    //cargar habilidades
     $habilidades = [];
     foreach ($personaje->competenciasClase as $habilidad) {
         if (!in_array($habilidad, $habilidades) && $habilidad - 100 > 0 && $habilidad - 100 < 19) {
@@ -58,6 +69,8 @@ if (isset($_POST['finalizar'])) {
             $habilidades[] = $habilidad - 100;
         }
     }
+
+    //cargar competencias
     $competencias = [];
     foreach ($personaje->competenciasClase as $competencia) {
         if (!in_array($competencia, $competencias) && !in_array($competencia - 100, $habilidades)) {
@@ -72,6 +85,7 @@ if (isset($_POST['finalizar'])) {
     $personaje->habilidades = $habilidades;
     $personaje->competencias = $competencias;
 
+    //crear el personaje
     $idPersonaje = putCharacter(
         getCon(),
         $_SESSION['user'][0]->user_nick,
@@ -92,26 +106,41 @@ if (isset($_POST['finalizar'])) {
         $personaje->subraza
     );
 
+    //poner las habilidades al personaje
     foreach ($personaje->habilidades as $habilidad) {
         putCharacterSkillProficiency(getCon(), $idPersonaje, $habilidad);
     }
+
+    //poner las competencias al personaje
     foreach ($personaje->competencias as $competencia) {
         putCharacterProficiency(getCon(), $idPersonaje, $competencia);
     }
+
+    //poner los trucos al personaje si tiene
     if (isset($personaje->trucos)) {
         foreach ($personaje->trucos as $spell) {
             putCharacterSpell(getCon(), $idPersonaje, $spell);
         }
+    }
+
+    //poner los conjuros de nivel 1 al personaje si los tiene
+    if(isset($personaje->nivel1)){
         foreach ($personaje->nivel1 as $spell) {
             putCharacterSpell(getCon(), $idPersonaje, $spell);
         }
     }
+
+    //poner los items al personaje
     foreach ($items as $item) {
         putCharacterInventory(getCon(), $idPersonaje, $item->item_id, $item->item_count);
     }
+
+    //poner las dotes al personaej
     foreach ($personaje->dotes as $dote) {
         putCharacterFeat(getCon(), $idPersonaje, $dote);
     }
+
+    //poner las maestrias la personaje si las tiene
     if (isset($personaje->maestrias)) {
         foreach ($personaje->maestrias as $maestria) {
             putCharacterItemMastery(getCon(),$idPersonaje,$maestria);
@@ -133,6 +162,7 @@ require_once "../includes/header.php";
                     <td>
                         <select name="equipoClase" id="equipoClase">
                             <?php
+                            //mostrar las opciones en funcion de si es un geurrero
                             if ($personaje->clase == 5) {
                                 echo "<option value='items'>Objetos (A)</option>";
                                 echo "<option value='items2'>Objetos (B)</option>";
@@ -151,6 +181,7 @@ require_once "../includes/header.php";
                     </td>
                 </tr>
                 <tr>
+                    <!-- divs cuyo contenido va a cambiar para mostrar los items de la clase y el trasfondo o el oro que dan -->
                     <td style="width: 50%;">
                         <div id='itemsClase'>
                         </div>

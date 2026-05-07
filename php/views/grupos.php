@@ -1,25 +1,31 @@
 <?php
 require_once "../utility/utils.php";
 
+//comprobar si se ha hecho login
 comprobarLogin();
-$_SESSION["personaje"] = null;
 
+//si se quiere crear un grupo y el nombre es valido
 if (isset($_POST['crearGrupo']) && trim($_POST['nombreGrupo']) != "") {
     crearGrupo($_POST['nombreGrupo']);
 }
 
+//si se quiere aniadir a alguien a un grupo
 if (isset($_POST['aniadirAGrupo'])) {
     putGroupMember(getCon(), $_GET['idGrupo'], $_POST['selectPersonas']);
 }
 
+//si se quiere borrar un grupo
 if (isset($_GET['grupoBorrar'])) {
     deleteGroup(getCon(), $_GET['grupoBorrar'], $_SESSION['user'][0]->user_nick);
 }
 
+//si se quiere salir de un grupo
 if (isset($_GET['salirDelGrupo'])) {
     deleteGroupMember(getCon(), $_GET['salirDelGrupo'], $_SESSION['user'][0]->user_nick);
 }
 
+
+//lista de grupos
 $grupos = obtenerGrupos($_SESSION['user'][0]->user_nick);
 $posibles = [];
 
@@ -30,10 +36,12 @@ require_once "../includes/header.php";
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
         <?php
+        //mostrar los grupos
         foreach ($grupos as $grupo) {
             echo "<div class='grid-2'>";
             echo "<p class='centrado'><a href='grupos.php?idGrupo=" . $grupo->group_id . "' class='centrado' style='margin: 0;'>" . $grupo->group_name . "</a></p>";
-            // var_dump($grupo);
+            
+            // mostrar ELIMINAR o SALIR en funcion de si el grupo te pertenece
             if ($grupo->user_nick == $_SESSION['user'][0]->user_nick) {
                 echo "<a href='grupos.php?grupoBorrar=" . $grupo->group_id . "' class='centrado ocupaTodo'><button class='ocupaTodo'>ELIMINAR</button></a>";
             } else {
@@ -41,6 +49,8 @@ require_once "../includes/header.php";
             }
             echo "</div>";
             echo "<br>";
+
+            //mostrar la tabla con informacion del grupo
             if (isset($_GET['idGrupo']) && $_GET['idGrupo'] == $grupo->group_id) {
                 $jugadores = obtenerJugadores($grupo->group_id);
         ?>
@@ -68,6 +78,8 @@ require_once "../includes/header.php";
         }
         ?>
         <button id="btnNuevoGrupo" class="centrado">Nuevo grupo</button>
+
+        <!-- dialogo para crear un grupo -->
         <dialog id="dialogCrear">
             <div>
                 <form method="post">
@@ -81,6 +93,8 @@ require_once "../includes/header.php";
                 </form>
             </div>
         </dialog>
+
+        <!-- dialogo para aniadir a alguien a un grupo -->
         <dialog id="dialogAniadir">
             <div>
                 <form method="post">

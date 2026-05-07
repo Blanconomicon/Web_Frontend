@@ -2,15 +2,18 @@
 require_once "../utility/utils.php";
 require_once "../utility/conexion.php";
 
+//comprobar si se ha hecho login
 comprobarLogin();
 $error = "";
+//si se ha pulsado el boton para avanzar
 if (isset($_POST['siguiente'])) {
 
+    //comporbar que las habilidades no esten las 3 igual
     if ($_POST['habilidad1'] == $_POST['habilidad2'] && $_POST['habilidad1'] == $_POST['habilidad3']) {
         $error = "No puedes darte todos los +1 a la misma habilidad";
     }
 
-
+    //crear el objeto del personaje
     $personaje = new stdClass();
     $personaje->nombre = $_POST["nombrePj"];
     $personaje->raza = $_POST["raza"];
@@ -25,9 +28,10 @@ if (isset($_POST['siguiente'])) {
     $personaje->habilidad1 = $_POST["habilidad1"];
     $personaje->habilidad2 = $_POST["habilidad2"];
     $personaje->habilidad3 = $_POST["habilidad3"];
-    $dotes=[];
-    $dotes[]=getBackgroundFeat(getCon(),$_POST["trasfondo"])[0]->feat_id;
-    $personaje->dotes=$dotes;
+    $dotes = [];
+    $dotes[] = getBackgroundFeat(getCon(), $_POST["trasfondo"])[0]->feat_id;
+    $personaje->dotes = $dotes;
+    //calcular la ca en funcion de la clase
     switch ($personaje->clase) {
         case 1:
             //barbaro
@@ -44,6 +48,7 @@ if (isset($_POST['siguiente'])) {
     }
     $_SESSION['personaje'] = $personaje;
     if ($error == "") {
+        //aumentar la habilidad seleccionada
         switch ($_POST['habilidad1']) {
             case 1:
                 $personaje->fuerza++;
@@ -108,6 +113,7 @@ if (isset($_POST['siguiente'])) {
         exit();
     }
 }
+//asegurarse de que los bonificadores no se suman si se recarga la pagina
 $personaje = null;
 if (isset($_SESSION['personaje'])) {
     $personaje = $_SESSION['personaje'];
@@ -173,6 +179,7 @@ if (isset($_SESSION['personaje'])) {
     }
 }
 
+//obtener datos para los select
 $razas = getRace(getCon());
 $clases = getClass(getCon());
 $trasfondos = getBackground(getCon());
@@ -183,6 +190,7 @@ require_once "../includes/header.php";
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
         <?php
+        //mostrar el error
         if ($error != "") {
             echo "<p style='color: red'>$error</p>";
         }
@@ -198,6 +206,7 @@ require_once "../includes/header.php";
                     <td>
                         <select class="ocupaTodo" name="raza" id="raza">
                             <?php
+                            //cargar select de razas
                             foreach ($razas as $raza) {
                                 $selected = ($personaje && $personaje->raza == $raza->race_id) ? "selected" : "";
                                 echo "<option value='" . $raza->race_id . "' $selected>" . $raza->race_name . "</option>";
@@ -208,6 +217,7 @@ require_once "../includes/header.php";
                     <td>
                         <select class="ocupaTodo" name="clase" id="clase">
                             <?php
+                            //cargar select de clases
                             foreach ($clases as $clase) {
                                 $selected = ($personaje && $personaje->clase == $clase->class_id) ? "selected" : "";
                                 echo "<option value='" . $clase->class_id . "' $selected>" . $clase->class_name . "</option>";
@@ -220,6 +230,7 @@ require_once "../includes/header.php";
                     <td colspan="2">
                         <select class="ocupaTodo" name="trasfondo" id="trasfondo">
                             <?php
+                            //cargar select de trasfondos
                             foreach ($trasfondos as $trasfondo) {
                                 $selected = ($personaje && $personaje->trasfondo == $trasfondo->background_id) ? "selected" : "";
                                 echo "<option value='" . $trasfondo->background_id . "' $selected>" . $trasfondo->background_name . "</option>";
@@ -228,6 +239,7 @@ require_once "../includes/header.php";
                         </select>
                         <br>
                         <br>
+                        <!-- div cuyo contenido cambiara para mostrar la informcion del trasfondo -->
                         <div id="infoTrafondo">
                             <select name="habilidad1" id="habilidad1"></select>
                             <select name="habilidad2" id="habilidad2"></select>
@@ -237,9 +249,11 @@ require_once "../includes/header.php";
                 </tr>
                 <tr>
                     <td colspan="2">
+                        <!-- compra de puntos -->
                         <h3 class="centrado">Compra de puntos</h3>
                         <p class="centrado"><b id="txtRestantes">27/27</b></p>
                         <div class="gridResponsive">
+                            <!-- selects de cada habilidad con informacion sobre el total y el modificador -->
                             <div>
                                 <h3 class="centrado">Fuerza</h3>
                                 <select name="selectFuerza" id="selectFuerza">

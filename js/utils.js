@@ -1,3 +1,4 @@
+//funcion para cargar una zona de la pagina por el valor que tenga un select
 function cargarDesdeSelect(selectId, resultadoId, archivoPhp, parametro) {
     const select = document.getElementById(selectId);
 

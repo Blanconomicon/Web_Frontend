@@ -1,6 +1,4 @@
-///////////////////////////////////////////////////////////////////////////
 //variables necesarias
-///////////////////////////////////////////////////////////////////////////
 let restantes = 27;
 let txtRestantes = document.getElementById("txtRestantes");
 
@@ -68,16 +66,13 @@ const costes = {
     14: 7,
     15: 9
 };
-///////////////////////////////////////////////////////////////////////////
-//funciones
-///////////////////////////////////////////////////////////////////////////
+
 //funcion para dar los eventos a los selects
 function cargarEventosSelects() {
     calcularRestantes();
     selects.forEach(select => {
         select.addEventListener("change", fijarValorTotal);
     });
-    // document.getElementById("trasfondo").addEventListener("change",fijarValorTotal);
 }
 
 //funcion para poner el valor del campo de total y su modificador
@@ -117,6 +112,7 @@ function calcularRestantes() {
     actualizarOpcionesDisponibles();
 }
 
+//funcion para actualizar las opciones disponibles
 function actualizarOpcionesDisponibles() {
     selects.forEach(select => {
         let valorActual = parseInt(select.value);
@@ -135,13 +131,12 @@ function actualizarOpcionesDisponibles() {
 
 }
 
+//funcion para obtener el coste de un determinado valor, por ejemplo de 8 el coste es 0
 function obtenerCoste(valor) {
     return costes[valor];
 }
 
-///////////////////////////////////////////////////////////////////////////
-//eventos
-///////////////////////////////////////////////////////////////////////////
+//dar evento al boton
 btnSiguiente.addEventListener("click", (event) => {
     if (restantes != 0) {
         event.preventDefault();
@@ -149,7 +144,5 @@ btnSiguiente.addEventListener("click", (event) => {
     }
 })
 
-///////////////////////////////////////////////////////////////////////////
 //codigo a ejecutar
-///////////////////////////////////////////////////////////////////////////
 cargarEventosSelects();

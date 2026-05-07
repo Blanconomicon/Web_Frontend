@@ -80,6 +80,7 @@ if (isset($_GET['itemsTrasfondo'])) {
     }
 }
 
+//elegir items de la clase
 if (isset($_GET['itemsClase'])) {
     $seleccion = $_GET['itemsClase'];
     $claseBundle = getClassBundle(getCon(), $personaje->clase);
