@@ -8,13 +8,13 @@ comprobarLogin();
 $personajeArr = getCharacter(getCon(), $_SESSION['user'][0]->user_nick, $_GET['idPersonaje']);
 
 //comprobar que el personaje sea valido
-if (!isset($_GET['idPersonaje'])||count($personajeArr)==0) {
+if (!isset($_GET['idPersonaje']) || count($personajeArr) == 0) {
   header("Location: ./personajes.php");
   exit();
 }
 
 //guardar informacion del personaje
-$personaje=$personajeArr[0];
+$personaje = $personajeArr[0];
 $clase = getClass(getCon(), $personaje->class_id)[0];
 $claseNombre = $clase->class_name;
 $dadoDeGolpe = $clase->class_hpdice;
@@ -36,11 +36,11 @@ $traitsSubraza = getTraitRace(getCon(), $personaje->race_id);
 if ($personaje->subrace_id != -1) {
   $traitsSubraza = getTraitRace(getCon(), $personaje->race_id, $personaje->subrace_id);
 }
-$maestrias=getCharacterItemMastery(getCon(),$personaje->character_id);
+$maestrias = getCharacterItemMastery(getCon(), $personaje->character_id);
 
-$dotes=[];
-foreach (getCharacterFeat(getCon(),$personaje->character_id) as $dote) {
-  $dotes[]=getFeat(getCon(),$dote->feat_id)[0];
+$dotes = [];
+foreach (getCharacterFeat(getCon(), $personaje->character_id) as $dote) {
+  $dotes[] = getFeat(getCon(), $dote->feat_id)[0];
 }
 ?><html lang="es">
 
@@ -255,7 +255,7 @@ foreach (getCharacterFeat(getCon(),$personaje->character_id) as $dote) {
           <div class="dnd__block-content">
             <div class='dnd__skill' style="border-width: 0.3em;"><span>Nombre</span><span class='dnd__skill-mod'>Tipo</span></div>
             <?php
-            $competencias=getCharacterProficiency(getCon(),$personaje->character_id);
+            $competencias = getCharacterProficiency(getCon(), $personaje->character_id);
             foreach ($competencias as $competencia) {
               $competenciaCompleta = getProf(getCon(), $competencia->prof_id)[0];
               echo "<div class='dnd__skill'><span>" . $competenciaCompleta->prof_name . "</span><span class='dnd__skill-mod'>" . $competenciaCompleta->prof_type . "</span></div>";
@@ -280,10 +280,10 @@ foreach (getCharacterFeat(getCon(),$personaje->character_id) as $dote) {
                 echo "<li><b>" . $dote->feat_name . ": </b>" . $dote->feat_desc . "</li>";
               }
               foreach ($maestrias as $maestria) {
-                $itemWeapon=getItemWeapon(getCon(),$maestria->item_id)[0];
-                $mastery=getMastery(getCon(),$itemWeapon->mastery_id)[0];
-                $item=getItem(getCon(),$itemWeapon->item_id)[0];
-                echo "<li><b>Maestria con " . $item->item_name . " (".$mastery->mastery_name."): </b>" . $mastery->mastery_desc . "</li>";
+                $itemWeapon = getItemWeapon(getCon(), $maestria->item_id)[0];
+                $mastery = getMastery(getCon(), $itemWeapon->mastery_id)[0];
+                $item = getItem(getCon(), $itemWeapon->item_id)[0];
+                echo "<li><b>Maestria con " . $item->item_name . " (" . $mastery->mastery_name . "): </b>" . $mastery->mastery_desc . "</li>";
               }
               ?>
             </ul>

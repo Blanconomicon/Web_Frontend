@@ -24,3 +24,34 @@ function cargarDesdeSelect(selectId, resultadoId, archivoPhp, parametro) {
     // 🔹 Se ejecuta al cargar la página
     cargar();
 }
+
+//funcion para dar el evento al formulario
+function cargarPericias(formId, divId) {
+    let formulario = document.getElementById(formId);
+    formulario.addEventListener("change", () => {
+        mostrarPericias(formulario, divId);
+    });
+}
+
+//funcion para mostrar las pericias disponibles
+function mostrarPericias(formulario, divId) {
+    let div = document.getElementById(divId);
+    let checkboxes = formulario.querySelectorAll(
+        'input[type="checkbox"]'
+    );
+    let txtMostrar = "";
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            txtMostrar += `
+                <input 
+                    type="checkbox"
+                    name="pericias[]"
+                    value="${checkbox.value-100}"
+                >
+                ${checkbox.id}
+                <br>
+            `;
+        }
+    });
+    div.innerHTML = txtMostrar;
+}

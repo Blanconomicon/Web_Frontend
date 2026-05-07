@@ -18,8 +18,10 @@ if (!isset($personaje->competenciasClase)) {
     $personaje->competenciasClase = [];
 }
 $error = "";
+
 //obtener las competencias
 $competenciasClase = getProfClass(getCon(), $personaje->clase, 1);
+
 //si se ha pulsado el boton para avanzar
 if (isset($_POST['siguiente'])) {
     //validar las competencias
@@ -37,6 +39,20 @@ if (isset($_POST['siguiente'])) {
     } else {
         $error .= "El " . $clase->class_name . " tiene " . $clase->prof_cuantity . " competencias<br>";
     }
+
+    //validar pericia
+    if (isset($_POST['pericias'])) {
+        if (count($_POST['pericias']) == 2) {
+            $pericias=[];
+            foreach ($_POST['pericias'] as $pericia) {
+                $pericias[]=$pericia;
+            }
+            $personaje->pericias=$pericias;
+        } else {
+            $error .= "El " . $clase->class_name . " tiene 2 pericias<br>";
+        }
+    }
+
     //validar los conjuros
     if ($clase->class_spellcaster == 1) {
         if (isset($_POST['Trucos']) && $progresion->cantrips_known == count($_POST['Trucos'])) {
@@ -110,7 +126,8 @@ require_once "../includes/header.php";
             //Si es lanzador de conjuros mostrar las tablas con los conjuros que puede aprender
             if ($clase->class_spellcaster) {
                 echo "<hr class='ocupaTodo'>";
-                echo "<h3>" . getAbility(getCon(), $clase->spellcasting_ability)[0]->ability_name . " es tu aptitud de lanzamiento de conjuros</h3>";
+                echo "<h3>" . getAbility(getCon(), $clase->spellcasting_ability)[0]->ability_name .
+                    " es tu aptitud de lanzamiento de conjuros</h3>";
                 //cantrips
                 if ($progresion->cantrips_known > 0) {
                     mostrarTablaSpells("Trucos", $clase->class_id, 0, $progresion->cantrips_known);
@@ -131,11 +148,20 @@ require_once "../includes/header.php";
                     $item = getItem(getCon(), $arma->item_id)[0];
                     $maestria = getMastery(getCon(), $arma->mastery_id)[0];
                     echo "<input type='checkbox' value='" . $arma->item_id . "' name='maestrias[]' " .
-                        (isset($personaje->maestrias) && in_array($arma->item_id, $personaje->maestrias) ? "checked" : "") . ">" .
-                        $item->item_name . " (" . $maestria->mastery_name . ")</input>";
+                        (isset($personaje->maestrias) && in_array($arma->item_id, $personaje->maestrias) ? "checked" : "") .
+                        ">" . $item->item_name . " (" . $maestria->mastery_name . ")</input>";
                     echo "</div>";
                 }
                 echo "</div>";
+            }
+            ?>
+            <?php
+            //si tiene pericia
+            if ($clase->class_id == 9) {
+                echo "<hr class='ocupaTodo'>";
+                echo "<h3>Pericias</h3>";
+                echo "<h4>Elige 2 pericias (para que aparezcan las pericias, primero tienes que ser competente en esa habilidad)</h4>";
+                echo "<div id='pericias'></div>";
             }
             ?>
             <hr class="ocupaTodo">
@@ -150,6 +176,11 @@ require_once "../includes/header.php";
 require_once "../includes/footer.php"
 ?>
 <script src="../../js/menuHamburguesa.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        cargarPericias("chkHabilidades", "pericias");
+    });
+</script>
 </body>
 
 </html>

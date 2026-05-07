@@ -106,11 +106,20 @@ if (isset($_POST['finalizar'])) {
         $personaje->subraza
     );
 
-    //poner las habilidades al personaje
-    foreach ($personaje->habilidades as $habilidad) {
-        putCharacterSkillProficiency(getCon(), $idPersonaje, $habilidad);
+    //poner las habilidades y las pericias al personaje
+    if (isset($personaje->pericias)) {
+        foreach ($personaje->habilidades as $habilidad) {
+            if (in_array($habilidad, $personaje->pericias)) {
+                putCharacterSkillProficiency(getCon(), $idPersonaje, $habilidad,"expertise");
+            } else {
+                putCharacterSkillProficiency(getCon(), $idPersonaje, $habilidad);
+            }
+        }
+    } else {
+        foreach ($personaje->habilidades as $habilidad) {
+            putCharacterSkillProficiency(getCon(), $idPersonaje, $habilidad);
+        }
     }
-
     //poner las competencias al personaje
     foreach ($personaje->competencias as $competencia) {
         putCharacterProficiency(getCon(), $idPersonaje, $competencia);
@@ -124,7 +133,7 @@ if (isset($_POST['finalizar'])) {
     }
 
     //poner los conjuros de nivel 1 al personaje si los tiene
-    if(isset($personaje->nivel1)){
+    if (isset($personaje->nivel1)) {
         foreach ($personaje->nivel1 as $spell) {
             putCharacterSpell(getCon(), $idPersonaje, $spell);
         }
@@ -143,7 +152,7 @@ if (isset($_POST['finalizar'])) {
     //poner las maestrias la personaje si las tiene
     if (isset($personaje->maestrias)) {
         foreach ($personaje->maestrias as $maestria) {
-            putCharacterItemMastery(getCon(),$idPersonaje,$maestria);
+            putCharacterItemMastery(getCon(), $idPersonaje, $maestria);
         }
     }
     header("Location: ./personajes.php");
