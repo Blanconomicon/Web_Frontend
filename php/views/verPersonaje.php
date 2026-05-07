@@ -240,6 +240,21 @@ foreach (getCharacterFeat(getCon(),$personaje->character_id) as $dote) {
         </div>
 
         <div class="dnd__block">
+          <h3 class="centrado">Competencias</h3>
+          <br>
+          <div class="dnd__block-content">
+            <div class='dnd__skill' style="border-width: 0.3em;"><span>Nombre</span><span class='dnd__skill-mod'>Tipo</span></div>
+            <?php
+            $competencias=getCharacterProficiency(getCon(),$personaje->character_id);
+            foreach ($competencias as $competencia) {
+              $competenciaCompleta = getProf(getCon(), $competencia->prof_id)[0];
+              echo "<div class='dnd__skill'><span>" . $competenciaCompleta->prof_name . "</span><span class='dnd__skill-mod'>" . $competenciaCompleta->prof_type . "</span></div>";
+            }
+            ?>
+          </div>
+        </div>
+
+        <div class="dnd__block">
           <h3 class="centrado">Rasgos</h3>
           <div class="dnd__block-content">
             <ul>
@@ -250,7 +265,6 @@ foreach (getCharacterFeat(getCon(),$personaje->character_id) as $dote) {
               foreach ($traitsClase as $trait) {
                 echo "<li><b>" . $trait->trait_name . ": </b>" . $trait->trait_desc . "</li>";
               }
-              //TODO aniadir la dote de origen
               foreach ($dotes as $dote) {
                 echo "<li><b>" . $dote->feat_name . ": </b>" . $dote->feat_desc . "</li>";
               }

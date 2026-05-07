@@ -512,7 +512,7 @@ function getCharacterSkillProficiency(PDO $con, int $idPersonaje, int|null $idSk
 }
 
 //funcion para aniadir una competencia o pericia al personaje
-function putCharacterSkillProficiency(PDO $con, int $idPersonaje, int $idSkill, string $tipoCompetencia)
+function putCharacterSkillProficiency(PDO $con, int $idPersonaje, int $idSkill, string $tipoCompetencia = "proficient")
 {
     try {
         $stmt = $con->prepare("CALL putCharacterSkillProficiency(:idPersonaje, :idSkill, :tipoCompetencia)");
@@ -639,6 +639,46 @@ function putCharacterFeat(PDO $con, int $idPersonaje, int $idDote)
         $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
         $stmt->bindParam(":idDote", $idDote, PDO::PARAM_INT);
         return $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener las competnecias de un personaje
+function getCharacterProficiency(PDO $con, int $idPersonaje, int|null $idCompetencia = null)
+{
+    try {
+        $stmt = $con->prepare("CALL getCharacterProficiency(:idPersonaje, :idCompetencia)");
+        $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
+        $stmt->bindParam(":idCompetencia", $idCompetencia, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para aniadir una competencia o pericia al personaje
+function putCharacterProficiency(PDO $con, int $idPersonaje, int $idCompetencia, string $tipoCompetencia = "proficient")
+{
+    try {
+        $stmt = $con->prepare("CALL putCharacterProficiency(:idPersonaje, :idCompetencia, :tipoCompetencia)");
+        $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
+        $stmt->bindParam(":idCompetencia", $idCompetencia, PDO::PARAM_INT);
+        $stmt->bindParam(":tipoCompetencia", $tipoCompetencia, PDO::PARAM_STR);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+function getProf(PDO $con,int|null $idCompetencia=null)
+{
+    try {
+        $stmt = $con->prepare("CALL getProf(:idCompetencia)");
+        $stmt->bindParam(":idCompetencia", $idCompetencia, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }

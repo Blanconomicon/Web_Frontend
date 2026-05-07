@@ -14,9 +14,19 @@ if (!isset($personaje->competenciasClase)) {
     $personaje->competenciasClase = [];
 }
 $error = "";
+$competenciasClase = getProfClass(getCon(), $personaje->clase, 1);
 if (isset($_POST['siguiente'])) {
     if (isset($_POST['checkCompetencias']) && count($_POST['checkCompetencias']) == $clase->prof_cuantity) {
-        $personaje->competenciasClase = $_POST['checkCompetencias'];
+        $competencias = [];
+        foreach ($_POST['checkCompetencias'] as $competencia) {
+            $competencias[] = $competencia;
+        }
+        foreach ($competenciasClase as $competencia) {
+            if ($competencia->prof_type != "skill") {
+                $competencias[] = $competencia->prof_id;
+            }
+        }
+        $personaje->competenciasClase = $competencias;
     } else {
         $error .= "El " . $clase->class_name . " tiene " . $clase->prof_cuantity . " competencias<br>";
     }
@@ -42,7 +52,6 @@ if (isset($_POST['siguiente'])) {
 }
 
 $traitsClase = getTraitClass(getCon(), $personaje->clase, 1);
-$competenciasClase = getProfClass(getCon(), $personaje->clase, 1);
 
 require_once "../includes/header.php";
 ?>

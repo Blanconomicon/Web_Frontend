@@ -175,7 +175,7 @@ a {
 
 @media (min-width: 1000px) {
     .dnd__bottom {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
     }
 
     .dnd__columns {

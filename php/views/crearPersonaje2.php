@@ -11,14 +11,14 @@ $personaje = $_SESSION["personaje"];
 
 if (isset($_POST['siguiente'])) {
     $personaje->subraza = $_POST["subraza"];
-    if(isset($_POST['dote'])){
-        $personaje->dotes[]=$_POST['dote'];
+    if (isset($_POST['dote'])) {
+        $personaje->dotes[] = $_POST['dote'];
     }
     $iniciativa = obtenerModificador($personaje->destreza);
-    if(in_array(1,$personaje->dotes)){
-        $iniciativa+=2;
+    if (in_array(1, $personaje->dotes)) {
+        $iniciativa += 2;
     }
-    $personaje->iniciativa=$iniciativa;
+    $personaje->iniciativa = $iniciativa;
     $personaje->tamanio = $_POST["tamanio"];
     $_SESSION['personaje'] = $personaje;
     header("Location: ./crearPersonaje3.php");
@@ -66,21 +66,21 @@ require_once "../includes/header.php";
                 <ul style="margin-bottom: 0;">
                     <?php
                     echo "<li><b>Longevidad: </b>" . $raza->race_age . " años</li>";
-                    echo "<li><b>Velocidad: </b>" . ($raza->race_speed * 0.3) . " metros</li>";
+                    echo "<li><b>Velocidad: </b>" . $raza->race_speed . " pies / " . ($raza->race_speed * 0.3) . " metros</li>";
                     ?>
                 </ul>
                 <div id="traitsSubraza">
                 </div>
                 <?php
-                    if($raza->race_id==1){
-                        echo "<h3 class='centrado'>Dote adicional</h3>";
-                        $dotes=getFeat(getCon());
-                        echo "<select name='dote' id='dote'>";
-                        foreach ($dotes as $dote) {
-                            echo "<option value='".$dote->feat_id."' ".(in_array($dote->feat_id,$personaje->dotes)?"disabled":"").">".$dote->feat_name."</option>";
-                        }
-                        echo "</select>";
+                if ($raza->race_id == 1) {
+                    echo "<h3 class='centrado'>Dote adicional</h3>";
+                    $dotes = getFeat(getCon());
+                    echo "<select name='dote' id='dote'>";
+                    foreach ($dotes as $dote) {
+                        echo "<option value='" . $dote->feat_id . "' " . (in_array($dote->feat_id, $personaje->dotes) ? "disabled" : "") . ">" . $dote->feat_name . "</option>";
                     }
+                    echo "</select>";
+                }
                 ?>
             </div>
             <hr class="ocupaTodo">

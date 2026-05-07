@@ -47,13 +47,31 @@ if (isset($_POST['finalizar'])) {
             $items[] = $item;
         }
     }
-    $habilidades = $personaje->competenciasClase;
+    $habilidades = [];
+    foreach ($personaje->competenciasClase as $habilidad) {
+        if (!in_array($habilidad, $habilidades) && $habilidad - 100 > 0 && $habilidad - 100 < 19) {
+            $habilidades[] = $habilidad - 100;
+        }
+    }
     foreach ($personaje->competenciasRaza as $habilidad) {
-        if (!in_array($habilidad, $habilidades)) {
-            $habilidades[] = $habilidad;
+        if (!in_array($habilidad, $habilidades) && $habilidad - 100 > 0 && $habilidad - 100 < 19) {
+            $habilidades[] = $habilidad - 100;
+        }
+    }
+    $competencias = [];
+    foreach ($personaje->competenciasClase as $competencia) {
+        if (!in_array($competencia, $competencias)&&!in_array($competencia-100, $habilidades)) {
+            $competencias[] = $competencia;
+        }
+    }
+    foreach ($personaje->competenciasRaza as $competencia) {
+        if (!in_array($competencia, $competencias)&&!in_array($competencia-100, $habilidades)) {
+            $competencias[] = $competencia;
         }
     }
     $personaje->habilidades = $habilidades;
+    $personaje->competencias = $competencias;
+
     $idPersonaje = putCharacter(
         getCon(),
         $_SESSION['user'][0]->user_nick,
@@ -75,7 +93,10 @@ if (isset($_POST['finalizar'])) {
     );
 
     foreach ($personaje->habilidades as $habilidad) {
-        putCharacterSkillProficiency(getCon(), $idPersonaje, $habilidad, "proficient");
+        putCharacterSkillProficiency(getCon(), $idPersonaje, $habilidad);
+    }
+    foreach ($personaje->competencias as $competencia) {
+        putCharacterProficiency(getCon(), $idPersonaje, $competencia);
     }
     if (isset($personaje->trucos)) {
         foreach ($personaje->trucos as $spell) {
@@ -89,7 +110,6 @@ if (isset($_POST['finalizar'])) {
         putCharacterInventory(getCon(), $idPersonaje, $item->item_id, $item->item_count);
     }
     foreach ($personaje->dotes as $dote) {
-        echo "<p>$dote</p>";
         putCharacterFeat(getCon(), $idPersonaje, $dote);
     }
     header("Location: ./personajes.php");

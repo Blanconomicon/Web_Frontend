@@ -151,8 +151,8 @@ function mostrarCompetencias(
         if ($seleccionandoCompetencias) {
             echo "<h4>Puedes elegir " . $cantidadCompetencias . " competencias</h4>";
             foreach ($competenciasHabilidades as $competencia) {
-                echo "<input type='checkbox' value='" . ($competencia->prof_id - 100) .
-                    "' name='checkCompetencias[]'" . (in_array(($competencia->prof_id - 100), $competenciasTiene) ? "checked" : "") . ">"
+                echo "<input type='checkbox' value='" . ($competencia->prof_id) .
+                    "' name='checkCompetencias[]'" . (in_array(($competencia->prof_id), $competenciasTiene) ? "checked" : "") . ">"
                     . $competencia->prof_name . "</input><br>";
             }
         } else {
