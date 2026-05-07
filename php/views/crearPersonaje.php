@@ -5,9 +5,9 @@ require_once "../utility/conexion.php";
 //comprobar si se ha hecho login
 comprobarLogin();
 $error = "";
+
 //si se ha pulsado el boton para avanzar
 if (isset($_POST['siguiente'])) {
-
     //comprobar que no haya otro personaje con el mismo nombre
     $personajes = getCharacter(getCon(), $_SESSION['user'][0]->user_nick);
     $nombresPersonajes = [];
@@ -119,8 +119,8 @@ if (isset($_POST['siguiente'])) {
             header("Location: ./crearPersonaje2.php");
             exit();
         }
-    }else{
-        $error="ya tienes otro personaje con ese nombre";
+    } else {
+        $error = "ya tienes otro personaje con ese nombre";
     }
 }
 //asegurarse de que los bonificadores no se suman si se recarga la pagina

@@ -40,7 +40,7 @@ require_once "../includes/header.php";
         foreach ($grupos as $grupo) {
             echo "<div class='grid-2'>";
             echo "<p class='centrado'><a href='grupos.php?idGrupo=" . $grupo->group_id . "' class='centrado' style='margin: 0;'>" . $grupo->group_name . "</a></p>";
-            
+
             // mostrar ELIMINAR o SALIR en funcion de si el grupo te pertenece
             if ($grupo->user_nick == $_SESSION['user'][0]->user_nick) {
                 echo "<a href='grupos.php?grupoBorrar=" . $grupo->group_id . "' class='centrado ocupaTodo'><button class='ocupaTodo'>ELIMINAR</button></a>";

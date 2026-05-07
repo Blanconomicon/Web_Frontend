@@ -43,11 +43,11 @@ if (isset($_POST['siguiente'])) {
     //validar pericia
     if (isset($_POST['pericias'])) {
         if (count($_POST['pericias']) == 2) {
-            $pericias=[];
+            $pericias = [];
             foreach ($_POST['pericias'] as $pericia) {
-                $pericias[]=$pericia;
+                $pericias[] = $pericia;
             }
-            $personaje->pericias=$pericias;
+            $personaje->pericias = $pericias;
         } else {
             $error .= "El " . $clase->class_name . " tiene 2 pericias<br>";
         }

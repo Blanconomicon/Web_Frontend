@@ -110,7 +110,7 @@ if (isset($_POST['finalizar'])) {
     if (isset($personaje->pericias)) {
         foreach ($personaje->habilidades as $habilidad) {
             if (in_array($habilidad, $personaje->pericias)) {
-                putCharacterSkillProficiency(getCon(), $idPersonaje, $habilidad,"expertise");
+                putCharacterSkillProficiency(getCon(), $idPersonaje, $habilidad, "expertise");
             } else {
                 putCharacterSkillProficiency(getCon(), $idPersonaje, $habilidad);
             }

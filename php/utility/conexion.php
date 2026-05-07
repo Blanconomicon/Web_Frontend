@@ -673,7 +673,7 @@ function putCharacterProficiency(PDO $con, int $idPersonaje, int $idCompetencia,
 }
 
 //funcion para obtener las competencias o una competencia concreta
-function getProf(PDO $con,int|null $idCompetencia=null)
+function getProf(PDO $con, int|null $idCompetencia = null)
 {
     try {
         $stmt = $con->prepare("CALL getProf(:idCompetencia)");
@@ -686,7 +686,7 @@ function getProf(PDO $con,int|null $idCompetencia=null)
 }
 
 //funcion para obtener las competencias o una competencia concreta
-function getItemWeapon(PDO $con,int|null $idItem=null)
+function getItemWeapon(PDO $con, int|null $idItem = null)
 {
     try {
         $stmt = $con->prepare("CALL getItemWeapon(:idItem)");
@@ -699,7 +699,7 @@ function getItemWeapon(PDO $con,int|null $idItem=null)
 }
 
 //funcion para obtener las maestrias o una maestria concreta
-function getMastery(PDO $con,int|null $idMaestria=null)
+function getMastery(PDO $con, int|null $idMaestria = null)
 {
     try {
         $stmt = $con->prepare("CALL getMastery(:idMaestria)");
@@ -712,7 +712,7 @@ function getMastery(PDO $con,int|null $idMaestria=null)
 }
 
 //funcion para obtener las maestrias de un personaje
-function getCharacterItemMastery(PDO $con,int $idPersonaje, int|null $idMaestria=null)
+function getCharacterItemMastery(PDO $con, int $idPersonaje, int|null $idMaestria = null)
 {
     try {
         $stmt = $con->prepare("CALL getCharacterItemMastery(:idPersonaje, :idMaestria)");
@@ -726,7 +726,7 @@ function getCharacterItemMastery(PDO $con,int $idPersonaje, int|null $idMaestria
 }
 
 //funcion para obtener aniadir una maestria a un personaje
-function putCharacterItemMastery(PDO $con,int $idPersonaje, int $idMaestria)
+function putCharacterItemMastery(PDO $con, int $idPersonaje, int $idMaestria)
 {
     try {
         $stmt = $con->prepare("CALL putCharacterItemMastery(:idPersonaje, :idMaestria)");

@@ -26,8 +26,8 @@ if (isset($_GET['subraza'])) {
     if (count($competenciasHabilidades) > 0) {
         $competenciasRazaSkills = [];
         foreach ($competenciasHabilidades as $skill) {
-            if($skill->prof_type=="skill"){
-                $skill->prof_id=$skill->prof_id;
+            if ($skill->prof_type == "skill") {
+                $skill->prof_id = $skill->prof_id;
             }
             $competenciasRazaSkills[] = $skill->prof_id;
         }
@@ -53,10 +53,10 @@ if (isset($_GET['trasfondo'])) {
     }
     echo "</div>";
     echo "<br>";
-    $idDote=getBackgroundFeat(getCon(),$trasfondo)[0]->feat_id;
-    $dote=getFeat(getCon(),$idDote)[0];
-    echo "<h3 class='centrado'>".$dote->feat_name."</h3>";
-    echo "<p>".$dote->feat_desc."</p>";
+    $idDote = getBackgroundFeat(getCon(), $trasfondo)[0]->feat_id;
+    $dote = getFeat(getCon(), $idDote)[0];
+    echo "<h3 class='centrado'>" . $dote->feat_name . "</h3>";
+    echo "<p>" . $dote->feat_desc . "</p>";
 }
 
 //elegir items del trasfondo
