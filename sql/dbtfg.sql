@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-05-2026 a las 13:03:54
+-- Tiempo de generación: 07-05-2026 a las 14:31:44
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -33,6 +33,12 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteGroup` (IN `p_group_id` INT, IN `p_user_nick` VARCHAR(30))   BEGIN
     DELETE FROM `groups`
+    WHERE group_id = CONVERT(p_group_id USING utf8mb4)
+      AND user_nick    = CONVERT(p_user_nick    USING utf8mb4);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteGroupMember` (IN `p_group_id` INT, IN `p_user_nick` VARCHAR(30))   BEGIN
+    DELETE FROM `users_groups`
     WHERE group_id = CONVERT(p_group_id USING utf8mb4)
       AND user_nick    = CONVERT(p_user_nick    USING utf8mb4);
 END$$
@@ -76,6 +82,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getBackgroundAbility` (IN `p_id` IN
         WHERE ba.background_id = CONVERT(p_id USING utf8mb4)
         ORDER BY ba.ability_id;
     END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getBackgroundFeat` (IN `p_id` INT)   BEGIN
+        SELECT *
+        FROM background_feat
+        WHERE background_id = CONVERT(p_id USING utf8mb4);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getBackgroundFull` (IN `p_id` INT)   BEGIN 
@@ -151,10 +163,41 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getCharacter` (IN `p_id` INT, IN `u
     END IF;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCharacterFeat` (IN `p_id` INT)   BEGIN
+        SELECT *
+        FROM character_feat
+        WHERE character_id = CONVERT(p_id USING utf8mb4);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCharacterInventory` (IN `p_id` INT)   BEGIN
         SELECT *
         FROM character_inventory
         WHERE character_id = CONVERT(p_id USING utf8mb4);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCharacterItemMastery` (IN `char_id` INT, IN `p_id` INT)   BEGIN
+    IF p_id IS NULL THEN
+        SELECT *
+        FROM character_item_mastery
+        WHERE character_id=CONVERT(char_id USING utf8mb4);
+    ELSE
+        SELECT *
+        FROM character_item_mastery
+        WHERE character_id=CONVERT(char_id USING utf8mb4) AND item_id=CONVERT(p_id USING utf8mb4);
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCharacterProficiency` (IN `char_id` INT, IN `p_id` INT)   BEGIN
+IF p_id IS NULL THEN
+     SELECT *
+       FROM character_proficiency
+        WHERE character_id = CONVERT(char_id USING utf8mb4);
+ELSE
+     SELECT *
+       FROM character_proficiency
+        WHERE character_id = CONVERT(char_id USING utf8mb4) AND
+skill_id=CONVERT(p_id USING utf8mb4);
+END IF;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCharacterSkillProficiency` (IN `char_id` INT, IN `p_id` INT)   BEGIN
@@ -215,6 +258,17 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getClassLevelProgression` (IN `p_id
     END IF;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getFeat` (IN `p_id` INT)   BEGIN
+    IF p_id IS NULL THEN
+        SELECT *
+        FROM feat;
+    ELSE
+        SELECT *
+        FROM feat
+        WHERE feat_id = CONVERT(p_id USING utf8mb4);
+    END IF;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getGroup` (IN `p_id` INT, IN `u_nick` VARCHAR(20))   BEGIN
     IF p_id IS NULL THEN
         SELECT *
@@ -253,6 +307,28 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getItem` (IN `p_id` INT)   BEGIN
         WHERE item_id = CONVERT(p_id USING utf8mb4);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getItemWeapon` (IN `p_id` INT)   BEGIN
+    IF p_id IS NULL THEN
+        SELECT *
+        FROM item_weapon;
+    ELSE
+        SELECT *
+        FROM item_weapon
+        WHERE item_id = CONVERT(p_id USING utf8mb4);
+    END IF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getMastery` (IN `p_id` INT)   BEGIN
+    IF p_id IS NULL THEN
+        SELECT *
+        FROM mastery;
+    ELSE
+        SELECT *
+        FROM mastery
+        WHERE mastery_id= CONVERT(p_id USING utf8mb4);
+    END IF;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getNoGroupUser` (IN `p_id` INT)   BEGIN
 	SELECT 
         users.user_nick
@@ -269,6 +345,17 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getPass` (IN `p_nick` VARCHAR(30)) 
 	SELECT *
     FROM pass
     WHERE user_nick = CONVERT(p_nick USING utf8mb4);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getProf` (IN `p_id` INT)   BEGIN
+    IF p_id IS NULL THEN
+        SELECT *
+        FROM prof;
+    ELSE
+        SELECT *
+        FROM prof
+        WHERE prof_id= CONVERT(p_id USING utf8mb4);
+    END IF;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getProfClass` (IN `p_id` INT, IN `p_lv` INT)   BEGIN
@@ -592,9 +679,24 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `putCharacter` (IN `p_user_nick` VAR
     SELECT LAST_INSERT_ID() AS character_id;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `putCharacterFeat` (IN `p_character_id` INT, IN `p_feat_id` INT)   BEGIN
+    INSERT INTO character_feat(	character_id ,feat_id)
+    VALUES(p_character_id,p_feat_id);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `putCharacterInventory` (IN `p_id` INT, IN `item_id` INT, IN `cuantity` INT)   BEGIN
     INSERT INTO character_inventory(`character_id`, `item_id`, `quantity`)
     VALUES(p_id,item_id,cuantity);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `putCharacterItemMastery` (IN `char_id` INT, IN `item_id` INT)   BEGIN
+    INSERT INTO character_item_mastery(character_id,item_id)
+    VALUES(char_id,item_id);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `putCharacterProficiency` (IN `char_id` INT, IN `p_id` INT, IN `prof_type` VARCHAR(10))   BEGIN
+	INSERT INTO `character_proficiency` (`character_id`, `prof_id`, `proficiency_type`) 
+    VALUES (char_id, p_id, prof_type);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `putCharacterSkillProficiency` (IN `char_id` INT, IN `p_id` INT, IN `prof_type` VARCHAR(10))   BEGIN
@@ -629,13 +731,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `updateCharacterHP` (IN `p_character
     SET current_hp = p_current_hp,
         temp_hp    = COALESCE(p_temp_hp, temp_hp)
     WHERE character_id = CONVERT(p_character_id USING utf8mb4);
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteGroupMember`(IN `p_group_id` INT, IN `p_user_nick` VARCHAR(30))
-BEGIN
-    DELETE FROM `users_groups`
-    WHERE group_id = CONVERT(p_group_id USING utf8mb4)
-      AND user_nick    = CONVERT(p_user_nick    USING utf8mb4);
 END$$
 
 --
@@ -711,7 +806,6 @@ INSERT INTO `armor_type` (`armor_type_id`, `armor_type_name`) VALUES
 CREATE TABLE `background` (
   `background_id` int(11) NOT NULL,
   `background_name` varchar(50) NOT NULL,
-  `background_feat` int(6) NOT NULL,
   `skill_choice_count` int(1) NOT NULL DEFAULT 2,
   `tool_choice_count` int(1) NOT NULL DEFAULT 1,
   `language_choice_count` int(1) NOT NULL DEFAULT 1,
@@ -727,19 +821,19 @@ CREATE TABLE `background` (
 -- Volcado de datos para la tabla `background`
 --
 
-INSERT INTO `background` (`background_id`, `background_name`, `background_feat`, `skill_choice_count`, `tool_choice_count`, `language_choice_count`, `bundle_id`, `suggested_personality_trait`, `suggested_ideals`, `suggested_bonds`, `suggested_flaws`, `feature_description`) VALUES
-(1, 'Acólito', 0, 0, 0, 2, 101, 'Cito las escrituras de mi fe para guiar a quienes me rodean. Veo las señales divinas en los eventos cotidianos.', 'Tradición. Los ritos sagrados deben preservarse exactamente. (Legal)\nCaridad. Sirvo a los necesitados sin esperar recompensa. (Bueno)\nPoder. La fe es el camino hacia la influencia y la grandeza. (Legal)', 'Daría mi vida por proteger el templo que me acogió.\nBusco recuperar un artefacto sagrado robado a mi congregación.', 'Soy intolerante con quienes no comparten mi fe.\nConfío ciegamente en la jerarquía de mi orden.', 'Refugio de los Fieles: tú y tus compañeros recibís alojamiento y comida gratis en cualquier templo de tu deidad o de deidades aliadas. Puedes realizar los ritos sagrados de tu fe.'),
-(2, 'Charlatán', 0, 0, 0, 0, 102, 'Tengo siempre una historia preparada. Nadie sospecha de mi sonrisa. Me adapto a quien tenga delante.', 'Libertad. Nadie debería poder controlarme. (Caótico)\nAspiración. Me ganaré lo que merezco, de una forma u otra. (Cualquiera)', 'Alguien descubrió una de mis mentiras y ahora me persigue.\nProtejo a la única persona que conoce mi verdadera identidad.', 'No puedo evitar mentir, aunque la verdad sea más útil.\nSoy incapaz de resistir estafar a alguien más rico que yo.', 'Identidad Falsa: posees una segunda identidad completa con documentos falsificados, un disfraz convincente y una red de contactos que respaldan tu historia. Crear una nueva identidad requiere 1 semana y 25 po.'),
-(3, 'Criminal', 0, 0, 0, 0, 103, 'Siempre tengo un plan de escape. Nunca muestro mis cartas hasta el momento adecuado.', 'Libertad. Las reglas son para quien no tiene el talento para evitarlas. (Caótico)\nLealtad. Traicionar a los tuyos es lo único imperdonable. (Legal)', 'Tengo una deuda de sangre con alguien del submundo.\nProtejo a mi familia de conocer mi vida real.', 'Traicionaría a casi cualquiera para salvar mi pellejo.\nSi veo una oportunidad de robo, me cuesta resistirla.', 'Contacto Criminal: tienes un enlace fiable en el submundo. Puedes pasar mensajes a otros criminales en la misma región y obtener información de la calle antes que nadie.'),
-(4, 'Héroe del Pueblo', 0, 0, 0, 0, 104, 'Soy directo y prefiero la acción a las palabras largas. Confío en el trabajo duro y en las manos callosas.', 'Pueblo. Mi deber es proteger a los que no pueden protegerse solos. (Bueno)\nDestino. Fui elegido para hacer grandes cosas; lo siento. (Cualquiera)', 'Defiendo mi aldea natal de cualquier amenaza que se acerque.\nEl héroe que me inspiró de niño es mi modelo a seguir.', 'Desconfío de los nobles y los eruditos sin callos en las manos.\nCuando me propongo algo me vuelvo obsesivo hasta lograrlo.', 'Hospitalidad Rústica: la gente común te reconoce como uno de los suyos. Puedes encontrar refugio, comida básica y apoyo entre campesinos y aldeanos, que te ayudarán a ocultarte de nobles o soldados si es preciso.'),
-(5, 'Marinero', 0, 0, 0, 0, 105, 'Me río ante el peligro y tengo una historia de mar para cada ocasión. El horizonte siempre me llama.', 'Respeto. En el mar, el capitán manda y su palabra es ley. (Legal)\nLibertad. Cada puerto es un nuevo comienzo. (Caótico)', 'Mi barco y su tripulación son mi familia; los protegeré siempre.\nDebo vengar la pérdida de un barco querido que naufragó.', 'Bebo demasiado cuando toco tierra y siempre acabo en problemas.\nNo confío en quien nunca ha visto el mar.', 'Pasaje en Barco: mientras no seas un fugitivo, puedes conseguir pasaje gratuito en barcos de vela para ti y hasta cinco compañeros, a cambio de trabajo durante la travesía.'),
-(6, 'Noble', 0, 0, 0, 1, 106, 'Mis modales y lenguaje son impecables. Espero el mismo refinamiento en mis acompañantes.', 'Responsabilidad. El poder conlleva el deber de proteger a los más débiles. (Legal)\nFamilia. La sangre es lo más sagrado que existe. (Cualquiera)', 'Haré cualquier cosa por proteger el honor de mi linaje.\nBusco recuperar un tesoro familiar perdido o robado.', 'Soy condescendiente con quienes considero de menor cuna.\nGuardo un secreto que podría hundir a toda mi familia.', 'Privilegio de Rango: tu posición noble te abre puertas. La gente común te trata con deferencia y puedes obtener audiencia con aristócratas y funcionarios con facilidad, siempre que no estés en desgracia.'),
-(7, 'Soldado', 0, 0, 0, 0, 107, 'Soy directo y disciplinado. Valoro la lealtad y el cumplimiento del deber por encima de todo.', 'Unidad. Solo juntos somos invencibles. (Legal)\nValentía. Nunca abandonar a un compañero en el campo. (Cualquiera)', 'Nunca olvidaré a los camaradas que cayeron a mi lado.\nDebo honrar el sacrificio de mi unidad cumpliendo su misión.', 'Obedezco órdenes sin cuestionarlas, incluso cuando debería.\nBusco peleas para demostrar que no he perdido mi habilidad.', 'Rango Militar: los soldados activos y veteranos reconocen tu autoridad. En territorios aliados puedes requisar equipo básico y alojamiento, y acceder a instalaciones militares.'),
-(8, 'Ermitaño', 0, 0, 0, 1, 108, 'Soy tranquilo y reflexivo. Escucho más de lo que hablo, y cuando hablo, mis palabras pesan.', 'Sabiduría. El conocimiento interior es el camino hacia la verdad. (Neutral)\nVinculación. Debo compartir lo que aprendí con el mundo. (Bueno)', 'Mi retiro me reveló algo que el mundo necesita saber urgentemente.\nDebo proteger el lugar sagrado donde viví.', 'Me obsesiono con cuestiones filosóficas y pierdo el hilo práctico.\nMe cuesta confiar en los demás tras años de soledad.', 'Descubrimiento: durante tu retiro alcanzaste una revelación única, filosófica, espiritual o histórica. El DM decide los detalles; puede tener implicaciones importantes en la campaña.'),
-(9, 'Artista', 0, 0, 0, 0, 109, 'Tengo una historia o canción para cada ocasión. Vivo para la atención y el aplauso del público.', 'Belleza. El arte eleva el alma y hace el mundo mejor. (Bueno)\nLibertad. El arte no puede vivir encadenado. (Caótico)', 'Mi instrumento es lo más preciado que tengo; me recuerda a alguien amado.\nQuiero inspirar a otros a superar sus propios límites con mi arte.', 'Haré cualquier cosa por la fama, incluyendo exagerar mis hazañas.\nUna vez que empiezo a actuar, es difícil que me detenga.', 'Por Amor al Arte: puedes conseguir alojamiento y comida básicos cada noche en tabernas, posadas u otros lugares donde tu arte sea apreciado, a cambio de actuar.'),
-(10, 'Sabio', 0, 0, 0, 2, 110, 'Cito expertos y textos académicos constantemente. Soy preciso y metódico en mi razonamiento.', 'Conocimiento. El saber tiene valor intrínseco independientemente de su uso. (Neutral)\nLogro. Debo demostrar que soy el mejor en mi campo. (Cualquiera)', 'Mi investigación está dedicada a un objetivo más grande que yo mismo.\nDebo devolver un texto antiguo a su legítimo propietario.', 'Me distraen los misterios intelectuales incluso en medio del peligro.\nSubestimo a quienes no tienen mi nivel de formación académica.', 'Investigador: cuando intentas recordar o buscar un dato, si no lo conoces, siempre sabes a qué persona, biblioteca o institución acudir para encontrarlo.'),
-(11, 'Callejero', 0, 0, 0, 0, 111, 'Duermo con un ojo abierto y siempre localizo la salida más cercana. Soy silencioso y observador.', 'Supervivencia. Lo primero es seguir vivo para ver mañana. (Neutral)\nSolidaridad. Protejo a los débiles porque yo fui uno de ellos. (Bueno)', 'La ciudad donde crecí es mi hogar y la defenderé.\nAlguien me ayudó cuando lo necesitaba; le debo lealtad eterna.', 'Tiendo a robar sin pensarlo cuando veo algo que necesito.\nNo confío en nadie, especialmente en figuras de autoridad.', 'Conocimiento de la Ciudad: conoces los callejones, escondites y pasajes secretos de cualquier ciudad donde hayas vivido. Puedes encontrar refugio, comida básica e información en el submundo urbano.'),
-(12, 'Mercader', 0, 0, 0, 1, 112, 'Siempre veo el ángulo rentable en cualquier situación. Soy persuasivo y nunca hago una oferta sin conocer la respuesta.', 'Acuerdo. Un contrato firmado es sagrado; la palabra dada, también. (Legal)\nProsperidad. La riqueza es la medida del éxito personal. (Cualquiera)', 'Mi red de socios es mi familia; los protegeré a cualquier precio.\nDebo recuperar una mercancía valiosa que me fue robada.', 'El oro es mi prioridad, incluso por encima de mis amigos.\nVeo cada interacción como una transacción potencial.', 'Red Comercial: gracias a tus contactos mercantiles puedes conseguir bienes a precio de coste en ciudades importantes y tienes acceso a información sobre el mercado local antes que la mayoría.');
+INSERT INTO `background` (`background_id`, `background_name`, `skill_choice_count`, `tool_choice_count`, `language_choice_count`, `bundle_id`, `suggested_personality_trait`, `suggested_ideals`, `suggested_bonds`, `suggested_flaws`, `feature_description`) VALUES
+(1, 'Acólito', 0, 0, 2, 101, 'Cito las escrituras de mi fe para guiar a quienes me rodean. Veo las señales divinas en los eventos cotidianos.', 'Tradición. Los ritos sagrados deben preservarse exactamente. (Legal)\nCaridad. Sirvo a los necesitados sin esperar recompensa. (Bueno)\nPoder. La fe es el camino hacia la influencia y la grandeza. (Legal)', 'Daría mi vida por proteger el templo que me acogió.\nBusco recuperar un artefacto sagrado robado a mi congregación.', 'Soy intolerante con quienes no comparten mi fe.\nConfío ciegamente en la jerarquía de mi orden.', 'Refugio de los Fieles: tú y tus compañeros recibís alojamiento y comida gratis en cualquier templo de tu deidad o de deidades aliadas. Puedes realizar los ritos sagrados de tu fe.'),
+(2, 'Charlatán', 0, 0, 0, 102, 'Tengo siempre una historia preparada. Nadie sospecha de mi sonrisa. Me adapto a quien tenga delante.', 'Libertad. Nadie debería poder controlarme. (Caótico)\nAspiración. Me ganaré lo que merezco, de una forma u otra. (Cualquiera)', 'Alguien descubrió una de mis mentiras y ahora me persigue.\nProtejo a la única persona que conoce mi verdadera identidad.', 'No puedo evitar mentir, aunque la verdad sea más útil.\nSoy incapaz de resistir estafar a alguien más rico que yo.', 'Identidad Falsa: posees una segunda identidad completa con documentos falsificados, un disfraz convincente y una red de contactos que respaldan tu historia. Crear una nueva identidad requiere 1 semana y 25 po.'),
+(3, 'Criminal', 0, 0, 0, 103, 'Siempre tengo un plan de escape. Nunca muestro mis cartas hasta el momento adecuado.', 'Libertad. Las reglas son para quien no tiene el talento para evitarlas. (Caótico)\nLealtad. Traicionar a los tuyos es lo único imperdonable. (Legal)', 'Tengo una deuda de sangre con alguien del submundo.\nProtejo a mi familia de conocer mi vida real.', 'Traicionaría a casi cualquiera para salvar mi pellejo.\nSi veo una oportunidad de robo, me cuesta resistirla.', 'Contacto Criminal: tienes un enlace fiable en el submundo. Puedes pasar mensajes a otros criminales en la misma región y obtener información de la calle antes que nadie.'),
+(4, 'Héroe del Pueblo', 0, 0, 0, 104, 'Soy directo y prefiero la acción a las palabras largas. Confío en el trabajo duro y en las manos callosas.', 'Pueblo. Mi deber es proteger a los que no pueden protegerse solos. (Bueno)\nDestino. Fui elegido para hacer grandes cosas; lo siento. (Cualquiera)', 'Defiendo mi aldea natal de cualquier amenaza que se acerque.\nEl héroe que me inspiró de niño es mi modelo a seguir.', 'Desconfío de los nobles y los eruditos sin callos en las manos.\nCuando me propongo algo me vuelvo obsesivo hasta lograrlo.', 'Hospitalidad Rústica: la gente común te reconoce como uno de los suyos. Puedes encontrar refugio, comida básica y apoyo entre campesinos y aldeanos, que te ayudarán a ocultarte de nobles o soldados si es preciso.'),
+(5, 'Marinero', 0, 0, 0, 105, 'Me río ante el peligro y tengo una historia de mar para cada ocasión. El horizonte siempre me llama.', 'Respeto. En el mar, el capitán manda y su palabra es ley. (Legal)\nLibertad. Cada puerto es un nuevo comienzo. (Caótico)', 'Mi barco y su tripulación son mi familia; los protegeré siempre.\nDebo vengar la pérdida de un barco querido que naufragó.', 'Bebo demasiado cuando toco tierra y siempre acabo en problemas.\nNo confío en quien nunca ha visto el mar.', 'Pasaje en Barco: mientras no seas un fugitivo, puedes conseguir pasaje gratuito en barcos de vela para ti y hasta cinco compañeros, a cambio de trabajo durante la travesía.'),
+(6, 'Noble', 0, 0, 1, 106, 'Mis modales y lenguaje son impecables. Espero el mismo refinamiento en mis acompañantes.', 'Responsabilidad. El poder conlleva el deber de proteger a los más débiles. (Legal)\nFamilia. La sangre es lo más sagrado que existe. (Cualquiera)', 'Haré cualquier cosa por proteger el honor de mi linaje.\nBusco recuperar un tesoro familiar perdido o robado.', 'Soy condescendiente con quienes considero de menor cuna.\nGuardo un secreto que podría hundir a toda mi familia.', 'Privilegio de Rango: tu posición noble te abre puertas. La gente común te trata con deferencia y puedes obtener audiencia con aristócratas y funcionarios con facilidad, siempre que no estés en desgracia.'),
+(7, 'Soldado', 0, 0, 0, 107, 'Soy directo y disciplinado. Valoro la lealtad y el cumplimiento del deber por encima de todo.', 'Unidad. Solo juntos somos invencibles. (Legal)\nValentía. Nunca abandonar a un compañero en el campo. (Cualquiera)', 'Nunca olvidaré a los camaradas que cayeron a mi lado.\nDebo honrar el sacrificio de mi unidad cumpliendo su misión.', 'Obedezco órdenes sin cuestionarlas, incluso cuando debería.\nBusco peleas para demostrar que no he perdido mi habilidad.', 'Rango Militar: los soldados activos y veteranos reconocen tu autoridad. En territorios aliados puedes requisar equipo básico y alojamiento, y acceder a instalaciones militares.'),
+(8, 'Ermitaño', 0, 0, 1, 108, 'Soy tranquilo y reflexivo. Escucho más de lo que hablo, y cuando hablo, mis palabras pesan.', 'Sabiduría. El conocimiento interior es el camino hacia la verdad. (Neutral)\nVinculación. Debo compartir lo que aprendí con el mundo. (Bueno)', 'Mi retiro me reveló algo que el mundo necesita saber urgentemente.\nDebo proteger el lugar sagrado donde viví.', 'Me obsesiono con cuestiones filosóficas y pierdo el hilo práctico.\nMe cuesta confiar en los demás tras años de soledad.', 'Descubrimiento: durante tu retiro alcanzaste una revelación única, filosófica, espiritual o histórica. El DM decide los detalles; puede tener implicaciones importantes en la campaña.'),
+(9, 'Artista', 0, 0, 0, 109, 'Tengo una historia o canción para cada ocasión. Vivo para la atención y el aplauso del público.', 'Belleza. El arte eleva el alma y hace el mundo mejor. (Bueno)\nLibertad. El arte no puede vivir encadenado. (Caótico)', 'Mi instrumento es lo más preciado que tengo; me recuerda a alguien amado.\nQuiero inspirar a otros a superar sus propios límites con mi arte.', 'Haré cualquier cosa por la fama, incluyendo exagerar mis hazañas.\nUna vez que empiezo a actuar, es difícil que me detenga.', 'Por Amor al Arte: puedes conseguir alojamiento y comida básicos cada noche en tabernas, posadas u otros lugares donde tu arte sea apreciado, a cambio de actuar.'),
+(10, 'Sabio', 0, 0, 2, 110, 'Cito expertos y textos académicos constantemente. Soy preciso y metódico en mi razonamiento.', 'Conocimiento. El saber tiene valor intrínseco independientemente de su uso. (Neutral)\nLogro. Debo demostrar que soy el mejor en mi campo. (Cualquiera)', 'Mi investigación está dedicada a un objetivo más grande que yo mismo.\nDebo devolver un texto antiguo a su legítimo propietario.', 'Me distraen los misterios intelectuales incluso en medio del peligro.\nSubestimo a quienes no tienen mi nivel de formación académica.', 'Investigador: cuando intentas recordar o buscar un dato, si no lo conoces, siempre sabes a qué persona, biblioteca o institución acudir para encontrarlo.'),
+(11, 'Callejero', 0, 0, 0, 111, 'Duermo con un ojo abierto y siempre localizo la salida más cercana. Soy silencioso y observador.', 'Supervivencia. Lo primero es seguir vivo para ver mañana. (Neutral)\nSolidaridad. Protejo a los débiles porque yo fui uno de ellos. (Bueno)', 'La ciudad donde crecí es mi hogar y la defenderé.\nAlguien me ayudó cuando lo necesitaba; le debo lealtad eterna.', 'Tiendo a robar sin pensarlo cuando veo algo que necesito.\nNo confío en nadie, especialmente en figuras de autoridad.', 'Conocimiento de la Ciudad: conoces los callejones, escondites y pasajes secretos de cualquier ciudad donde hayas vivido. Puedes encontrar refugio, comida básica e información en el submundo urbano.'),
+(12, 'Mercader', 0, 0, 1, 112, 'Siempre veo el ángulo rentable en cualquier situación. Soy persuasivo y nunca hago una oferta sin conocer la respuesta.', 'Acuerdo. Un contrato firmado es sagrado; la palabra dada, también. (Legal)\nProsperidad. La riqueza es la medida del éxito personal. (Cualquiera)', 'Mi red de socios es mi familia; los protegeré a cualquier precio.\nDebo recuperar una mercancía valiosa que me fue robada.', 'El oro es mi prioridad, incluso por encima de mis amigos.\nVeo cada interacción como una transacción potencial.', 'Red Comercial: gracias a tus contactos mercantiles puedes conseguir bienes a precio de coste en ciudades importantes y tienes acceso a información sobre el mercado local antes que la mayoría.');
 
 -- --------------------------------------------------------
 
@@ -804,6 +898,24 @@ CREATE TABLE `background_feat` (
   `background_id` int(11) NOT NULL,
   `feat_id` int(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `background_feat`
+--
+
+INSERT INTO `background_feat` (`background_id`, `feat_id`) VALUES
+(1, 1),
+(9, 2),
+(3, 1),
+(8, 3),
+(12, 4),
+(7, 2),
+(2, 5),
+(4, 5),
+(5, 5),
+(6, 5),
+(10, 5),
+(11, 5);
 
 -- --------------------------------------------------------
 
@@ -1070,7 +1182,9 @@ CREATE TABLE `character` (
 --
 
 INSERT INTO `character` (`character_id`, `user_nick`, `character_name`, `character_level`, `race_id`, `subrace_id`, `class_id`, `subclass_id`, `background_id`, `strength`, `dexterity`, `constitution`, `intelligence`, `wisdom`, `charisma`, `max_hp`, `current_hp`, `temp_hp`, `armor_class`, `initiative`, `speed`, `inspiration`, `experience_points`, `alignment`, `deity`, `personality_trait`, `ideals`, `bonds`, `flaws`, `languages`, `proficiency_bonus`, `character_date`, `cp`, `sp`, `gp`, `ep`, `pp`) VALUES
-(35, 'pako', 'afsdfsafesfdsgtdsgednhjykjdyjt', 1, 7, 3, 1, NULL, 1, 15, 15, 15, 10, 9, 8, 14, 14, 0, 14, 2, 30, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2026-05-06 11:43:14', 0, 0, 19, 0, 0);
+(52, 'pako', 'yr', 1, 7, 3, 5, NULL, 1, 15, 15, 15, 10, 9, 8, 12, 12, 0, 12, 4, 30, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2026-05-07 12:25:50', 0, 0, 0, 0, 0),
+(53, 'pako', 'afds', 1, 7, 3, 9, NULL, 1, 15, 15, 15, 10, 9, 8, 10, 10, 0, 12, 4, 30, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2026-05-07 14:02:58', 0, 0, 0, 0, 0),
+(54, 'pako', 'borrar', 1, 4, 2, 1, NULL, 4, 15, 15, 17, 8, 9, 8, 18, 18, 0, 14, 2, 30, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2026-05-07 14:26:15', 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1082,6 +1196,15 @@ CREATE TABLE `character_feat` (
   `character_id` int(11) NOT NULL,
   `feat_id` int(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `character_feat`
+--
+
+INSERT INTO `character_feat` (`character_id`, `feat_id`) VALUES
+(52, 1),
+(53, 1),
+(54, 5);
 
 -- --------------------------------------------------------
 
@@ -1102,13 +1225,63 @@ CREATE TABLE `character_inventory` (
 --
 
 INSERT INTO `character_inventory` (`character_id`, `item_id`, `quantity`, `equipped`, `notes`) VALUES
-(35, 704, 1, 0, NULL),
-(35, 705, 1, 0, NULL),
-(35, 706, 1, 0, NULL),
-(35, 707, 1, 0, NULL),
-(35, 708, 1, 0, NULL),
-(35, 709, 1, 0, NULL),
-(35, 731, 1, 0, NULL);
+(52, 101, 1, 0, NULL),
+(52, 704, 2, 0, NULL),
+(52, 705, 2, 0, NULL),
+(52, 706, 1, 0, NULL),
+(52, 707, 1, 0, NULL),
+(52, 708, 1, 0, NULL),
+(52, 709, 1, 0, NULL),
+(52, 723, 1, 0, NULL),
+(52, 731, 1, 0, NULL),
+(52, 733, 1, 0, NULL),
+(52, 734, 1, 0, NULL),
+(52, 735, 1, 0, NULL),
+(53, 101, 1, 0, NULL),
+(53, 704, 2, 0, NULL),
+(53, 705, 2, 0, NULL),
+(53, 706, 1, 0, NULL),
+(53, 707, 1, 0, NULL),
+(53, 708, 1, 0, NULL),
+(53, 709, 1, 0, NULL),
+(53, 723, 1, 0, NULL),
+(53, 731, 1, 0, NULL),
+(53, 733, 1, 0, NULL),
+(53, 734, 1, 0, NULL),
+(53, 735, 1, 0, NULL),
+(54, 1, 1, 0, NULL),
+(54, 704, 2, 0, NULL),
+(54, 705, 2, 0, NULL),
+(54, 713, 1, 0, NULL),
+(54, 714, 1, 0, NULL),
+(54, 721, 1, 0, NULL),
+(54, 722, 1, 0, NULL),
+(54, 723, 1, 0, NULL),
+(54, 731, 1, 0, NULL),
+(54, 737, 1, 0, NULL),
+(54, 741, 1, 0, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `character_item_mastery`
+--
+
+CREATE TABLE `character_item_mastery` (
+  `character_id` int(11) NOT NULL,
+  `item_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `character_item_mastery`
+--
+
+INSERT INTO `character_item_mastery` (`character_id`, `item_id`) VALUES
+(52, 1),
+(52, 7),
+(52, 8),
+(54, 1),
+(54, 7);
 
 -- --------------------------------------------------------
 
@@ -1121,6 +1294,38 @@ CREATE TABLE `character_proficiency` (
   `prof_id` int(5) NOT NULL,
   `proficiency_type` enum('proficient','expertise') DEFAULT 'proficient'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `character_proficiency`
+--
+
+INSERT INTO `character_proficiency` (`character_id`, `prof_id`, `proficiency_type`) VALUES
+(52, 1, 'proficient'),
+(52, 2, 'proficient'),
+(52, 15, 'proficient'),
+(52, 16, 'proficient'),
+(52, 17, 'proficient'),
+(52, 18, 'proficient'),
+(52, 71, 'proficient'),
+(52, 80, 'proficient'),
+(53, 1, 'proficient'),
+(53, 4, 'proficient'),
+(53, 5, 'proficient'),
+(53, 15, 'proficient'),
+(53, 31, 'proficient'),
+(53, 71, 'proficient'),
+(53, 80, 'proficient'),
+(53, 88, 'proficient'),
+(54, 1, 'proficient'),
+(54, 2, 'proficient'),
+(54, 6, 'proficient'),
+(54, 7, 'proficient'),
+(54, 15, 'proficient'),
+(54, 16, 'proficient'),
+(54, 18, 'proficient'),
+(54, 29, 'proficient'),
+(54, 71, 'proficient'),
+(54, 73, 'proficient');
 
 -- --------------------------------------------------------
 
@@ -1139,8 +1344,14 @@ CREATE TABLE `character_skill_proficiency` (
 --
 
 INSERT INTO `character_skill_proficiency` (`character_id`, `skill_id`, `proficiency_type`) VALUES
-(35, 2, 'proficient'),
-(35, 12, 'proficient');
+(52, 5, 'proficient'),
+(52, 7, 'proficient'),
+(53, 1, 'proficient'),
+(53, 4, 'expertise'),
+(53, 8, 'proficient'),
+(53, 16, 'expertise'),
+(54, 2, 'proficient'),
+(54, 11, 'proficient');
 
 -- --------------------------------------------------------
 
@@ -1168,26 +1379,27 @@ CREATE TABLE `class` (
   `class_spellcaster` tinyint(1) NOT NULL,
   `spellcasting_ability` int(11) DEFAULT NULL,
   `class_bundle_id` int(4) NOT NULL,
-  `prof_cuantity` int(11) NOT NULL DEFAULT 2
+  `prof_cuantity` int(11) NOT NULL DEFAULT 2,
+  `mastery_count` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `class`
 --
 
-INSERT INTO `class` (`class_id`, `class_name`, `class_hpdice`, `safe1_ability_id`, `safe2_ability_id`, `class_spellcaster`, `spellcasting_ability`, `class_bundle_id`, `prof_cuantity`) VALUES
-(1, 'Bárbaro', 'd12', 1, 3, 0, NULL, 0, 2),
-(2, 'Bardo', 'd8', 2, 6, 1, 6, 0, 3),
-(3, 'Clérigo', 'd8', 5, 6, 1, 5, 0, 2),
-(4, 'Druida', 'd8', 4, 5, 1, 5, 0, 2),
-(5, 'Guerrero', 'd10', 1, 3, 0, 4, 0, 2),
-(6, 'Mago', 'd6', 4, 5, 1, 4, 0, 2),
-(7, 'Monje', 'd8', 1, 2, 0, NULL, 0, 2),
-(8, 'Paladín', 'd10', 5, 6, 1, 6, 0, 2),
-(9, 'Pícaro', 'd8', 2, 4, 0, 4, 0, 4),
-(10, 'Explorador', 'd10', 1, 2, 0, 5, 0, 3),
-(11, 'Hechicero', 'd6', 3, 6, 1, 6, 0, 2),
-(12, 'Brujo', 'd8', 5, 6, 1, 6, 0, 2);
+INSERT INTO `class` (`class_id`, `class_name`, `class_hpdice`, `safe1_ability_id`, `safe2_ability_id`, `class_spellcaster`, `spellcasting_ability`, `class_bundle_id`, `prof_cuantity`, `mastery_count`) VALUES
+(1, 'Bárbaro', 'd12', 1, 3, 0, NULL, 0, 2, 2),
+(2, 'Bardo', 'd8', 2, 6, 1, 6, 0, 3, 0),
+(3, 'Clérigo', 'd8', 5, 6, 1, 5, 0, 2, 0),
+(4, 'Druida', 'd8', 4, 5, 1, 5, 0, 2, 0),
+(5, 'Guerrero', 'd10', 1, 3, 0, 4, 0, 2, 3),
+(6, 'Mago', 'd6', 4, 5, 1, 4, 0, 2, 0),
+(7, 'Monje', 'd8', 1, 2, 0, NULL, 0, 2, 0),
+(8, 'Paladín', 'd10', 5, 6, 1, 6, 0, 2, 2),
+(9, 'Pícaro', 'd8', 2, 4, 0, 4, 0, 4, 0),
+(10, 'Explorador', 'd10', 1, 2, 1, 5, 0, 3, 2),
+(11, 'Hechicero', 'd6', 3, 6, 1, 6, 0, 2, 0),
+(12, 'Brujo', 'd8', 5, 6, 1, 6, 0, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -1199,6 +1411,25 @@ CREATE TABLE `class_bundle` (
   `class_id` int(11) NOT NULL,
   `bundle_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `class_bundle`
+--
+
+INSERT INTO `class_bundle` (`class_id`, `bundle_id`) VALUES
+(1, 109),
+(2, 106),
+(3, 106),
+(4, 106),
+(5, 106),
+(5, 109),
+(6, 106),
+(7, 106),
+(8, 106),
+(9, 106),
+(10, 106),
+(11, 106),
+(12, 106);
 
 -- --------------------------------------------------------
 
@@ -1309,7 +1540,7 @@ INSERT INTO `class_level_progression` (`class_id`, `level`, `proficiency_bonus`,
 (4, 18, 6, 'Hechizos de Mente en Blanco, Alma de la Bestia', 4, 22, 4, 3, 3, 3, 3, 1, 1, 1, 1),
 (4, 19, 6, 'Mejora de Característica', 4, 22, 4, 3, 3, 3, 3, 2, 1, 1, 1),
 (4, 20, 6, 'Archidruida', 4, 22, 4, 3, 3, 3, 3, 2, 2, 1, 1),
-(5, 1, 2, 'Estilo de Combate, Segundo Viento', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(5, 1, 2, 'Estilo de Combate, Segundo Aliento', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (5, 2, 2, 'Acción Súbita', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (5, 3, 2, 'Arquetipo Marcial', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (5, 4, 2, 'Mejora de Característica', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1349,26 +1580,26 @@ INSERT INTO `class_level_progression` (`class_id`, `level`, `proficiency_bonus`,
 (6, 18, 6, 'Dominio de Hechizo', 5, 36, 4, 3, 3, 3, 3, 1, 1, 1, 1),
 (6, 19, 6, 'Mejora de Característica', 5, 38, 4, 3, 3, 3, 3, 2, 1, 1, 1),
 (6, 20, 6, 'Hechizo Señalado', 5, 40, 4, 3, 3, 3, 3, 2, 2, 1, 1),
-(7, 1, 2, 'Defensa sin Armadura, Artes Marciales (d4)', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(7, 1, 2, 'Defensa sin Armadura, Artes Marciales (d6)', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (7, 2, 2, 'Ki (2 puntos), Movimiento sin Armadura (+3m)', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (7, 3, 2, 'Tradición Monástica, Parar Proyectiles', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (7, 4, 2, 'Mejora de Característica, Caída Lenta', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(7, 5, 3, 'Ataque Extra, Golpe Aturdidor, Artes Marciales (d6)', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(7, 5, 3, 'Ataque Extra, Golpe Aturdidor, Artes Marciales (d8)', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (7, 6, 3, 'Golpe de Ki, Rasgo de Tradición, Movimiento sin Armadura (+4,5m)', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (7, 7, 3, 'Evasión, Tranquilidad del Alma', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (7, 8, 3, 'Mejora de Característica', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (7, 9, 4, 'Movimiento sin Armadura (+6m, trepar/correr en agua)', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (7, 10, 4, 'Rasgo de Tradición, Purity of Body', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(7, 11, 4, 'Visión de Sombras, Artes Marciales (d8)', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(7, 11, 4, 'Visión de Sombras, Artes Marciales (d10)', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (7, 12, 4, 'Mejora de Característica', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (7, 13, 5, 'Lengua del Sol y la Luna', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (7, 14, 5, 'Alma de Diamante', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (7, 15, 5, 'Mente en Blanco Atemporal', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(7, 16, 5, 'Mejora de Característica, Artes Marciales (d10)', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(7, 16, 5, 'Mejora de Característica, Artes Marciales (d12)', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (7, 17, 6, 'Rasgo de Tradición', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (7, 18, 6, 'Cuerpo Vacío', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (7, 19, 6, 'Mejora de Característica', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(7, 20, 6, 'Ser Perfecto, Artes Marciales (d12)', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(7, 20, 6, 'Ser Perfecto', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (8, 1, 2, 'Detección Divina, Imposición de Manos', 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0),
 (8, 2, 2, 'Estilo de Combate, Lanzamiento de Conjuros, Golpe Divino', 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0),
 (8, 3, 2, 'Juramento Sagrado, Canal de Divinidad', 0, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1409,26 +1640,26 @@ INSERT INTO `class_level_progression` (`class_id`, `level`, `proficiency_bonus`,
 (9, 18, 6, 'Escurridizo', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (9, 19, 6, 'Mejora de Característica, Ataque Furtivo (10d6)', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (9, 20, 6, 'Golpe del Destino', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(10, 1, 2, 'Favorito Natural, Exploración Natural (1)', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(10, 2, 2, 'Estilo de Combate, Conjuros de Explorador', 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0),
-(10, 3, 2, 'Arquetipo de Explorador, Exploración Natural (2)', 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0),
-(10, 4, 2, 'Mejora de Característica', 0, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0),
-(10, 5, 3, 'Ataque Extra', 0, 5, 4, 2, 0, 0, 0, 0, 0, 0, 0),
+(10, 1, 2, 'Favorito Natural, Exploración Natural (1)', 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0),
+(10, 2, 2, 'Estilo de Combate, Conjuros de Explorador', 0, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0),
+(10, 3, 2, 'Arquetipo de Explorador, Exploración Natural (2)', 0, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0),
+(10, 4, 2, 'Mejora de Característica', 0, 5, 3, 0, 0, 0, 0, 0, 0, 0, 0),
+(10, 5, 3, 'Ataque Extra', 0, 6, 4, 2, 0, 0, 0, 0, 0, 0, 0),
 (10, 6, 3, 'Favorito Natural Mejorado', 0, 6, 4, 2, 0, 0, 0, 0, 0, 0, 0),
 (10, 7, 3, 'Rasgo de Arquetipo, Exploración Natural (3)', 0, 7, 4, 3, 0, 0, 0, 0, 0, 0, 0),
-(10, 8, 3, 'Mejora de Característica, Tierra en Pie (1)', 0, 8, 4, 3, 0, 0, 0, 0, 0, 0, 0),
+(10, 8, 3, 'Mejora de Característica, Tierra en Pie (1)', 0, 7, 4, 3, 0, 0, 0, 0, 0, 0, 0),
 (10, 9, 4, NULL, 0, 9, 4, 3, 2, 0, 0, 0, 0, 0, 0),
-(10, 10, 4, 'Escondite Natural', 0, 10, 4, 3, 2, 0, 0, 0, 0, 0, 0),
-(10, 11, 4, 'Rasgo de Arquetipo', 0, 11, 4, 3, 3, 0, 0, 0, 0, 0, 0),
-(10, 12, 4, 'Mejora de Característica', 0, 11, 4, 3, 3, 0, 0, 0, 0, 0, 0),
-(10, 13, 5, NULL, 0, 13, 4, 3, 3, 1, 0, 0, 0, 0, 0),
-(10, 14, 5, 'Desaparecer', 0, 13, 4, 3, 3, 1, 0, 0, 0, 0, 0),
-(10, 15, 5, 'Rasgo de Arquetipo, Tierra en Pie (2)', 0, 14, 4, 3, 3, 2, 0, 0, 0, 0, 0),
-(10, 16, 5, 'Mejora de Característica', 0, 14, 4, 3, 3, 2, 0, 0, 0, 0, 0),
-(10, 17, 6, NULL, 0, 16, 4, 3, 3, 3, 1, 0, 0, 0, 0),
-(10, 18, 6, 'Sentidos Salvajes', 0, 16, 4, 3, 3, 3, 1, 0, 0, 0, 0),
-(10, 19, 6, 'Mejora de Característica', 0, 18, 4, 3, 3, 3, 2, 0, 0, 0, 0),
-(10, 20, 6, 'Cazador de Asesinos', 0, 18, 4, 3, 3, 3, 2, 0, 0, 0, 0),
+(10, 10, 4, 'Escondite Natural', 0, 9, 4, 3, 2, 0, 0, 0, 0, 0, 0),
+(10, 11, 4, 'Rasgo de Arquetipo', 0, 10, 4, 3, 3, 0, 0, 0, 0, 0, 0),
+(10, 12, 4, 'Mejora de Característica', 0, 10, 4, 3, 3, 0, 0, 0, 0, 0, 0),
+(10, 13, 5, NULL, 0, 11, 4, 3, 3, 1, 0, 0, 0, 0, 0),
+(10, 14, 5, 'Desaparecer', 0, 11, 4, 3, 3, 1, 0, 0, 0, 0, 0),
+(10, 15, 5, 'Rasgo de Arquetipo, Tierra en Pie (2)', 0, 12, 4, 3, 3, 2, 0, 0, 0, 0, 0),
+(10, 16, 5, 'Mejora de Característica', 0, 12, 4, 3, 3, 2, 0, 0, 0, 0, 0),
+(10, 17, 6, NULL, 0, 14, 4, 3, 3, 3, 1, 0, 0, 0, 0),
+(10, 18, 6, 'Sentidos Salvajes', 0, 14, 4, 3, 3, 3, 1, 0, 0, 0, 0),
+(10, 19, 6, 'Mejora de Característica', 0, 15, 4, 3, 3, 3, 2, 0, 0, 0, 0),
+(10, 20, 6, 'Cazador de Asesinos', 0, 15, 4, 3, 3, 3, 2, 0, 0, 0, 0),
 (11, 1, 2, 'Lanzamiento de Conjuros, Origen Sorcérico', 4, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0),
 (11, 2, 2, 'Puntos de Fuente Sorcérica (2)', 4, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0),
 (11, 3, 2, 'Metamagia (2)', 4, 4, 4, 2, 0, 0, 0, 0, 0, 0, 0),
@@ -1513,6 +1744,17 @@ CREATE TABLE `feat` (
   `feat_desc` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `feat`
+--
+
+INSERT INTO `feat` (`feat_id`, `feat_name`, `feat_desc`) VALUES
+(1, 'Alerta', '<ul>\n<li><b>Competencia en iniciativa:</b> Sumas a tu iniciativa tu bonificador por competencia.</li>\n<li><b>Cambio de iniciativa:</b> Inmediatamente después de lanzar iniciativa, puedes cambiar tu iniciativa por la de cualquier criatura que no esté incapacitada.</li></ul>'),
+(2, 'Atacante salvaje', 'Una vez por turno, cuando golpeas a una criatura con un ataque con arma, puedes lanzar el daño 2 veces y usar el resultado que quieras'),
+(3, 'Curandero', '<ul>\n<li><b>Médico de combate.</b> Si tienes un botiquín, puedes usar uno de sus usos para curar a una criatura a 1,5 metros de ti como acción de Utilizar. Esa criatura puede gastar uno de sus dados de puntos de golpe, y luego tú tiras ese dado. La criatura recupera una cantidad de puntos de golpe igual al resultado de la tirada más tu bonificador de competencia.</li>\n<li><b>Retirada de curación.</b> Siempre que tires un dado para determinar la cantidad de puntos de golpe que restauras con un conjuro o con el beneficio de Médico de combate de esta dote, puedes volver a tirar el dado si obtienes un 1, y debes usar el nuevo resultado.</li></ul>'),
+(4, 'Afortunado', '<ul>\r\n<li><b>Puntos de Suerte.<b> Tienes una cantidad de Puntos de Suerte igual a tu Bonificador de Competencia y puedes gastarlos en los beneficios que se describen a continuación. Recuperas los Puntos de Suerte gastados al finalizar un Descanso Largo.</li>\r\n<li><b>Ventaja.</b> Cuando tiras un d20 para una Prueba de D20, puedes gastar 1 Punto de Suerte para obtener Ventaja en la tirada.</li>\r\n<li><b>Desventaja.</b> Cuando una criatura tira un d20 para un ataque contra ti, puedes gastar 1 Punto de Suerte para imponerle Desventaja en esa tirada.</li></ul>'),
+(5, 'Duro', 'Tu máximo de puntos de golpe aumenta en una cantidad igual al doble de tu nivel de personaje cuando obtienes esta dote. Cada vez que subas de nivel de personaje a partir de entonces, tu máximo de puntos de golpe aumentará en 2 puntos de golpe adicionales.');
+
 -- --------------------------------------------------------
 
 --
@@ -1595,12 +1837,9 @@ INSERT INTO `item` (`item_id`, `item_name`, `item_desc`, `item_count`, `item_wei
 (101, 'Espada larga', 'Espada versátil de hoja recta, a una o dos manos', 1, 1.50, 15.00),
 (102, 'Hacha de batalla', 'Hacha grande diseñada para el combate', 1, 2.00, 10.00),
 (103, 'Martillo de guerra', 'Martillo pesado con cabeza de metal', 1, 2.00, 15.00),
-(104, 'Espada bastarda', 'Espada de mano y media, versátil y poderosa', 1, 3.00, 35.00),
 (105, 'Gran hacha', 'Hacha de dos manos con doble filo', 1, 3.50, 30.00),
-(106, 'Gran espada', 'Espada enorme de dos manos con gran alcance', 1, 3.00, 50.00),
-(107, 'Espada ancha', 'Espada de hoja ancha y pesada, una mano', 1, 2.00, 25.00),
+(106, 'Espadón', 'Espada enorme de dos manos con gran alcance', 1, 3.00, 50.00),
 (108, 'Mayal', 'Mango con cabeza de metal unida por cadena', 1, 2.00, 10.00),
-(109, 'Lanza de caballería', 'Lanza larga usada a caballo, requiere dos manos a pie', 1, 3.00, 10.00),
 (110, 'Pico de guerra', 'Pico de combate con punta de acero', 1, 2.00, 5.00),
 (111, 'Tridente', 'Arma con tres puntas, también arrojadiza', 1, 2.00, 5.00),
 (112, 'Estoque', 'Espada de hoja delgada para ataques perforantes precisos', 1, 1.00, 25.00),
@@ -1715,7 +1954,7 @@ CREATE TABLE `item_wand` (
 
 CREATE TABLE `item_weapon` (
   `item_id` int(10) NOT NULL,
-  `skill_id` int(1) NOT NULL,
+  `ability_id` int(1) NOT NULL,
   `weapon_hitdice` varchar(5) NOT NULL,
   `damage_id` int(1) NOT NULL,
   `mastery_id` int(4) NOT NULL,
@@ -1726,35 +1965,32 @@ CREATE TABLE `item_weapon` (
 -- Volcado de datos para la tabla `item_weapon`
 --
 
-INSERT INTO `item_weapon` (`item_id`, `skill_id`, `weapon_hitdice`, `damage_id`, `mastery_id`, `weapon_properties`) VALUES
-(1, 1, '1d4', 8, 3, 'Ligera, arrojadiza (6/18)'),
-(2, 2, '1d6', 2, 2, ''),
-(3, 2, '1d6', 2, 5, 'Versátil (1d8)'),
-(4, 2, '1d6', 12, 7, 'Ligera, arrojadiza (6/18)'),
-(5, 1, '1d6', 8, 3, 'Ligera'),
-(6, 2, '1d6', 8, 7, 'Arrojadiza (6/18), versátil (1d8)'),
-(7, 2, '1d4', 2, 2, ''),
-(8, 2, '1d4', 12, 9, 'Ligera'),
-(9, 2, '1d6', 8, 7, 'Arrojadiza (9/36)'),
-(10, 2, '1d4', 2, 7, 'Ligera, arrojadiza (6/18)'),
-(101, 2, '1d8', 12, 1, 'Versátil (1d10)'),
-(102, 2, '1d8', 12, 2, ''),
-(103, 2, '1d8', 2, 2, 'Versátil (1d10)'),
-(104, 2, '1d8', 12, 2, 'Versátil (2d6)'),
-(105, 2, '1d12', 12, 2, 'Pesada, dos manos'),
-(106, 2, '2d6', 12, 2, 'Pesada, dos manos'),
-(107, 2, '2d6', 12, 4, 'Dos manos, pesada'),
-(108, 2, '1d8', 2, 2, ''),
-(109, 2, '1d12', 8, 4, 'Alcance, especial'),
-(110, 2, '1d8', 8, 2, ''),
-(111, 2, '1d6', 8, 7, 'Arrojadiza (6/18), versátil (1d8)'),
-(112, 1, '1d8', 8, 3, 'Ligera'),
-(201, 1, '1d6', 8, 8, 'Munición (24/96), dos manos'),
-(202, 1, '1d8', 8, 8, 'Munición (45/180), dos manos, pesada'),
-(203, 1, '1d8', 8, 8, 'Munición (24/96), dos manos, recarga'),
-(204, 1, '1d6', 8, 8, 'Munición (9/36), ligera'),
-(205, 1, '1d10', 8, 8, 'Munición (30/120), dos manos, pesada, recarga'),
-(206, 1, '1', 9, 8, 'Munición (7,5/30), dos manos');
+INSERT INTO `item_weapon` (`item_id`, `ability_id`, `weapon_hitdice`, `damage_id`, `mastery_id`, `weapon_properties`) VALUES
+(1, 2, '1d4', 8, 3, 'Ligera, arrojadiza (20/60)'),
+(2, 1, '1d6', 2, 5, ''),
+(3, 1, '1d6', 2, 7, 'Versátil (1d8)'),
+(4, 1, '1d6', 12, 8, 'Ligera, arrojadiza (20/60)'),
+(5, 2, '1d6', 8, 8, 'Ligera'),
+(6, 1, '1d6', 8, 7, 'Arrojadiza (20/60), versátil (1d8)'),
+(7, 1, '1d4', 2, 6, ''),
+(8, 2, '1d4', 12, 3, 'Ligera'),
+(9, 1, '1d6', 8, 6, 'Arrojadiza (30/120)'),
+(10, 2, '1d4', 2, 3, 'Ligera, arrojadiza (20/60)'),
+(101, 1, '1d8', 12, 5, 'Versátil (1d10)'),
+(102, 1, '1d8', 12, 7, ''),
+(103, 1, '1d8', 2, 4, 'Versátil (1d10)'),
+(105, 1, '1d12', 12, 1, 'Pesada, dos manos'),
+(106, 1, '2d6', 12, 2, 'Pesada, dos manos'),
+(108, 1, '1d8', 2, 2, ''),
+(110, 2, '1d8', 8, 3, ''),
+(111, 1, '1d8', 8, 7, 'Arrojadiza (20/60), versátil (1d10)'),
+(112, 2, '1d8', 8, 8, 'Ligera'),
+(201, 2, '1d6', 8, 8, 'Munición (80/320), dos manos'),
+(202, 2, '1d8', 8, 6, 'Munición (150/600), dos manos, pesada'),
+(203, 1, '1d8', 8, 6, 'Munición (80/320), dos manos, recarga'),
+(204, 2, '1d6', 8, 8, 'Munición (30/120), ligera'),
+(205, 2, '1d10', 8, 4, 'Munición (100/400), dos manos, pesada, recarga'),
+(206, 2, '1', 9, 8, 'Munición (25/100), dos manos');
 
 -- --------------------------------------------------------
 
@@ -1773,15 +2009,14 @@ CREATE TABLE `mastery` (
 --
 
 INSERT INTO `mastery` (`mastery_id`, `mastery_name`, `mastery_desc`) VALUES
-(1, 'Flexible', 'Puedes cambiar el tipo de daño entre contundente, cortante y perforante cuando atacas con esta arma.'),
-(2, 'Pesada', 'Las criaturas Pequeñas y más pequeñas tienen desventaja en las tiradas de ataque con esta arma.'),
-(3, 'Ligera', 'Cuando atacas con esta arma usando la acción de Atacar, puedes realizar un ataque adicional con otra arma Ligera como acción adicional.'),
-(4, 'Cargada', 'Si te mueves al menos 3 metros en línea recta antes de este ataque, añades 1d6 al daño si el ataque impacta.'),
-(5, 'Versátil', 'Esta arma puede usarse con una o dos manos. El daño entre paréntesis es el de dos manos.'),
-(6, 'Alcance', 'Esta arma aumenta tu alcance de ataque cuerpo a cuerpo en 1,5 metros.'),
-(7, 'Arrojadiza', 'Puedes lanzar esta arma a distancia. Si es un arma cuerpo a cuerpo, usas el mismo modificador de característica.'),
-(8, 'A distancia', 'Esta arma solo puede usarse para ataques a distancia. Tiene rango normal y largo en metros.'),
-(9, 'Fiable', 'Cuando tiras el daño con esta arma y el resultado es inferior a tu bonificador de competencia, usas el bonificador de competencia como resultado.');
+(1, 'Adherirse', 'Si aciertas a una criatura con una tirada de ataque cuerpo a cuerpo usando esta arma, puedes realizar una tirada de ataque cuerpo a cuerpo con ella contra una segunda criatura que se encuentre a 5 pies / 1,5 metros de la primera y que también esté a tu alcance. Si aciertas, la segunda criatura recibe el daño del arma, pero no se le suma tu modificador de característica a ese daño, a menos que dicho modificador sea negativo. Solo puedes realizar este ataque adicional una vez por turno.'),
+(2, 'Rozar', 'Cuando fallas una ataque contra una criatura, le haces daño igual al modificador de característica que usaste para realizar esta tirada. El tipo de daño es el mismo que el del arma y este daño solo se puede aumentar aumentando tu modificador'),
+(3, 'Mellar', 'Cuando realizas el ataque adicional de la propiedad Ligera, puedes hacerlo como parte de la acción de Ataque en lugar de como una Acción Adicional. Solo puedes realizar este ataque adicional una vez por turno.'),
+(4, 'Empujar', 'Si golpeas a una criatura con esta arma, puedes empujarla hasta 10 pies / 3 metros en línea recta alejándola de ti si su tamaño es Grande o más pequeña.'),
+(5, 'Agotar', 'Si golpeas a una criatura con esta arma, esa criatura tiene desventaja en su siguiente tirada de ataque antes del comienzo de tu siguiente turno.'),
+(6, 'Realientizar', 'Si golpeas a una criatura con esta arma y le infliges daño, puedes reducir su Velocidad en 10 pies / 3 metros hasta el comienzo de tu próximo turno. Si la criatura es golpeada más de una vez por armas con esta propiedad, la reducción de Velocidad no excederá los 10 pies / 3 metros.'),
+(7, 'Derribar', 'Si golpeas a una criatura con esta arma, puedes obligarla a realizar una tirada de salvación de Constitución (CD 8 más el modificador de característica utilizado para la tirada de ataque y tu bonificador de competencia). Si falla la tirada, la criatura queda tumbada.'),
+(8, 'Acosar', 'Si golpeas a una criatura con esta arma y le infliges daño, tienes ventaja en tu siguiente tirada de ataque contra esa criatura antes del final de tu siguiente turno.');
 
 -- --------------------------------------------------------
 
@@ -2089,10 +2324,13 @@ INSERT INTO `prof_class` (`prof_id`, `class_id`, `class_lv`) VALUES
 (101, 7, 1),
 (101, 9, 1),
 (102, 1, 1),
+(102, 2, 1),
 (102, 5, 1),
+(102, 7, 1),
 (102, 8, 1),
 (102, 9, 1),
 (102, 10, 1),
+(103, 2, 1),
 (103, 4, 1),
 (103, 6, 1),
 (103, 11, 1),
@@ -2100,6 +2338,8 @@ INSERT INTO `prof_class` (`prof_id`, `class_id`, `class_lv`) VALUES
 (104, 2, 1),
 (104, 9, 1),
 (104, 11, 1),
+(104, 12, 1),
+(105, 2, 1),
 (105, 3, 1),
 (105, 5, 1),
 (105, 6, 1),
@@ -2110,20 +2350,29 @@ INSERT INTO `prof_class` (`prof_id`, `class_id`, `class_lv`) VALUES
 (107, 2, 1),
 (107, 5, 1),
 (107, 8, 1),
+(107, 9, 1),
 (107, 11, 1),
 (107, 12, 1),
+(108, 2, 1),
 (108, 6, 1),
-(108, 7, 1),
 (108, 9, 1),
 (108, 10, 1),
 (108, 12, 1),
+(109, 2, 1),
 (109, 9, 1),
+(110, 2, 1),
 (110, 3, 1),
+(110, 4, 1),
 (110, 6, 1),
 (110, 8, 1),
+(111, 1, 1),
+(111, 2, 1),
 (111, 4, 1),
+(111, 6, 1),
 (111, 10, 1),
 (112, 1, 1),
+(112, 2, 1),
+(112, 4, 1),
 (112, 5, 1),
 (112, 9, 1),
 (112, 10, 1),
@@ -2131,14 +2380,20 @@ INSERT INTO `prof_class` (`prof_id`, `class_id`, `class_lv`) VALUES
 (113, 3, 1),
 (113, 4, 1),
 (113, 5, 1),
+(113, 6, 1),
 (113, 7, 1),
 (113, 8, 1),
+(113, 9, 1),
+(113, 10, 1),
+(113, 11, 1),
 (113, 12, 1),
 (114, 2, 1),
 (114, 3, 1),
+(114, 5, 1),
 (114, 8, 1),
 (114, 9, 1),
 (114, 11, 1),
+(115, 2, 1),
 (115, 3, 1),
 (115, 4, 1),
 (115, 6, 1),
@@ -2146,13 +2401,19 @@ INSERT INTO `prof_class` (`prof_id`, `class_id`, `class_lv`) VALUES
 (115, 8, 1),
 (115, 11, 1),
 (115, 12, 1),
+(116, 2, 1),
 (116, 7, 1),
 (116, 9, 1),
 (116, 10, 1),
 (117, 1, 1),
+(117, 2, 1),
 (117, 4, 1),
+(117, 5, 1),
 (117, 10, 1),
+(118, 1, 1),
+(118, 2, 1),
 (118, 4, 1),
+(118, 5, 1),
 (118, 10, 1),
 (183, 7, 1);
 
@@ -2395,66 +2656,72 @@ CREATE TABLE `spell` (
 --
 
 INSERT INTO `spell` (`spell_id`, `spell_name`, `spell_level`, `spell_school_id`, `spell_ritual`, `spell_cast_time`, `spell_range`, `spell_duration`, `spell_concentration`, `spell_desc`, `spell_higher_level`) VALUES
-(1, 'Fuego fatuo', 0, 7, 0, '1 acción', '36 m', '1 minuto', 1, 'Creas una luz espectral que flota en un punto. Emite luz tenue en radio de 3 m. Puedes moverla hasta 9 m con acción adicional.', NULL),
-(2, 'Mano de mago', 0, 2, 0, '1 acción', '9 m', '1 minuto', 0, 'Creas una mano espectral que puede manipular objetos de hasta 2,5 kg, abrir puertas y contenedores, o entregar objetos.', NULL),
-(3, 'Prestidigitación', 0, 2, 0, '1 acción', '3 m', 'Hasta 1 hora', 0, 'Realizas un pequeño truco mágico inocuo: crear un efecto sensorial, limpiar un objeto, encender o apagar una llama, etc.', NULL),
-(4, 'Rayo de fuego', 0, 5, 0, '1 acción', '36 m', 'Instantáneo', 0, 'Lanzas un rayo de fuego a una criatura. Tirada de ataque de conjuro a distancia. Impacto: 1d10 daño de fuego. Aumenta 1d10 en nv 5, 11 y 17.', NULL),
-(5, 'Taumaturgia', 0, 8, 0, '1 acción', '9 m', '1 minuto', 0, 'Manifiestas un pequeño prodigio divino: tu voz retumba, tus ojos brillan, puertas se abren solas o luces parpadean.', NULL),
+(1, 'Fuego fatuo', 0, 7, 0, '1 acción', '120 pies / 36 metros', '1 minuto', 1, 'Creas una luz espectral que flota en un punto. Emite luz tenue en radio de 3 m. Puedes moverla hasta 9 m con acción adicional.', NULL),
+(2, 'Mano de mago', 0, 2, 0, '1 acción', '30 pies / 9 metros', '1 minuto', 0, 'Creas una mano espectral que puede manipular objetos de hasta 2,5 kg, abrir puertas y contenedores, o entregar objetos.', NULL),
+(3, 'Prestidigitación', 0, 2, 0, '1 acción', '10 pies / 3 metros', 'Hasta 1 hora', 0, 'Realizas un pequeño truco mágico inocuo: crear un efecto sensorial, limpiar un objeto, encender o apagar una llama, etc.', NULL),
+(4, 'Rayo de fuego', 0, 5, 0, '1 acción', '120 pies / 36 metros', 'Instantáneo', 0, 'Lanzas un rayo de fuego a una criatura. Tirada de ataque de conjuro a distancia. Impacto: 1d10 daño de fuego. Aumenta 1d10 en nv 5, 11 y 17.', NULL),
+(5, 'Taumaturgia', 0, 8, 0, '1 acción', '30 pies / 9 metros', '1 minuto', 0, 'Manifiestas un pequeño prodigio divino: tu voz retumba, tus ojos brillan, puertas se abren solas o luces parpadean.', NULL),
 (6, 'Toque de muerte', 0, 7, 0, '1 acción', 'Toque', 'Instantáneo', 0, 'Invocas la energía de la muerte en una criatura que tocas. Tirada de ataque de conjuro cuerpo a cuerpo. Impacto: 1d6 + SAB daño necrótico (1d6 adicional cada 2 niveles a partir de nv 5).', NULL),
-(7, 'Rayo de Frío', 0, 5, 0, '1 acción', '18 m', 'Instantáneo', 0, 'Lanzas un rayo de luz helada. Tirada de ataque a distancia. Impacto: 1d8 daño frío y velocidad de la criatura reducida a 0 hasta el próximo turno. Aumenta 1d8 en nv 5, 11 y 17.', NULL),
-(8, 'Ilusión menor', 0, 6, 0, '1 acción', '9 m', '1 minuto', 0, 'Creas un sonido o imagen ilusoria. Puede ser un sonido de hasta voz inteligible, o una imagen inmóvil que quepa en un cubo de 1,5 m.', NULL),
+(7, 'Rayo de escarcha', 0, 5, 0, '1 acción', '60 pies / 18 metros', 'Instantáneo', 0, 'Lanzas un rayo de luz helada. Tirada de ataque a distancia. Impacto: 1d8 daño frío y velocidad de la criatura reducida a 0 hasta el próximo turno. Aumenta 1d8 en nv 5, 11 y 17.', NULL),
+(8, 'Ilusión menor', 0, 6, 0, '1 acción', '30 pies / 9 metros', '1 minuto', 0, 'Creas un sonido o imagen ilusoria. Puede ser un sonido de hasta voz inteligible, o una imagen inmóvil que quepa en un cubo de 1,5 m.', NULL),
 (9, 'Luz', 0, 5, 0, '1 acción', 'Toque', '1 hora', 0, 'Un objeto que no se lleva puesto emite luz brillante en radio de 6 m y luz tenue 6 m más allá. Solo puede existir una instancia a la vez.', NULL),
-(10, 'Veneno Ácido', 0, 2, 0, '1 acción', '18 m', '1 minuto', 0, 'Invocas una burbuja de ácido. Objetivo: tirada de tSalv de CON o recibe 1d6 de daño ácido inmediatamente y 1d6 al inicio de su siguiente turno.', NULL),
+(10, 'Veneno Ácido', 0, 2, 0, '1 acción', '60 pies / 18 metros', '1 minuto', 0, 'Invocas una burbuja de ácido. Objetivo: tirada de tSalv de CON o recibe 1d6 de daño ácido inmediatamente y 1d6 al inicio de su siguiente turno.', NULL),
 (101, 'Curación de heridas', 1, 1, 0, '1 acción', 'Toque', 'Instantáneo', 0, 'Una criatura que toques recupera 1d8 + modificador de lanzamiento PG.', 'Al lanzarlo con ranura nv 2+, el daño aumenta 1d8 por cada nivel adicional.'),
-(102, 'Detección de magia', 1, 3, 1, '1 acción', 'Personal', 'Hasta 10 minutos', 1, 'Durante la duración, sientes la presencia de magia dentro de 9 m. Si detectas magia, puedes ver un aura tenue alrededor del objeto o criatura mágicos.', NULL),
-(103, 'Dormir', 1, 4, 0, '1 acción', '18 m', '1 minuto', 0, 'Envías criaturas a un sueño mágico. Lanza 5d8: el total es los PG que puedes adormecer (de menor a mayor PG). Las criaturas dormidas no despiertan con daño.', 'Al lanzarlo con ranura nv 2+, añades 2d8 por cada nivel adicional.'),
+(102, 'Detectar magia', 1, 3, 1, '1 acción', 'Personal', 'Hasta 10 minutos', 1, 'Durante la duración, sientes la presencia de magia dentro de 9 m. Si detectas magia, puedes ver un aura tenue alrededor del objeto o criatura mágicos.', NULL),
+(103, 'Dormir', 1, 4, 0, '1 acción', '60 pies / 18 metros', '1 minuto', 0, 'Envías criaturas a un sueño mágico. Lanza 5d8: el total es los PG que puedes adormecer (de menor a mayor PG). Las criaturas dormidas no despiertan con daño.', 'Al lanzarlo con ranura nv 2+, añades 2d8 por cada nivel adicional.'),
 (104, 'Armadura de mago', 1, 1, 0, '1 acción', 'Toque', '8 horas', 0, 'Tocas a una criatura voluntaria que no lleve armadura. La CA base de la criatura pasa a ser 13 + modificador de DES.', NULL),
 (105, 'Manos ardientes', 1, 5, 0, '1 acción', 'Personal', 'Instantáneo', 0, 'Llamas brotan de tus manos en cono de 4,5 m. Las criaturas en el área hacen tSalv de DES: fracaso 3d6 fuego, éxito la mitad.', 'Al lanzarlo con ranura nv 2+, el daño aumenta 1d6 por cada nivel adicional.'),
-(106, 'Cura ligera de heridas', 1, 1, 0, '1 acción adicional', 'Toque', 'Instantáneo', 0, 'Una criatura que toques recupera 1d4 + modificador de lanzamiento PG.', NULL),
-(107, 'Proyectil mágico', 1, 5, 0, '1 acción', '36 m', 'Instantáneo', 0, 'Creas tres dardos brillantes que golpean automáticamente. Cada dardo inflige 1d4+1 de daño de fuerza.', 'Al lanzarlo con ranura nv 2+, creas un dardo adicional por cada nivel adicional.'),
+(106, 'Bendecir', 1, 4, 0, '1 acción', '30 pies / 9 metros', '1 minuto', 1, 'Selecciona hasta 3 criaturas al alcance, mientras dure el hechizo, estas criaturas suman 1d4 a sus tiradas de ataque y de salvación', 'Puedes elegir una criatura adicional por cada espacio de conjuro de nivel superior utilizado'),
+(107, 'Proyectil mágico', 1, 5, 0, '1 acción', '120 pies / 36 metros', 'Instantáneo', 0, 'Creas tres dardos brillantes que golpean automáticamente. Cada dardo inflige 1d4+1 de daño de fuerza.', 'Al lanzarlo con ranura nv 2+, creas un dardo adicional por cada nivel adicional.'),
 (108, 'Escudo', 1, 1, 0, '1 reacción', 'Personal', '1 asalto', 0, 'Cuando te impactan con un ataque, invocas un escudo invisible que añade +5 a tu CA incluido el ataque desencadenante. También bloqueas Proyectil mágico.', NULL),
 (109, 'Gracia feérica', 1, 8, 0, '1 acción', 'Toque', 'Hasta 1 hora', 1, 'Tocas a una criatura voluntaria. Hasta que el conjuro termine: la criatura no deja huella ni olor; puede pasar por espacios de criaturas de tamaño pequeño o mayor.', NULL),
-(110, 'Palabra de curación', 1, 5, 0, '1 acción adicional', '18 m', 'Instantáneo', 0, 'Una criatura que puedas ver recupera 1d4 + modificador de lanzamiento PG.', 'Al lanzarlo con ranura nv 2+, el daño aumenta 1d4 por cada nivel adicional.'),
+(110, 'Palabra de curación', 1, 5, 0, '1 acción adicional', '60 pies / 18 metros', 'Instantáneo', 0, 'Una criatura que puedas ver recupera 1d4 + modificador de lanzamiento PG.', 'Al lanzarlo con ranura nv 2+, el daño aumenta 1d4 por cada nivel adicional.'),
 (111, 'Identificar', 1, 3, 1, '1 minuto', 'Toque', 'Instantáneo', 0, 'Eliges un objeto o criatura. Aprendes sus propiedades mágicas, cómo usarlo, si requiere sintonía y cuántos cargos le quedan.', NULL),
-(112, 'Imagen silenciosa', 1, 6, 0, '1 acción', '18 m', 'Hasta 10 minutos', 1, 'Creas una imagen visual de un objeto, criatura u otro fenómeno visible que quepa en un cubo de 4,5 m. La imagen no tiene sonido, olor, ni tactilidad.', NULL),
+(112, 'Imagen silenciosa', 1, 6, 0, '1 acción', '60 pies / 18 metros', 'Hasta 10 minutos', 1, 'Creas una imagen visual de un objeto, criatura u otro fenómeno visible que quepa en un cubo de 4,5 m. La imagen no tiene sonido, olor, ni tactilidad.', NULL),
 (201, 'Invisibilidad', 2, 6, 0, '1 acción', 'Toque', 'Hasta 1 hora', 1, 'Una criatura que toques se vuelve invisible hasta que el conjuro termine, ataque o lance un conjuro.', 'Al lanzarlo con ranura nv 3+, puedes apuntar a una criatura adicional por cada nivel adicional.'),
-(202, 'Sugestión', 2, 4, 0, '1 acción', '9 m', 'Hasta 8 horas', 1, 'Pronuncias una sugerencia de dos palabras o más a una criatura que puedas entenderte. La criatura debe hacer tSalv de SAB. Si falla, seguir la sugestión.', NULL),
-(203, 'Misil de ácido de Melf', 2, 2, 0, '1 acción', '18 m', 'Hasta 1 minuto', 0, 'Creas tres dardos de ácido brillantes. Cada dardo impacta automáticamente: 2d4 daño de ácido ahora y 2d4 al final de su siguiente turno.', 'Al lanzarlo con ranura nv 3+, creas un dardo adicional por cada nivel adicional.'),
+(202, 'Sugestión', 2, 4, 0, '1 acción', '30 pies / 9 metros', 'Hasta 8 horas', 1, 'Pronuncias una sugerencia de dos palabras o más a una criatura que puedas entenderte. La criatura debe hacer tSalv de SAB. Si falla, seguir la sugestión.', NULL),
+(203, 'Misil de ácido de Melf', 2, 2, 0, '1 acción', '60 pies / 18 metros', 'Hasta 1 minuto', 0, 'Creas tres dardos de ácido brillantes. Cada dardo impacta automáticamente: 2d4 daño de ácido ahora y 2d4 al final de su siguiente turno.', 'Al lanzarlo con ranura nv 3+, creas un dardo adicional por cada nivel adicional.'),
 (204, 'Espejo de imágenes', 2, 6, 0, '1 acción', 'Personal', '1 minuto', 0, 'Tres duplicados ilusorios de ti mismo aparecen en tu espacio. Cuando te atacan, el atacante apunta aleatoriamente a ti o a un duplicado.', NULL),
 (205, 'Toque de parálisis', 2, 8, 0, '1 acción', 'Toque', 'Hasta 1 minuto', 1, 'Tirada de ataque de conjuro cuerpo a cuerpo. Impacto: la criatura está paralizada hasta que el conjuro termine. Puede repetir la tSalv de CON cada turno.', NULL),
-(206, 'Curación espiritual', 2, 1, 0, '1 acción adicional', '18 m', 'Hasta 1 minuto', 1, 'Invocas un arma espiritual en forma de símbolo de tu deidad. Usas acción adicional para realizar un ataque cuerpo a cuerpo de conjuro con ella: 1d8 + mod de lanzamiento.', 'Al lanzarlo con ranura nv 3+, el daño aumenta 1d8 por cada dos niveles adicionales.'),
-(207, 'Oscuridad', 2, 5, 0, '1 acción', '18 m', 'Hasta 10 minutos', 1, 'La oscuridad mágica llena una esfera de 4,5 m de radio centrada en un punto. Las criaturas sin visión en oscuridad total no pueden ver a través de ella.', NULL),
+(206, 'Curación espiritual', 2, 1, 0, '1 acción adicional', '60 pies / 18 metros', 'Hasta 1 minuto', 1, 'Invocas un arma espiritual en forma de símbolo de tu deidad. Usas acción adicional para realizar un ataque cuerpo a cuerpo de conjuro con ella: 1d8 + mod de lanzamiento.', 'Al lanzarlo con ranura nv 3+, el daño aumenta 1d8 por cada dos niveles adicionales.'),
+(207, 'Oscuridad', 2, 5, 0, '1 acción', '60 pies / 18 metros', 'Hasta 10 minutos', 1, 'La oscuridad mágica llena una esfera de 4,5 m de radio centrada en un punto. Las criaturas sin visión en oscuridad total no pueden ver a través de ella.', NULL),
 (208, 'Detectar pensamientos', 2, 3, 0, '1 acción', 'Personal', 'Hasta 1 minuto', 1, 'Puedes leer los pensamientos superficiales de las criaturas dentro de 9 m. La criatura puede hacer tSalv de SAB para resistir.', NULL),
-(301, 'Bola de fuego', 3, 5, 0, '1 acción', '45 m', 'Instantáneo', 0, 'Una explosión de llamas surge en un punto. Las criaturas en radio de 6 m hacen tSalv de DES: fracaso 8d6 fuego, éxito la mitad.', 'Al lanzarlo con ranura nv 4+, el daño aumenta 1d6 por cada nivel adicional.'),
-(302, 'Contramagia', 3, 1, 0, '1 reacción', '18 m', 'Instantáneo', 0, 'Intentas cancelar un conjuro siendo lanzado. Si es de nivel 3 o inferior, falla. Si es de nivel superior, haces prueba de característica contra CD 10 + nivel del conjuro.', NULL),
-(303, 'Hipnotismo', 3, 4, 0, '1 acción', '36 m', 'Hasta 1 hora', 1, 'Hasta seis criaturas que puedas ver en radio de 6 m deben hacer tSalv de SAB. Las que fallen quedan incapacitadas y velocidad 0 hasta que el conjuro termine o reciban daño.', NULL),
+(301, 'Bola de fuego', 3, 5, 0, '1 acción', '150 pies / 45 metros', 'Instantáneo', 0, 'Una explosión de llamas surge en un punto. Las criaturas en radio de 6 m hacen tSalv de DES: fracaso 8d6 fuego, éxito la mitad.', 'Al lanzarlo con ranura nv 4+, el daño aumenta 1d6 por cada nivel adicional.'),
+(302, 'Contramagia', 3, 1, 0, '1 reacción', '60 pies / 18 metros', 'Instantáneo', 0, 'Intentas cancelar un conjuro siendo lanzado. Si es de nivel 3 o inferior, falla. Si es de nivel superior, haces prueba de característica contra CD 10 + nivel del conjuro.', NULL),
+(303, 'Hipnotismo', 3, 4, 0, '1 acción', '120 pies / 36 metros', 'Hasta 1 hora', 1, 'Hasta seis criaturas que puedas ver en radio de 6 m deben hacer tSalv de SAB. Las que fallen quedan incapacitadas y velocidad 0 hasta que el conjuro termine o reciban daño.', NULL),
 (304, 'Vuelo', 3, 8, 0, '1 acción', 'Toque', 'Hasta 10 minutos', 1, 'Tocas a una criatura voluntaria. Gana velocidad de vuelo de 18 m durante la duración.', 'Al lanzarlo con ranura nv 4+, puedes apuntar a una criatura adicional por cada nivel adicional.'),
-(305, 'Luz del día', 3, 5, 1, '1 acción', '18 m', '1 hora', 0, 'Una esfera de luz de 18 m de radio brilla desde el punto que eliges. La oscuridad creada por conjuros de nivel 3 o menor es disipada en el área.', NULL),
+(305, 'Luz del día', 3, 5, 1, '1 acción', '60 pies / 18 metros', '1 hora', 0, 'Una esfera de luz de 18 m de radio brilla desde el punto que eliges. La oscuridad creada por conjuros de nivel 3 o menor es disipada en el área.', NULL),
 (306, 'Revivir', 3, 7, 0, '1 acción', 'Toque', 'Instantáneo', 0, 'Tocas a una criatura que ha muerto en el último minuto. La criatura regresa a la vida con 1 PG. No revive criaturas que murieron de vejez.', NULL),
-(307, 'Disipa magia', 3, 1, 0, '1 acción', '36 m', 'Instantáneo', 0, 'Elige un objeto, criatura o efecto mágico en rango. Los conjuros de nivel 3 o menor sobre el objetivo finalizan. Para conjuros superiores, haces prueba de característica contra CD 10 + nivel del conjuro.', NULL),
+(307, 'Disipa magia', 3, 1, 0, '1 acción', '120 pies / 36 metros', 'Instantáneo', 0, 'Elige un objeto, criatura o efecto mágico en rango. Los conjuros de nivel 3 o menor sobre el objetivo finalizan. Para conjuros superiores, haces prueba de característica contra CD 10 + nivel del conjuro.', NULL),
 (308, 'Lanzamiento de relámpagos', 3, 5, 0, '1 acción', 'Personal', 'Instantáneo', 0, 'Un rayo de 30 m de longitud y 1,5 m de ancho. Las criaturas en la línea hacen tSalv de DES: fracaso 8d6 eléctrico, éxito la mitad.', 'Al lanzarlo con ranura nv 4+, el daño aumenta 1d6 por cada nivel adicional.'),
-(401, 'Polimorfar', 4, 8, 0, '1 acción', '18 m', 'Hasta 1 hora', 1, 'Transformas una criatura en otra forma. La criatura hace tSalv de SAB. Si falla, se convierte en la bestia elegida hasta que caiga a 0 PG o el conjuro termine.', NULL),
-(402, 'Tormenta de hielo', 4, 5, 0, '1 acción', '90 m', 'Instantáneo', 0, 'Granizo helado cae en un cilindro de 6 m de radio y 6 m de altura. Las criaturas hacen tSalv de DES: fracaso 2d8 contundente + 4d6 frío, éxito solo la mitad.', 'Al lanzarlo con ranura nv 5+, el daño contundente aumenta 1d8 por cada nivel adicional.'),
-(403, 'Destierro', 4, 1, 0, '1 acción', '18 m', 'Hasta 1 minuto', 1, 'Intentas desterrar a una criatura a otro plano. Hace tSalv de CAR. Si falla, queda desterrada hasta que el conjuro termine o concentración se rompa.', NULL),
+(401, 'Polimorfar', 4, 8, 0, '1 acción', '60 pies / 18 metros', 'Hasta 1 hora', 1, 'Transformas una criatura en otra forma. La criatura hace tSalv de SAB. Si falla, se convierte en la bestia elegida hasta que caiga a 0 PG o el conjuro termine.', NULL),
+(402, 'Tormenta de hielo', 4, 5, 0, '1 acción', '300 pies / 90 metros', 'Instantáneo', 0, 'Granizo helado cae en un cilindro de 6 m de radio y 6 m de altura. Las criaturas hacen tSalv de DES: fracaso 2d8 contundente + 4d6 frío, éxito solo la mitad.', 'Al lanzarlo con ranura nv 5+, el daño contundente aumenta 1d8 por cada nivel adicional.'),
+(403, 'Destierro', 4, 1, 0, '1 acción', '60 pies / 18 metros', 'Hasta 1 minuto', 1, 'Intentas desterrar a una criatura a otro plano. Hace tSalv de CAR. Si falla, queda desterrada hasta que el conjuro termine o concentración se rompa.', NULL),
 (404, 'Adivinación', 4, 3, 1, '1 acción', 'Personal', 'Instantáneo', 0, 'Tu magia y una ofrenda te ponen en contacto con un semidiós, espíritu u otro ser de conocimiento. Recibes una respuesta breve, honesta sobre un acontecimiento futuro en los próximos 7 días.', NULL),
-(405, 'Guardián de la fe', 4, 1, 0, '1 acción', '9 m', '8 horas', 0, 'Aparece un gran guardián espectral que protege un área de 3 m de radio. Las criaturas hostiles que entren en el área reciben 20 daño radiante (tSalv de DES, mitad si tiene éxito).', NULL),
-(501, 'Bola de fuego mayor', 5, 5, 0, '1 acción', '45 m', 'Instantáneo', 0, 'Como Bola de fuego pero inflige 12d6 de daño de fuego. Rango de explosión 6 m.', 'Al lanzarlo con ranura nv 6+, el daño aumenta 1d6 por cada nivel adicional.'),
+(405, 'Guardián de la fe', 4, 1, 0, '1 acción', '30 pies / 9 metros', '8 horas', 0, 'Aparece un gran guardián espectral que protege un área de 3 m de radio. Las criaturas hostiles que entren en el área reciben 20 daño radiante (tSalv de DES, mitad si tiene éxito).', NULL),
+(501, 'Bola de fuego mayor', 5, 5, 0, '1 acción', '150 pies / 45 metros', 'Instantáneo', 0, 'Como Bola de fuego pero inflige 12d6 de daño de fuego. Rango de explosión 6 m.', 'Al lanzarlo con ranura nv 6+, el daño aumenta 1d6 por cada nivel adicional.'),
 (502, 'Cono de frío', 5, 5, 0, '1 acción', 'Personal', 'Instantáneo', 0, 'Un cono de aire helado de 18 m. Las criaturas hacen tSalv de CON: fracaso 8d8 daño frío, éxito la mitad.', 'Al lanzarlo con ranura nv 6+, el daño aumenta 1d8 por cada nivel adicional.'),
 (503, 'Resurrección', 5, 7, 0, '1 hora', 'Toque', 'Instantáneo', 0, 'Traes de vuelta a un muerto que lleva menos de 10 años muerto. La criatura regresa a la vida con 1 PG con todas sus habilidades. Lleva un punto de agotamiento.', NULL),
 (504, 'Telepatía', 5, 3, 0, '1 acción', 'Sin límite', 'Hasta 24 horas', 1, 'Estableces un vínculo telepático con otra criatura que conozcas. Podéis comunicaros libremente a cualquier distancia (incluso planos distintos).', NULL),
 (505, 'Ráfaga de llamas', 5, 2, 0, '1 acción', 'Personal', 'Instantáneo', 0, 'Cuatro columnas de llamas bajan del cielo. Cada una afecta a un cilindro de 3 m de radio y 12 m de altura: tSalv de DES o 4d6 fuego + 4d6 radiante (mitad si tiene éxito).', 'Al lanzarlo con ranura nv 6+, el daño de fuego y radiante aumenta 1d6 por cada nivel adicional.'),
-(601, 'Cadena de relámpagos', 6, 5, 0, '1 acción', '30 m', 'Instantáneo', 0, 'Un rayo golpea a un objetivo primario: 10d8 eléctrico (tSalv de DES, mitad si tiene éxito). El rayo rebota hasta tres objetivos adicionales dentro de 9 m del anterior.', 'Al lanzarlo con ranura nv 7+, el daño aumenta 1d8 por nivel de ranura.'),
-(602, 'Crear no muertos', 6, 7, 0, '1 minuto', '3 m', 'Instantáneo', 0, 'Puedes lanzar este conjuro solo de noche. Hasta tres cadáveres de humanoides medianos o pequeños se levantan como ghules bajo tu control hasta el próximo anochecer.', 'Al lanzarlo con ranura nv 7+, puedes crear criatura más poderosa o más criaturas.'),
+(601, 'Cadena de relámpagos', 6, 5, 0, '1 acción', '100 pies / 30 metros', 'Instantáneo', 0, 'Un rayo golpea a un objetivo primario: 10d8 eléctrico (tSalv de DES, mitad si tiene éxito). El rayo rebota hasta tres objetivos adicionales dentro de 9 m del anterior.', 'Al lanzarlo con ranura nv 7+, el daño aumenta 1d8 por nivel de ranura.'),
+(602, 'Crear no muertos', 6, 7, 0, '1 minuto', '10 pies / 3 metros', 'Instantáneo', 0, 'Puedes lanzar este conjuro solo de noche. Hasta tres cadáveres de humanoides medianos o pequeños se levantan como ghules bajo tu control hasta el próximo anochecer.', 'Al lanzarlo con ranura nv 7+, puedes crear criatura más poderosa o más criaturas.'),
 (603, 'Visión de la verdad', 6, 3, 0, '1 acción', 'Personal', 'Hasta 1 hora', 1, 'Puedes ver las cosas como son realmente. Ves criaturas invisibles y objetos, ves en la oscuridad, ves planos etéreos y percibes ilusiones como tales.', NULL),
-(701, 'Teletransportación', 7, 2, 0, '1 acción', '3 m', 'Instantáneo', 0, 'Tú y hasta ocho criaturas voluntarias en rango os teletransportáis a un destino que conozcas. La fiabilidad depende del conocimiento que tengas del destino.', NULL),
+(701, 'Teletransportación', 7, 2, 0, '1 acción', '10 pies / 3 metros', 'Instantáneo', 0, 'Tú y hasta ocho criaturas voluntarias en rango os teletransportáis a un destino que conozcas. La fiabilidad depende del conocimiento que tengas del destino.', NULL),
 (702, 'Regeneración', 7, 8, 0, '1 minuto', 'Toque', '1 hora', 0, 'Tocas a una criatura y estimulas su capacidad de curación. El objetivo recupera 4d8+15 PG. Durante la duración, recupera 1 PG al inicio de cada turno.', NULL),
-(703, 'Mano de hierro', 7, 2, 0, '1 acción', '18 m', 'Hasta 1 minuto', 1, 'Una mano arcana gigante (4×4 m) aparece en un punto. Puede: bloquear, empujar (Fueza del conjurador vs. la criatura), agarrar o aplastar.', NULL),
-(801, 'Terremoto', 8, 5, 0, '1 acción', '120 m', 'Instantáneo', 0, 'Creas un seísmo en radio de 30 m. El terreno se vuelve difícil, estructuras pueden derrumbarse y criaturas pueden caer al suelo. Efectos variados según la naturaleza del suelo.', NULL),
-(802, 'Plaga de insectos', 8, 2, 0, '1 acción', '90 m', 'Hasta 10 minutos', 1, 'Una nube de langostas de 6 m de radio llena el área. Es terreno difícil. Las criaturas en el área al inicio de tu turno reciben 4d10 daño perforante (tSalv de CON, mitad si tiene éxito).', NULL),
-(803, 'Palabra de poder: aturdir', 8, 4, 0, '1 acción', '18 m', 'Hasta 1 minuto', 0, 'Pronuncias una palabra de poder que abruma la mente de una criatura con 150 PG o menos. Queda aturdida. Puede repetir tSalv de CON al final de cada turno.', NULL),
+(703, 'Mano de hierro', 7, 2, 0, '1 acción', '60 pies / 18 metros', 'Hasta 1 minuto', 1, 'Una mano arcana gigante (4×4 m) aparece en un punto. Puede: bloquear, empujar (Fueza del conjurador vs. la criatura), agarrar o aplastar.', NULL),
+(801, 'Terremoto', 8, 5, 0, '1 acción', '400 pies / 120 metros', 'Instantáneo', 0, 'Creas un seísmo en radio de 30 m. El terreno se vuelve difícil, estructuras pueden derrumbarse y criaturas pueden caer al suelo. Efectos variados según la naturaleza del suelo.', NULL),
+(802, 'Plaga de insectos', 8, 2, 0, '1 acción', '300 pies / 90 metros', 'Hasta 10 minutos', 1, 'Una nube de langostas de 6 m de radio llena el área. Es terreno difícil. Las criaturas en el área al inicio de tu turno reciben 4d10 daño perforante (tSalv de CON, mitad si tiene éxito).', NULL),
+(803, 'Palabra de poder: aturdir', 8, 4, 0, '1 acción', '60 pies / 18 metros', 'Hasta 1 minuto', 0, 'Pronuncias una palabra de poder que abruma la mente de una criatura con 150 PG o menos. Queda aturdida. Puede repetir tSalv de CON al final de cada turno.', NULL),
 (901, 'Deseo', 9, 2, 0, '1 acción', 'Personal', 'Instantáneo', 0, 'El conjuro más poderoso que pueden lanzar los mortales. Replicar cualquier conjuro de nivel 8 o inferior sin componentes. O bien, puedes intentar cumplir un deseo literal, con riesgo de efectos secundarios graves.', NULL),
-(902, 'Palabra de poder: matar', 9, 4, 0, '1 acción', '18 m', 'Instantáneo', 0, 'Pronuncias una palabra de poder que obliga a una criatura con 100 PG o menos a morir instantáneamente. Sin tirada de salvación.', NULL),
-(903, 'Tempestad del tiempo', 9, 2, 0, '1 acción', '90 m', 'Hasta 1 minuto', 1, 'Invocas una tempestad mágica en un cilindro de 40 m de radio y 40 m de altura. Las criaturas en el área hacen tSalv de CON o reciben 6d10 trueno y están aturdidas. Viento, lluvia y rayos dificultan la acción.', NULL);
+(902, 'Palabra de poder: matar', 9, 4, 0, '1 acción', '60 pies / 18 metros', 'Instantáneo', 0, 'Pronuncias una palabra de poder que obliga a una criatura con 100 PG o menos a morir instantáneamente. Sin tirada de salvación.', NULL),
+(903, 'Tempestad del tiempo', 9, 2, 0, '1 acción', '300 pies / 90 metros', 'Hasta 1 minuto', 1, 'Invocas una tempestad mágica en un cilindro de 40 m de radio y 40 m de altura. Las criaturas en el área hacen tSalv de CON o reciben 6d10 trueno y están aturdidas. Viento, lluvia y rayos dificultan la acción.', NULL),
+(904, 'Brazos de Hadar', 1, 2, 0, '1 acción', 'Radio de 10 pies / 3 mentros alrededor del conjura', 'Instantaneo', 0, 'Invocando a Hadar, haces que broten tentáculos de ti. Cada criatura en un radio de 10 pies / 3 metros de Emanación que emana de ti realiza una tirada de salvación de Fuerza. Si falla la tirada, el objetivo recibe 2d6 puntos de daño necrótico y no puede realizar Reacciones hasta el inicio de su siguiente turno. Si tiene éxito, el objetivo recibe solo la mitad de ese daño.\r\n', 'El daño aumenta 1d6 por cada espacio de conjuro de nivel superior utilizado'),
+(905, 'Armadura de Agathys', 1, 1, 0, '1 acción adicional', 'Personal', '1 hora', 0, 'Una escarcha mágica protectora te rodea. Obtienes 5 puntos de golpe temporales. Si una criatura te golpea con un ataque cuerpo a cuerpo antes de que termine el conjuro, recibe 5 puntos de daño por frío. El conjuro termina antes de tiempo si no tienes puntos de golpe temporales.', 'Los puntos de golpe temporales y el daño aumentan en 5 por cada espacio de conjuro de nivel superior utilizado'),
+(908, 'Amistad animal', 1, 4, 0, '1 acción', '30 pies / 9 metros', '24 horas', 0, 'Selecciona una Bestia que puedas ver dentro del alcance. El objetivo debe superar una tirada de salvación de Sabiduría o sufrir el estado de Encantado durante la duración del conjuro. Si tú o uno de tus aliados le infligen daño, el conjuro termina.', 'Puedes seleccionar una bestia adicional po'),
+(909, 'Armadura de Agathys', 1, 4, 0, '1 acción adicional', 'Personal', '1 hora', 0, 'Selecciona una Bestia que puedas ver dentro del alcance. El objetivo debe superar una tirada de salvación de Sabiduría o sufrir el estado de Encantado durante la duración del conjuro. Si tú o uno de tus aliados le infligen daño, el conjuro termina.', 'Puedes seleccionar una bestia adicional por cada espacio de conjuro de nivel superior utilizado'),
+(910, 'Elementalismo', 0, 8, 0, '1 acción', '10 pies / 3 metros', 'Instantaneo', 0, 'Controlas los elementos, creando uno de los siguientes efectos:\r\n<ul>\r\n<li><b>Invocar el Aire</b>. Creas una brisa lo suficientemente fuerte como para ondular la tela, remover el polvo, agitar las hojas y cerrar puertas y persianas abiertas, todo dentro de un cubo de 5 pies / 1,5 metros. Las puertas y persianas que alguien o algo mantiene abiertas no se ven afectadas.</li>\r\n\r\n<li><b>Invocar la Tierra<b>. Creas una fina capa de polvo o arena que cubre las superficies en un área de 5 pies / 1,5 metros cuadrados, o haces que aparezca una sola palabra escrita a mano en un trozo de tierra o arena.</li>\r\n\r\n<li><b>Invocar el Fuego</b>. Creas una fina nube de brasas inofensivas y humo de color y aroma en un cubo de 5 pies / 1,5 metros. Eliges el color y el aroma, y ​​las brasas pueden encender velas, antorchas o lámparas en esa área. El aroma del humo perdura durante 1 minuto.</li>\r\n\r\n<li><b>Invocar el Agua</b>. Creas una bruma fresca que humedece ligeramente a las criaturas y objetos dentro de un cubo de 5 pies / 1,5 metros. Como alternativa, creas una taza de agua limpia en un recipiente abierto o sobre una superficie, y el agua se evapora en un minuto.</li>\r\n\r\n<li><b>Esculpir elemento</b>. Haces que tierra, arena, fuego, humo, niebla o agua que quepa en un cubo de 30 cm adquieran una forma tosca (como la de una criatura) durante una hora.</li>\r\n</ul>', NULL),
+(911, 'Guia', 0, 3, 0, '1 acción', 'Toque', '1 minuto', 1, 'Tocas a una criatura y eliges una característica, dicha criatura suma 1d4 a sus tiradas de habilidad que usen dicha característica', NULL);
 
 -- --------------------------------------------------------
 
@@ -2559,6 +2826,7 @@ INSERT INTO `spell_class` (`spell_id`, `class_id`) VALUES
 (102, 2),
 (102, 3),
 (102, 4),
+(102, 10),
 (103, 2),
 (103, 6),
 (104, 6),
@@ -2654,7 +2922,17 @@ INSERT INTO `spell_class` (`spell_id`, `class_id`) VALUES
 (902, 6),
 (902, 12),
 (903, 6),
-(903, 11);
+(903, 11),
+(904, 12),
+(905, 12),
+(908, 2),
+(908, 4),
+(908, 10),
+(910, 4),
+(910, 6),
+(910, 11),
+(911, 3),
+(911, 4);
 
 -- --------------------------------------------------------
 
@@ -3002,7 +3280,7 @@ CREATE TABLE `trait` (
 --
 
 INSERT INTO `trait` (`trait_id`, `trait_name`, `trait_desc`) VALUES
-(1, 'Versatilidad Humana', 'Ganas +1 a todas las características. Además, ganas competencia en una habilidad adicional a tu elección.'),
+(1, 'Versatilidad Humana', 'Obtienes una dote de origen adicional'),
 (2, 'Visión en la Oscuridad (Elfo)', 'Puedes ver en luz tenue hasta 18 metros como si fuera luz brillante, y en oscuridad como si fuera luz tenue.'),
 (3, 'Ascendencia Feérica', 'Tienes ventaja en las tiradas de salvación contra encantamiento y no puedes ser hechizado.'),
 (4, 'Sigilo del Mediano', 'Puedes intentar ocultarte incluso cuando solo estás cubierto por una criatura de al menos un tamaño mayor que el tuyo.'),
@@ -3060,7 +3338,7 @@ INSERT INTO `trait` (`trait_id`, `trait_name`, `trait_desc`) VALUES
 (102, 'Inspiración Bárdica (Bardo)', 'Puedes inspirar a otros con palabras o música. Otorgas un dado de inspiración (d6 al nivel 1) que puede usarse en pruebas, ataques o salvaciones.'),
 (103, 'Canal de Divinidad (Clérigo)', 'Puedes canalizar energía divina directamente de tu deidad. Número de usos y efectos según dominio y nivel.'),
 (104, 'Forma Salvaje (Druida)', 'Puedes usar tu acción para transformarte mágicamente en un animal que hayas visto antes. Límites según tu nivel de druida.'),
-(105, 'Segundo Viento (Guerrero)', 'Puedes usar una acción adicional para recuperar 1d10 + nivel de guerrero puntos de golpe (1 uso/descanso corto o largo).'),
+(105, 'Segundo Aliento (Guerrero)', 'Puedes usar una acción adicional para recuperar 1d10 + nivel de guerrero puntos de golpe (1 uso/descanso corto o largo).'),
 (106, 'Recuperación Arcana (Mago)', 'Una vez al día, al terminar un descanso corto, puedes recuperar ranuras de conjuro gastadas con un nivel total no mayor a la mitad de tu nivel de mago.'),
 (107, 'Defensa sin Armadura (Monje)', 'Mientras no lleves armadura ni escudo, tu CA es igual a 10 + modificador de DES + modificador de SAB.'),
 (108, 'Imposición de Manos (Paladín)', 'Tienes una reserva de poder curativo. Puedes gastar puntos de la reserva para restaurar PG (1 punto = 1 PG). Reserva: nivel de paladín × 5.'),
@@ -3462,6 +3740,13 @@ ALTER TABLE `character_inventory`
   ADD KEY `item_id` (`item_id`);
 
 --
+-- Indices de la tabla `character_item_mastery`
+--
+ALTER TABLE `character_item_mastery`
+  ADD PRIMARY KEY (`character_id`,`item_id`),
+  ADD KEY `character_item_mastery_ibfk_2` (`item_id`);
+
+--
 -- Indices de la tabla `character_proficiency`
 --
 ALTER TABLE `character_proficiency`
@@ -3563,7 +3848,7 @@ ALTER TABLE `item_weapon`
   ADD PRIMARY KEY (`item_id`),
   ADD KEY `mastery_id` (`mastery_id`),
   ADD KEY `damage_id` (`damage_id`),
-  ADD KEY `skill_id` (`skill_id`);
+  ADD KEY `skill_id` (`ability_id`);
 
 --
 -- Indices de la tabla `mastery`
@@ -3762,7 +4047,13 @@ ALTER TABLE `users_groups`
 -- AUTO_INCREMENT de la tabla `character`
 --
 ALTER TABLE `character`
-  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+
+--
+-- AUTO_INCREMENT de la tabla `feat`
+--
+ALTER TABLE `feat`
+  MODIFY `feat_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `groups`
@@ -3792,7 +4083,7 @@ ALTER TABLE `prof`
 -- AUTO_INCREMENT de la tabla `spell`
 --
 ALTER TABLE `spell`
-  MODIFY `spell_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=904;
+  MODIFY `spell_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=912;
 
 --
 -- AUTO_INCREMENT de la tabla `spell_school`
@@ -3857,8 +4148,8 @@ ALTER TABLE `character`
 -- Filtros para la tabla `character_feat`
 --
 ALTER TABLE `character_feat`
-  ADD CONSTRAINT `character_feat_ibfk_1` FOREIGN KEY (`character_id`) REFERENCES `character` (`character_id`),
-  ADD CONSTRAINT `character_feat_ibfk_2` FOREIGN KEY (`feat_id`) REFERENCES `feat` (`feat_id`);
+  ADD CONSTRAINT `character_feat_ibfk_1` FOREIGN KEY (`character_id`) REFERENCES `character` (`character_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `character_feat_ibfk_2` FOREIGN KEY (`feat_id`) REFERENCES `feat` (`feat_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `character_inventory`
@@ -3868,11 +4159,18 @@ ALTER TABLE `character_inventory`
   ADD CONSTRAINT `character_inventory_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `item` (`item_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `character_item_mastery`
+--
+ALTER TABLE `character_item_mastery`
+  ADD CONSTRAINT `character_item_mastery_ibfk_1` FOREIGN KEY (`character_id`) REFERENCES `character` (`character_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `character_item_mastery_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `item_weapon` (`item_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `character_proficiency`
 --
 ALTER TABLE `character_proficiency`
-  ADD CONSTRAINT `character_proficiency_ibfk_1` FOREIGN KEY (`character_id`) REFERENCES `character` (`character_id`),
-  ADD CONSTRAINT `character_proficiency_ibfk_2` FOREIGN KEY (`prof_id`) REFERENCES `prof` (`prof_id`);
+  ADD CONSTRAINT `character_proficiency_ibfk_1` FOREIGN KEY (`character_id`) REFERENCES `character` (`character_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `character_proficiency_ibfk_2` FOREIGN KEY (`prof_id`) REFERENCES `prof` (`prof_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `character_skill_proficiency`
@@ -3948,7 +4246,7 @@ ALTER TABLE `item_weapon`
   ADD CONSTRAINT `item_weapon_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `item` (`item_id`),
   ADD CONSTRAINT `item_weapon_ibfk_2` FOREIGN KEY (`mastery_id`) REFERENCES `mastery` (`mastery_id`),
   ADD CONSTRAINT `item_weapon_ibfk_3` FOREIGN KEY (`damage_id`) REFERENCES `damage` (`damage_id`),
-  ADD CONSTRAINT `item_weapon_ibfk_4` FOREIGN KEY (`skill_id`) REFERENCES `skill` (`skill_id`);
+  ADD CONSTRAINT `item_weapon_ibfk_4` FOREIGN KEY (`ability_id`) REFERENCES `ability` (`ability_id`);
 
 --
 -- Filtros para la tabla `pass`
