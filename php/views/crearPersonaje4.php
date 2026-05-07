@@ -169,6 +169,7 @@ require_once "../includes/header.php";
             <table>
                 <tr>
                     <td>
+                        <h3 class="centrado">Clase</h3>
                         <select name="equipoClase" id="equipoClase">
                             <?php
                             //mostrar las opciones en funcion de si es un geurrero
@@ -183,6 +184,7 @@ require_once "../includes/header.php";
                         </select>
                     </td>
                     <td>
+                        <h3 class="centrado">Trasfondo</h3>
                         <select name="equipoTrasfondo" id="equipoTrasfondo">
                             <option value="items">Objetos</option>
                             <option value="oro">Oro</option>
