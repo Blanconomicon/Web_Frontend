@@ -30,6 +30,7 @@ $traitsSubraza = getTraitRace(getCon(), $personaje->race_id);
 if ($personaje->subrace_id != -1) {
   $traitsSubraza = getTraitRace(getCon(), $personaje->race_id, $personaje->subrace_id);
 }
+$maestrias=getCharacterItemMastery(getCon(),$personaje->character_id);
 
 $dotes=[];
 foreach (getCharacterFeat(getCon(),$personaje->character_id) as $dote) {
@@ -267,6 +268,12 @@ foreach (getCharacterFeat(getCon(),$personaje->character_id) as $dote) {
               }
               foreach ($dotes as $dote) {
                 echo "<li><b>" . $dote->feat_name . ": </b>" . $dote->feat_desc . "</li>";
+              }
+              foreach ($maestrias as $maestria) {
+                $itemWeapon=getItemWeapon(getCon(),$maestria->item_id)[0];
+                $mastery=getMastery(getCon(),$itemWeapon->mastery_id)[0];
+                $item=getItem(getCon(),$itemWeapon->item_id)[0];
+                echo "<li><b>Maestria con " . $item->item_name . " (".$mastery->mastery_name."): </b>" . $mastery->mastery_desc . "</li>";
               }
               ?>
             </ul>

@@ -197,7 +197,6 @@ th {
 .conScroll{
   margin: 0.6em;
   overflow-x: auto;
-  white-space: nowrap;
 }
 
 /******************************/

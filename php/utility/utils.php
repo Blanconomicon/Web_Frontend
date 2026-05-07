@@ -149,7 +149,7 @@ function mostrarCompetencias(
         echo "<div>";
         echo "<h3>Competencias con habilidades</h3>";
         if ($seleccionandoCompetencias) {
-            echo "<h4>Puedes elegir " . $cantidadCompetencias . " competencias</h4>";
+            echo "<h4>Elige " . $cantidadCompetencias . " competencias</h4>";
             foreach ($competenciasHabilidades as $competencia) {
                 echo "<input type='checkbox' value='" . ($competencia->prof_id) .
                     "' name='checkCompetencias[]'" . (in_array(($competencia->prof_id), $competenciasTiene) ? "checked" : "") . ">"
@@ -200,7 +200,7 @@ function mostrarCompetencias(
 function mostrarTablaSpells(string $titulo, int $idClase, int $nivelSpell, int $cantidad)
 {
     $conjuros = getSpellClass(getCon(), $idClase, $nivelSpell);
-    echo "<div class='conScroll'>";
+    echo "<div class='conScroll ocupaTodo'>";
     echo "<h3 class='centrado'>$titulo</h3>";
     echo "<h4 class='centrado'>Tienes que elegir $cantidad</h4>";
     echo "<br>";

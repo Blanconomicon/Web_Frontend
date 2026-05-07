@@ -60,12 +60,12 @@ if (isset($_POST['finalizar'])) {
     }
     $competencias = [];
     foreach ($personaje->competenciasClase as $competencia) {
-        if (!in_array($competencia, $competencias)&&!in_array($competencia-100, $habilidades)) {
+        if (!in_array($competencia, $competencias) && !in_array($competencia - 100, $habilidades)) {
             $competencias[] = $competencia;
         }
     }
     foreach ($personaje->competenciasRaza as $competencia) {
-        if (!in_array($competencia, $competencias)&&!in_array($competencia-100, $habilidades)) {
+        if (!in_array($competencia, $competencias) && !in_array($competencia - 100, $habilidades)) {
             $competencias[] = $competencia;
         }
     }
@@ -111,6 +111,11 @@ if (isset($_POST['finalizar'])) {
     }
     foreach ($personaje->dotes as $dote) {
         putCharacterFeat(getCon(), $idPersonaje, $dote);
+    }
+    if (isset($personaje->maestrias)) {
+        foreach ($personaje->maestrias as $maestria) {
+            putCharacterItemMastery(getCon(),$idPersonaje,$maestria);
+        }
     }
     header("Location: ./personajes.php");
     exit();

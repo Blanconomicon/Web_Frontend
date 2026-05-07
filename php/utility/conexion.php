@@ -672,11 +672,66 @@ function putCharacterProficiency(PDO $con, int $idPersonaje, int $idCompetencia,
     }
 }
 
+//funcion para obtener las competencias o una competencia concreta
 function getProf(PDO $con,int|null $idCompetencia=null)
 {
     try {
         $stmt = $con->prepare("CALL getProf(:idCompetencia)");
         $stmt->bindParam(":idCompetencia", $idCompetencia, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener las competencias o una competencia concreta
+function getItemWeapon(PDO $con,int|null $idItem=null)
+{
+    try {
+        $stmt = $con->prepare("CALL getItemWeapon(:idItem)");
+        $stmt->bindParam(":idItem", $idItem, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener las maestrias o una maestria concreta
+function getMastery(PDO $con,int|null $idMaestria=null)
+{
+    try {
+        $stmt = $con->prepare("CALL getMastery(:idMaestria)");
+        $stmt->bindParam(":idMaestria", $idMaestria, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener las maestrias de un personaje
+function getCharacterItemMastery(PDO $con,int $idPersonaje, int|null $idMaestria=null)
+{
+    try {
+        $stmt = $con->prepare("CALL getCharacterItemMastery(:idPersonaje, :idMaestria)");
+        $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
+        $stmt->bindParam(":idMaestria", $idMaestria, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+
+//funcion para obtener aniadir una maestria a un personaje
+function putCharacterItemMastery(PDO $con,int $idPersonaje, int $idMaestria)
+{
+    try {
+        $stmt = $con->prepare("CALL putCharacterItemMastery(:idPersonaje, :idMaestria)");
+        $stmt->bindParam(":idPersonaje", $idPersonaje, PDO::PARAM_INT);
+        $stmt->bindParam(":idMaestria", $idMaestria, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     } catch (PDOException $e) {

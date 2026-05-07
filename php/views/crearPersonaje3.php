@@ -42,6 +42,13 @@ if (isset($_POST['siguiente'])) {
             $error .= "El " . $clase->class_name . " tiene " . $progresion->spells_known . " hechizos conocidos<br>";
         }
     }
+    if ($clase->mastery_count > 0) {
+        if (isset($_POST['maestrias']) && count($_POST['maestrias']) == $clase->mastery_count) {
+            $personaje->maestrias = $_POST['maestrias'];
+        } else {
+            $error .= "El " . $clase->class_name . " tiene " . $clase->mastery_count . " maestrias conocidas<br>";
+        }
+    }
     $_SESSION['personaje'] = $personaje;
     if ($error == "") {
         $personaje->pg = intval(substr($clase->class_hpdice, 1)) + (obtenerModificador($personaje->constitucion));
@@ -89,9 +96,29 @@ require_once "../includes/header.php";
                 echo "<hr class='ocupaTodo'>";
                 echo "<h3>" . getAbility(getCon(), $clase->spellcasting_ability)[0]->ability_name . " es tu aptitud de lanzamiento de conjuros</h3>";
                 //cantrips
-                mostrarTablaSpells("Trucos", $clase->class_id, 0, $progresion->cantrips_known);
+                if ($progresion->cantrips_known > 0) {
+                    mostrarTablaSpells("Trucos", $clase->class_id, 0, $progresion->cantrips_known);
+                }
                 //nivel1
                 mostrarTablaSpells("Nivel1", $clase->class_id, 1, $progresion->spells_known);
+            }
+            if ($clase->mastery_count > 0) {
+                $armas = getItemWeapon(getCon());
+                echo "<br>";
+                echo "<h3 class='centrado'>Maestrias</h3>";
+                echo "<h4>Elige " . $clase->mastery_count . " maestrias</h4>";
+                echo "<br>";
+                echo "<div class='gridResponsive'>";
+                foreach ($armas as $arma) {
+                    echo "<div>";
+                    $item = getItem(getCon(), $arma->item_id)[0];
+                    $maestria = getMastery(getCon(), $arma->mastery_id)[0];
+                    echo "<input type='checkbox' value='" . $arma->item_id . "' name='maestrias[]' " .
+                        (isset($personaje->maestrias)&&in_array($arma->item_id, $personaje->maestrias) ? "checked" : "") . ">" .
+                        $item->item_name . " (" . $maestria->mastery_name . ")</input>";
+                    echo "</div>";
+                }
+                echo "</div>";
             }
             ?>
             <hr class="ocupaTodo">
