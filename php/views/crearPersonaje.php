@@ -25,6 +25,9 @@ if (isset($_POST['siguiente'])) {
     $personaje->habilidad1 = $_POST["habilidad1"];
     $personaje->habilidad2 = $_POST["habilidad2"];
     $personaje->habilidad3 = $_POST["habilidad3"];
+    $dotes=[];
+    $dotes[]=getBackgroundFeat(getCon(),$_POST["trasfondo"])[0]->feat_id;
+    $personaje->dotes=$dotes;
     switch ($personaje->clase) {
         case 1:
             //barbaro

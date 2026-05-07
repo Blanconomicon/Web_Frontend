@@ -11,16 +11,22 @@ $personaje = $_SESSION["personaje"];
 
 if (isset($_POST['siguiente'])) {
     $personaje->subraza = $_POST["subraza"];
-    //TODO calcular la inciativa, se hace aqui por si se elige humano y la dote de alerta
-    $personaje->iniciativa = obtenerModificador($personaje->destreza);
+    if(isset($_POST['dote'])){
+        $personaje->dotes[]=$_POST['dote'];
+    }
+    $iniciativa = obtenerModificador($personaje->destreza);
+    if(in_array(1,$personaje->dotes)){
+        $iniciativa+=2;
+    }
+    $personaje->iniciativa=$iniciativa;
     $personaje->tamanio = $_POST["tamanio"];
     $_SESSION['personaje'] = $personaje;
     header("Location: ./crearPersonaje3.php");
     exit();
 }
 
-$raza = getRace(getCon(), $personaje->raza);
-$tamanios = getSize(getCon(), $raza[0]->size_id);
+$raza = getRace(getCon(), $personaje->raza)[0];
+$tamanios = getSize(getCon(), $raza->size_id);
 $subrazas = getSubrace(getCon(), $personaje->raza);
 
 require_once "../includes/header.php";
@@ -29,7 +35,7 @@ require_once "../includes/header.php";
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
         <form action="" method="post">
-            <h2><?php echo $raza[0]->race_name ?></h2>
+            <h2><?php echo $raza->race_name ?></h2>
             <?php
             if (count($subrazas) > 0) {
             ?>
@@ -49,7 +55,7 @@ require_once "../includes/header.php";
             <select name="tamanio" id="tamanio">
                 <?php
                 echo "<option value='" . $tamanios[0]->size_id . "'>" . $tamanios[0]->size_name . "</option>";
-                if ($tamanios[0]->size_id == 3 && $raza[0]->race_name != "Enano") {
+                if ($tamanios[0]->size_id == 3 && $raza->race_name != "Enano") {
                     echo "<option value='2'>Pequeño</option>";
                 }
                 ?>
@@ -59,15 +65,23 @@ require_once "../includes/header.php";
                 <h3 class="centrado">Rasgos de la raza</h3>
                 <ul style="margin-bottom: 0;">
                     <?php
-                    echo "<li><b>Longevidad: </b>" . $raza[0]->race_age . " años</li>";
-                    echo "<li><b>Velocidad: </b>" . ($raza[0]->race_speed * 0.3) . " metros</li>";
-                    // foreach ($raza[0] as $nombreCaracteristica => $caracteristica) {
-                    //     echo "<li><b>$nombreCaracteristica:</b>$caracteristica</li>";
-                    // }
+                    echo "<li><b>Longevidad: </b>" . $raza->race_age . " años</li>";
+                    echo "<li><b>Velocidad: </b>" . ($raza->race_speed * 0.3) . " metros</li>";
                     ?>
                 </ul>
                 <div id="traitsSubraza">
                 </div>
+                <?php
+                    if($raza->race_id==1){
+                        echo "<h3 class='centrado'>Dote adicional</h3>";
+                        $dotes=getFeat(getCon());
+                        echo "<select name='dote' id='dote'>";
+                        foreach ($dotes as $dote) {
+                            echo "<option value='".$dote->feat_id."' ".(in_array($dote->feat_id,$personaje->dotes)?"disabled":"").">".$dote->feat_name."</option>";
+                        }
+                        echo "</select>";
+                    }
+                ?>
             </div>
             <hr class="ocupaTodo">
             <div class="centrado">
