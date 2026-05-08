@@ -54,6 +54,7 @@ if (isset($_POST['siguiente'])) {
                 break;
         }
         $_SESSION['personaje'] = $personaje;
+
         if ($error == "") {
             //aumentar la habilidad seleccionada
             switch ($_POST['habilidad1']) {
@@ -123,6 +124,7 @@ if (isset($_POST['siguiente'])) {
         $error = "ya tienes otro personaje con ese nombre";
     }
 }
+
 //asegurarse de que los bonificadores no se suman si se recarga la pagina
 $personaje = null;
 if (isset($_SESSION['personaje'])) {

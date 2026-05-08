@@ -124,6 +124,7 @@ require_once "../includes/header.php";
                 mostrarCompetencias($competenciasClase, true, $personaje->competenciasClase, $clase->prof_cuantity);
                 ?>
             </div>
+
             <?php
             //Si es lanzador de conjuros mostrar las tablas con los conjuros que puede aprender
             if ($clase->class_spellcaster) {
@@ -137,6 +138,7 @@ require_once "../includes/header.php";
                 //nivel1
                 mostrarTablaSpells("Nivel1", $clase->class_id, 1, $progresion->spells_known);
             }
+
             //si tiene maestrias de arma, mostrar una lista con todas las armas para que escoja las maestrias que quiera
             if ($clase->mastery_count > 0) {
                 $armas = getItemWeapon(getCon());
@@ -157,6 +159,7 @@ require_once "../includes/header.php";
                 echo "</div>";
             }
             ?>
+
             <?php
             //si tiene pericia
             if ($clase->class_id == 9) {
@@ -166,6 +169,7 @@ require_once "../includes/header.php";
                 echo "<div id='pericias'></div>";
             }
             ?>
+            
             <hr class="ocupaTodo">
             <div class="centrado">
                 <input type="submit" name="anterior" value="Anterior">

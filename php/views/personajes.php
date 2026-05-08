@@ -19,6 +19,7 @@ require_once "../includes/header.php";
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
         <div class="grid-2">
+            
             <?php
             //mostrar personajes
             foreach ($personajes as $personaje) {

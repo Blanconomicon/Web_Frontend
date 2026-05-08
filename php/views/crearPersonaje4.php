@@ -178,6 +178,7 @@ require_once "../includes/header.php";
                     <td>
                         <h3 class="centrado">Clase</h3>
                         <select name="equipoClase" id="equipoClase">
+                            
                             <?php
                             //mostrar las opciones en funcion de si es un geurrero
                             if ($personaje->clase == 5) {

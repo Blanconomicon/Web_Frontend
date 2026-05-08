@@ -10,6 +10,7 @@ if (!isset($_SESSION['personaje']) || isset($_POST["anterior"])) {
     header("Location: ./crearPersonaje.php");
     exit();
 }
+
 //cargar el personaje
 $personaje = $_SESSION["personaje"];
 
@@ -55,6 +56,7 @@ require_once "../includes/header.php";
     <section class="contenedor">
         <form action="" method="post">
             <h2><?php echo $raza->race_name ?></h2>
+            
             <?php
             //mostrar select de subraza si hay subrazas
             if (count($subrazas) > 0) {

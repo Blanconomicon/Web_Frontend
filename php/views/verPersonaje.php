@@ -61,6 +61,7 @@ foreach (getCharacterFeat(getCon(), $personaje->character_id) as $dote) {
 <body>
   <main>
     <section class="dnd__sheet">
+
       <!-- CABECERA -->
       <div class="dnd__header">
         <div class="dnd__title"><?php echo $personaje->character_name ?></div>
@@ -87,8 +88,6 @@ foreach (getCharacterFeat(getCon(), $personaje->character_id) as $dote) {
       <div class="dnd__stats">
         <div class="dnd__stat-box">CA <br> <?php echo $personaje->armor_class ?></div>
         <div class="dnd__stat-box">Iniciativa <br> <?php echo $personaje->initiative ?></div>
-        <!--Inspiraciones
-        REVISAR TABLA CHARACTER-->
         <div class="dnd__stat-box">PG <?php echo $personaje->current_hp . "/" . $personaje->max_hp ?> <br> Dados de golpe
           <?php echo $personaje->character_level . "" . $dadoDeGolpe ?></div>
         <div class="dnd__stat-box">Velocidad <br> <?php echo $personaje->speed ?> pies / <?php echo ($personaje->speed * 0.3) ?> metros</div>
@@ -97,9 +96,9 @@ foreach (getCharacterFeat(getCon(), $personaje->character_id) as $dote) {
 
       <!-- ATRIBUTOS + HABILIDADES -->
       <div class="dnd__columns">
+
         <!-- ATRIBUTOS -->
         <div class="dnd__attributes">
-
           <div class="dnd__attribute">
             <div class="dnd__attr-name">Fuerza</div>
             <div class="dnd__attr-mod"><?php echo $modFuerza ?></div>
@@ -194,6 +193,7 @@ foreach (getCharacterFeat(getCon(), $personaje->character_id) as $dote) {
               ?>
             </span></div>
         </div>
+
         <!-- HABILIDADES -->
         <div class="dnd__skills">
           <?php
@@ -234,6 +234,7 @@ foreach (getCharacterFeat(getCon(), $personaje->character_id) as $dote) {
             </div>
           </div>
           <br>
+
           <!-- div con los objetos del inventario -->
           <div class="dnd__block-content">
             <div class='dnd__skill' style="border-width: 0.3em;"><span>Nombre</span><span class='dnd__skill-mod'>Cantidad</span></div>
@@ -307,6 +308,7 @@ foreach (getCharacterFeat(getCon(), $personaje->character_id) as $dote) {
                   echo "<li><a href='" . $url . "'>" . $spell->spell_name . " - Truco</a></li>";
                 }
                 $url = basename($_SERVER['PHP_SELF']) . "?idPersonaje=" . $personaje->character_id;
+                
                 if (isset($_GET['descripcionSpell'])) {
                   //mostrar informacion del conjuro seleccionado
                   if ($conjuro->spell_id == $_GET['descripcionSpell']) {

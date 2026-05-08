@@ -35,6 +35,7 @@ require_once "../includes/header.php";
 <main>
     <!-- Informacion de la Pagina -->
     <section class="contenedor">
+
         <?php
         //mostrar los grupos
         foreach ($grupos as $grupo) {
@@ -59,6 +60,7 @@ require_once "../includes/header.php";
                         <th>JUGADOR</th>
                         <th>ROL</th>
                     </tr>
+                    
                     <?php
                     // var_dump($jugadores);
                     $posibles = getNoGroupUser(getCon(), $grupo->group_id);
