@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-05-2026 a las 14:31:44
+-- Tiempo de generación: 08-05-2026 a las 12:58:00
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -140,13 +140,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getBundle` (IN `p_id` INT)   BEGIN
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getBundleItems` (IN `p_id` INT)   BEGIN
-	SELECT *
+    SELECT 
+        item.*,
+        bundle_item.item_count as cantidad
     FROM item
-    WHERE EXISTS(
-        SELECT *
-    	FROM bundle_item
-    	WHERE item.item_id = bundle_item.item_id
-        AND bundle_item.bundle_id = CONVERT(p_id USING utf8mb4));
+    INNER JOIN bundle_item 
+        ON item.item_id = bundle_item.item_id
+    WHERE bundle_item.bundle_id = CONVERT(p_id USING utf8mb4);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `getCharacter` (IN `p_id` INT, IN `u_nick` VARCHAR(30))   BEGIN
@@ -1009,7 +1009,7 @@ CREATE TABLE `bundle` (
 
 INSERT INTO `bundle` (`bundle_id`, `bundle_name`, `bundle_price`, `extra_gp`) VALUES
 (1, 'Equipo de Aventurero', 19.00, 0),
-(2, 'Equipo de Explorador', 12.00, 0),
+(2, 'Pack de Explorador', 10.00, 0),
 (3, 'Equipo de Diplomático', 25.00, 0),
 (4, 'Equipo de Guerrero Básico', 50.00, 0),
 (5, 'Equipo de Mago Iniciado', 35.00, 0),
@@ -1024,7 +1024,25 @@ INSERT INTO `bundle` (`bundle_id`, `bundle_name`, `bundle_price`, `extra_gp`) VA
 (109, 'Equipo del Artista Errante (Artista)', 22.00, 0),
 (110, 'Equipo del Erudito (Sabio)', 15.00, 0),
 (111, 'Equipo del Callejero (Huérfano)', 15.00, 0),
-(112, 'Equipo del Comerciante (Mercader)', 20.00, 0);
+(112, 'Equipo del Comerciante (Mercader)', 20.00, 0),
+(113, 'Equipo de Barbaro', 75.00, 15),
+(114, 'Equipo de Bardo', 90.00, 19),
+(115, 'Pack del Artista', 40.00, 0),
+(116, 'Equipo de Clérigo', 110.00, 7),
+(117, 'Pack del Sacerdote', 33.00, 0),
+(118, 'Equipo de Druida', 50.00, 9),
+(119, 'Equipo de Guerrero (A)', 155.00, 4),
+(120, 'Equipo de Guerrero (B)', 155.00, 11),
+(121, 'Pack del Explorador de Mazmorras', 12.00, 0),
+(122, 'Equipo de Monje', 50.00, 11),
+(123, 'Equipo de Paladin', 150.00, 9),
+(124, 'Equipo de Explorador', 150.00, 7),
+(125, 'Equipo de Pícaro', 100.00, 8),
+(126, 'Pack del Ladron', 16.00, 0),
+(127, 'Equipo de Hechicero', 50.00, 28),
+(128, 'Equipo de Brujo', 100.00, 15),
+(129, 'Pack del Erudito', 40.00, 0),
+(130, 'Equipo de Mago', 55.00, 5);
 
 -- --------------------------------------------------------
 
@@ -1043,6 +1061,14 @@ CREATE TABLE `bundle_item` (
 --
 
 INSERT INTO `bundle_item` (`bundle_id`, `item_id`, `item_count`) VALUES
+(2, 702, 1),
+(2, 703, 10),
+(2, 704, 10),
+(2, 705, 1),
+(2, 743, 1),
+(2, 744, 1),
+(2, 745, 2),
+(2, 746, 1),
 (101, 704, 5),
 (101, 705, 1),
 (101, 706, 1),
@@ -1129,7 +1155,107 @@ INSERT INTO `bundle_item` (`bundle_id`, `item_id`, `item_count`) VALUES
 (112, 705, 1),
 (112, 723, 1),
 (112, 730, 1),
-(112, 738, 1);
+(112, 738, 1),
+(113, 4, 4),
+(113, 105, 1),
+(114, 1, 2),
+(114, 301, 1),
+(114, 721, 1),
+(115, 704, 9),
+(115, 705, 1),
+(115, 722, 3),
+(115, 743, 1),
+(115, 744, 1),
+(115, 745, 8),
+(115, 746, 1),
+(115, 747, 1),
+(115, 748, 1),
+(115, 749, 1),
+(116, 2, 1),
+(116, 303, 1),
+(116, 601, 1),
+(116, 706, 1),
+(117, 704, 7),
+(117, 720, 1),
+(117, 743, 1),
+(117, 746, 1),
+(117, 748, 1),
+(117, 750, 1),
+(117, 751, 1),
+(118, 3, 1),
+(118, 8, 1),
+(118, 301, 1),
+(118, 601, 1),
+(118, 719, 1),
+(119, 9, 1),
+(119, 106, 1),
+(119, 401, 1),
+(120, 5, 1),
+(120, 202, 1),
+(120, 302, 1),
+(120, 753, 20),
+(120, 754, 1),
+(121, 702, 1),
+(121, 703, 10),
+(121, 704, 10),
+(121, 705, 1),
+(121, 743, 1),
+(121, 745, 2),
+(121, 746, 1),
+(121, 755, 1),
+(121, 756, 1),
+(122, 1, 5),
+(122, 6, 1),
+(122, 721, 1),
+(123, 9, 6),
+(123, 101, 1),
+(123, 401, 1),
+(123, 601, 1),
+(123, 706, 1),
+(124, 5, 1),
+(124, 202, 1),
+(124, 302, 1),
+(124, 752, 1),
+(124, 753, 20),
+(124, 754, 1),
+(125, 1, 2),
+(125, 5, 1),
+(125, 201, 1),
+(125, 301, 1),
+(125, 712, 1),
+(125, 753, 20),
+(125, 754, 1),
+(126, 702, 1),
+(126, 704, 5),
+(126, 705, 1),
+(126, 743, 1),
+(126, 745, 7),
+(126, 746, 1),
+(126, 747, 1),
+(126, 748, 1),
+(126, 756, 1),
+(126, 757, 1),
+(126, 758, 10),
+(127, 1, 2),
+(127, 6, 1),
+(127, 759, 1),
+(128, 1, 2),
+(128, 8, 1),
+(128, 301, 1),
+(128, 726, 1),
+(128, 760, 1),
+(129, 725, 1),
+(129, 726, 1),
+(129, 743, 1),
+(129, 745, 10),
+(129, 746, 1),
+(129, 748, 1),
+(129, 761, 1),
+(129, 762, 10),
+(130, 1, 2),
+(130, 3, 1),
+(130, 702, 1),
+(130, 763, 1);
 
 -- --------------------------------------------------------
 
@@ -1177,15 +1303,6 @@ CREATE TABLE `character` (
   `pp` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `character`
---
-
-INSERT INTO `character` (`character_id`, `user_nick`, `character_name`, `character_level`, `race_id`, `subrace_id`, `class_id`, `subclass_id`, `background_id`, `strength`, `dexterity`, `constitution`, `intelligence`, `wisdom`, `charisma`, `max_hp`, `current_hp`, `temp_hp`, `armor_class`, `initiative`, `speed`, `inspiration`, `experience_points`, `alignment`, `deity`, `personality_trait`, `ideals`, `bonds`, `flaws`, `languages`, `proficiency_bonus`, `character_date`, `cp`, `sp`, `gp`, `ep`, `pp`) VALUES
-(52, 'pako', 'yr', 1, 7, 3, 5, NULL, 1, 15, 15, 15, 10, 9, 8, 12, 12, 0, 12, 4, 30, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2026-05-07 12:25:50', 0, 0, 0, 0, 0),
-(53, 'pako', 'afds', 1, 7, 3, 9, NULL, 1, 15, 15, 15, 10, 9, 8, 10, 10, 0, 12, 4, 30, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2026-05-07 14:02:58', 0, 0, 0, 0, 0),
-(54, 'pako', 'borrar', 1, 4, 2, 1, NULL, 4, 15, 15, 17, 8, 9, 8, 18, 18, 0, 14, 2, 30, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, '2026-05-07 14:26:15', 0, 0, 0, 0, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -1196,15 +1313,6 @@ CREATE TABLE `character_feat` (
   `character_id` int(11) NOT NULL,
   `feat_id` int(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `character_feat`
---
-
-INSERT INTO `character_feat` (`character_id`, `feat_id`) VALUES
-(52, 1),
-(53, 1),
-(54, 5);
 
 -- --------------------------------------------------------
 
@@ -1220,47 +1328,6 @@ CREATE TABLE `character_inventory` (
   `notes` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `character_inventory`
---
-
-INSERT INTO `character_inventory` (`character_id`, `item_id`, `quantity`, `equipped`, `notes`) VALUES
-(52, 101, 1, 0, NULL),
-(52, 704, 2, 0, NULL),
-(52, 705, 2, 0, NULL),
-(52, 706, 1, 0, NULL),
-(52, 707, 1, 0, NULL),
-(52, 708, 1, 0, NULL),
-(52, 709, 1, 0, NULL),
-(52, 723, 1, 0, NULL),
-(52, 731, 1, 0, NULL),
-(52, 733, 1, 0, NULL),
-(52, 734, 1, 0, NULL),
-(52, 735, 1, 0, NULL),
-(53, 101, 1, 0, NULL),
-(53, 704, 2, 0, NULL),
-(53, 705, 2, 0, NULL),
-(53, 706, 1, 0, NULL),
-(53, 707, 1, 0, NULL),
-(53, 708, 1, 0, NULL),
-(53, 709, 1, 0, NULL),
-(53, 723, 1, 0, NULL),
-(53, 731, 1, 0, NULL),
-(53, 733, 1, 0, NULL),
-(53, 734, 1, 0, NULL),
-(53, 735, 1, 0, NULL),
-(54, 1, 1, 0, NULL),
-(54, 704, 2, 0, NULL),
-(54, 705, 2, 0, NULL),
-(54, 713, 1, 0, NULL),
-(54, 714, 1, 0, NULL),
-(54, 721, 1, 0, NULL),
-(54, 722, 1, 0, NULL),
-(54, 723, 1, 0, NULL),
-(54, 731, 1, 0, NULL),
-(54, 737, 1, 0, NULL),
-(54, 741, 1, 0, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -1271,17 +1338,6 @@ CREATE TABLE `character_item_mastery` (
   `character_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `character_item_mastery`
---
-
-INSERT INTO `character_item_mastery` (`character_id`, `item_id`) VALUES
-(52, 1),
-(52, 7),
-(52, 8),
-(54, 1),
-(54, 7);
 
 -- --------------------------------------------------------
 
@@ -1295,38 +1351,6 @@ CREATE TABLE `character_proficiency` (
   `proficiency_type` enum('proficient','expertise') DEFAULT 'proficient'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `character_proficiency`
---
-
-INSERT INTO `character_proficiency` (`character_id`, `prof_id`, `proficiency_type`) VALUES
-(52, 1, 'proficient'),
-(52, 2, 'proficient'),
-(52, 15, 'proficient'),
-(52, 16, 'proficient'),
-(52, 17, 'proficient'),
-(52, 18, 'proficient'),
-(52, 71, 'proficient'),
-(52, 80, 'proficient'),
-(53, 1, 'proficient'),
-(53, 4, 'proficient'),
-(53, 5, 'proficient'),
-(53, 15, 'proficient'),
-(53, 31, 'proficient'),
-(53, 71, 'proficient'),
-(53, 80, 'proficient'),
-(53, 88, 'proficient'),
-(54, 1, 'proficient'),
-(54, 2, 'proficient'),
-(54, 6, 'proficient'),
-(54, 7, 'proficient'),
-(54, 15, 'proficient'),
-(54, 16, 'proficient'),
-(54, 18, 'proficient'),
-(54, 29, 'proficient'),
-(54, 71, 'proficient'),
-(54, 73, 'proficient');
-
 -- --------------------------------------------------------
 
 --
@@ -1338,20 +1362,6 @@ CREATE TABLE `character_skill_proficiency` (
   `skill_id` int(1) NOT NULL,
   `proficiency_type` enum('proficient','expertise') DEFAULT 'proficient'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `character_skill_proficiency`
---
-
-INSERT INTO `character_skill_proficiency` (`character_id`, `skill_id`, `proficiency_type`) VALUES
-(52, 5, 'proficient'),
-(52, 7, 'proficient'),
-(53, 1, 'proficient'),
-(53, 4, 'expertise'),
-(53, 8, 'proficient'),
-(53, 16, 'expertise'),
-(54, 2, 'proficient'),
-(54, 11, 'proficient');
 
 -- --------------------------------------------------------
 
@@ -1388,18 +1398,18 @@ CREATE TABLE `class` (
 --
 
 INSERT INTO `class` (`class_id`, `class_name`, `class_hpdice`, `safe1_ability_id`, `safe2_ability_id`, `class_spellcaster`, `spellcasting_ability`, `class_bundle_id`, `prof_cuantity`, `mastery_count`) VALUES
-(1, 'Bárbaro', 'd12', 1, 3, 0, NULL, 0, 2, 2),
-(2, 'Bardo', 'd8', 2, 6, 1, 6, 0, 3, 0),
-(3, 'Clérigo', 'd8', 5, 6, 1, 5, 0, 2, 0),
-(4, 'Druida', 'd8', 4, 5, 1, 5, 0, 2, 0),
-(5, 'Guerrero', 'd10', 1, 3, 0, 4, 0, 2, 3),
-(6, 'Mago', 'd6', 4, 5, 1, 4, 0, 2, 0),
-(7, 'Monje', 'd8', 1, 2, 0, NULL, 0, 2, 0),
-(8, 'Paladín', 'd10', 5, 6, 1, 6, 0, 2, 2),
-(9, 'Pícaro', 'd8', 2, 4, 0, 4, 0, 4, 0),
-(10, 'Explorador', 'd10', 1, 2, 1, 5, 0, 3, 2),
-(11, 'Hechicero', 'd6', 3, 6, 1, 6, 0, 2, 0),
-(12, 'Brujo', 'd8', 5, 6, 1, 6, 0, 2, 0);
+(1, 'Bárbaro', 'd12', 1, 3, 0, NULL, 2, 2, 2),
+(2, 'Bardo', 'd8', 2, 6, 1, 6, 115, 3, 0),
+(3, 'Clérigo', 'd8', 5, 6, 1, 5, 117, 2, 0),
+(4, 'Druida', 'd8', 4, 5, 1, 5, 2, 2, 0),
+(5, 'Guerrero', 'd10', 1, 3, 0, 4, 121, 2, 3),
+(6, 'Mago', 'd6', 4, 5, 1, 4, 129, 2, 0),
+(7, 'Monje', 'd8', 1, 2, 0, NULL, 2, 2, 0),
+(8, 'Paladín', 'd10', 5, 6, 1, 6, 117, 2, 2),
+(9, 'Pícaro', 'd8', 2, 4, 0, 4, 126, 4, 0),
+(10, 'Explorador', 'd10', 1, 2, 1, 5, 2, 3, 2),
+(11, 'Hechicero', 'd6', 3, 6, 1, 6, 121, 2, 0),
+(12, 'Brujo', 'd8', 5, 6, 1, 6, 129, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -1417,19 +1427,19 @@ CREATE TABLE `class_bundle` (
 --
 
 INSERT INTO `class_bundle` (`class_id`, `bundle_id`) VALUES
-(1, 109),
-(2, 106),
-(3, 106),
-(4, 106),
-(5, 106),
-(5, 109),
-(6, 106),
-(7, 106),
-(8, 106),
-(9, 106),
-(10, 106),
-(11, 106),
-(12, 106);
+(1, 113),
+(2, 114),
+(3, 116),
+(4, 118),
+(5, 119),
+(5, 120),
+(6, 130),
+(7, 122),
+(8, 123),
+(9, 125),
+(10, 124),
+(11, 127),
+(12, 128);
 
 -- --------------------------------------------------------
 
@@ -1752,7 +1762,7 @@ INSERT INTO `feat` (`feat_id`, `feat_name`, `feat_desc`) VALUES
 (1, 'Alerta', '<ul>\n<li><b>Competencia en iniciativa:</b> Sumas a tu iniciativa tu bonificador por competencia.</li>\n<li><b>Cambio de iniciativa:</b> Inmediatamente después de lanzar iniciativa, puedes cambiar tu iniciativa por la de cualquier criatura que no esté incapacitada.</li></ul>'),
 (2, 'Atacante salvaje', 'Una vez por turno, cuando golpeas a una criatura con un ataque con arma, puedes lanzar el daño 2 veces y usar el resultado que quieras'),
 (3, 'Curandero', '<ul>\n<li><b>Médico de combate.</b> Si tienes un botiquín, puedes usar uno de sus usos para curar a una criatura a 1,5 metros de ti como acción de Utilizar. Esa criatura puede gastar uno de sus dados de puntos de golpe, y luego tú tiras ese dado. La criatura recupera una cantidad de puntos de golpe igual al resultado de la tirada más tu bonificador de competencia.</li>\n<li><b>Retirada de curación.</b> Siempre que tires un dado para determinar la cantidad de puntos de golpe que restauras con un conjuro o con el beneficio de Médico de combate de esta dote, puedes volver a tirar el dado si obtienes un 1, y debes usar el nuevo resultado.</li></ul>'),
-(4, 'Afortunado', '<ul>\r\n<li><b>Puntos de Suerte.<b> Tienes una cantidad de Puntos de Suerte igual a tu Bonificador de Competencia y puedes gastarlos en los beneficios que se describen a continuación. Recuperas los Puntos de Suerte gastados al finalizar un Descanso Largo.</li>\r\n<li><b>Ventaja.</b> Cuando tiras un d20 para una Prueba de D20, puedes gastar 1 Punto de Suerte para obtener Ventaja en la tirada.</li>\r\n<li><b>Desventaja.</b> Cuando una criatura tira un d20 para un ataque contra ti, puedes gastar 1 Punto de Suerte para imponerle Desventaja en esa tirada.</li></ul>'),
+(4, 'Afortunado', '<ul>\r\n<li><b>Puntos de Suerte.</b> Tienes una cantidad de Puntos de Suerte igual a tu Bonificador de Competencia y puedes gastarlos en los beneficios que se describen a continuación. Recuperas los Puntos de Suerte gastados al finalizar un Descanso Largo.</li>\r\n<li><b>Ventaja.</b> Cuando tiras un d20 para una Prueba de D20, puedes gastar 1 Punto de Suerte para obtener Ventaja en la tirada.</li>\r\n<li><b>Desventaja.</b> Cuando una criatura tira un d20 para un ataque contra ti, puedes gastar 1 Punto de Suerte para imponerle Desventaja en esa tirada.</li></ul>'),
 (5, 'Duro', 'Tu máximo de puntos de golpe aumenta en una cantidad igual al doble de tu nivel de personaje cuando obtienes esta dote. Cada vez que subas de nivel de personaje a partir de entonces, tu máximo de puntos de golpe aumentará en 2 puntos de golpe adicionales.');
 
 -- --------------------------------------------------------
@@ -1792,17 +1802,6 @@ CREATE TABLE `groups` (
   `group_name` varchar(50) NOT NULL,
   `user_nick` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `groups`
---
-
-INSERT INTO `groups` (`group_id`, `group_name`, `user_nick`) VALUES
-(1, 'Los Buscadores del Amanecer', 'dm_carlos'),
-(2, 'La Orden del Fénix', 'dm_carlos'),
-(3, 'Mesa de Pruebas', 'admin'),
-(5, 'grupoJuan', 'juan'),
-(6, 'grupoPako', 'pako');
 
 -- --------------------------------------------------------
 
@@ -1901,7 +1900,28 @@ INSERT INTO `item` (`item_id`, `item_name`, `item_desc`, `item_count`, `item_wei
 (739, 'Nota críptica', 'Mensaje cifrado o en clave', 1, 0.05, 0.50),
 (740, 'Carta de compañero', 'Correspondencia de un aliado caído', 1, 0.05, 0.50),
 (741, 'Recuerdo familiar', 'Objeto sentimental de los padres', 1, 0.10, 0.50),
-(742, 'Mapa incompleto', 'Fragmento de un mapa del tesoro', 1, 0.10, 2.00);
+(742, 'Mapa incompleto', 'Fragmento de un mapa del tesoro', 1, 0.10, 2.00),
+(743, 'Mochila', 'Mochila para guardar objetos', 1, 5.00, 2.00),
+(744, 'Saco de dormir', 'Saco para dormir', 1, 7.00, 1.00),
+(745, 'Frasco de aceite', 'Frasco con aceite', 1, 1.00, 0.10),
+(746, 'Mechero', 'Mechero que funciona con piedra', 1, 1.00, 0.50),
+(747, 'Campana', 'Campana que puede producir sonido a 60 pies / 18 metros', 1, 0.00, 1.00),
+(748, 'Farol', 'farol para alumbrar', 1, 2.00, 10.00),
+(749, 'Espejo', 'espejo de bolsillo', 1, 0.50, 5.00),
+(750, 'Agua sagrada', 'Puedes lanzarlo a 20 pies y impactas en una criatura, si es un no muerto, recibe 2d8 de daño radiante', 1, 1.00, 25.00),
+(751, 'Túnica', 'una túnica', 1, 4.00, 1.00),
+(752, 'Cimitarra', 'Arma ligera y sutil', 1, 3.00, 25.00),
+(753, 'Flecha', 'Una flecha', 1, 0.10, 0.10),
+(754, 'Carcaj', 'capaz de contener hasta 20 flechas', 1, 1.00, 1.00),
+(755, 'Abrojo', 'puedes esparcir trampas de púas desde tu bolsa para cubrir un área de 5 pies / 1,5 metros cuadrados a menos de 5 pies / 1,5 metros de ti.', 1, 2.00, 1.00),
+(756, 'Palanca', 'Ventaja en tiradas de fuerza que usen la palanca', 1, 5.00, 2.00),
+(757, 'Rodamientos de bolas', 'Bolas pequeñas como canicas', 1, 2.00, 1.00),
+(758, 'Vela', 'Una vela', 1, 0.00, 0.01),
+(759, 'Cristal (foco arcano)', 'foco arcano', 1, 1.00, 10.00),
+(760, 'Orbe', 'Orbe que puede ser un foco arcano', 1, 3.00, 20.00),
+(761, 'Tinta', '', 1, 0.00, 10.00),
+(762, 'Pergamino', 'Pergamino que puede contener hasta 250 palabras', 1, 0.00, 0.10),
+(763, 'Libro de conjuros', 'Libro con conjuros', 1, 3.00, 50.00);
 
 -- --------------------------------------------------------
 
@@ -1990,7 +2010,8 @@ INSERT INTO `item_weapon` (`item_id`, `ability_id`, `weapon_hitdice`, `damage_id
 (203, 1, '1d8', 8, 6, 'Munición (80/320), dos manos, recarga'),
 (204, 2, '1d6', 8, 8, 'Munición (30/120), ligera'),
 (205, 2, '1d10', 8, 4, 'Munición (100/400), dos manos, pesada, recarga'),
-(206, 2, '1', 9, 8, 'Munición (25/100), dos manos');
+(206, 2, '1', 9, 8, 'Munición (25/100), dos manos'),
+(752, 2, '1d6', 12, 3, 'Ligera, Sutil');
 
 -- --------------------------------------------------------
 
@@ -2028,19 +2049,6 @@ CREATE TABLE `pass` (
   `user_nick` varchar(30) NOT NULL,
   `pass_hash` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `pass`
---
-
-INSERT INTO `pass` (`user_nick`, `pass_hash`) VALUES
-('admin', '$2y$10$ABC123XYZ456$hashedpassword1'),
-('dm_carlos', '$2y$10$DEF789GHI012$hashedpassword2'),
-('juan', '$argon2id$v=19$m=65536,t=4,p=1$dmR5WFBhMGttZVZlaGdkNQ$JJWZonJ/3FebV2TN/qQwAqufXt/+X5wLKCgwaAL5VHY'),
-('jugador_ana', '$2y$10$JKL345MNO678$hashedpassword3'),
-('jugador_luis', '$2y$10$PQR901STU234$hashedpassword4'),
-('jugador_sofia', '$2y$10$VWX567YZA890$hashedpassword5'),
-('pako', '$argon2id$v=19$m=65536,t=4,p=1$V2lubG90aWFaNFJHSzd2TQ$kPT3zzyyo/m9SLuBQFaUpkFcLmH6gwvqg6ryi0KrCd0');
 
 -- --------------------------------------------------------
 
@@ -2434,9 +2442,6 @@ CREATE TABLE `prof_race` (
 --
 
 INSERT INTO `prof_race` (`prof_id`, `race_id`, `race_lv`) VALUES
-(6, 4, 1),
-(7, 4, 1),
-(29, 4, 1),
 (71, 1, 1),
 (71, 2, 1),
 (71, 3, 1),
@@ -2456,8 +2461,9 @@ INSERT INTO `prof_race` (`prof_id`, `race_id`, `race_lv`) VALUES
 (80, 7, 1),
 (81, 5, 1),
 (82, 9, 1),
-(107, 10, 1),
-(112, 2, 1);
+(112, 2, 1),
+(113, 2, 1),
+(117, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -2511,13 +2517,10 @@ CREATE TABLE `prof_subrace` (
 --
 
 INSERT INTO `prof_subrace` (`prof_id`, `race_id`, `subrace_id`, `subrace_lv`) VALUES
+(1, 2, 1, 1),
 (2, 2, 1, 1),
-(5, 2, 3, 1),
 (4, 2, 3, 1),
-(15, 4, 2, 1),
-(16, 4, 2, 1),
-(22, 6, 1, 1),
-(1, 2, 1, 1);
+(5, 2, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -2545,7 +2548,7 @@ INSERT INTO `race` (`race_id`, `race_name`, `race_speed`, `size_id`, `race_age`,
 (4, 'Enano', 30, 3, 350, 'Los enanos son seres robustos y tenaces, conocidos por su habilidad artesanal y su resistencia. En D&D 2024 todos los enanos tienen: velocidad 30 pies (no reducida por armadura), visión en la oscuridad 60 pies, Resistencia Enana (ventaja contra veneno, resistencia al daño de veneno), competencia en herramientas de artesano, e idiomas Común y Enano.'),
 (5, 'Draconido', 30, 3, 80, 'Los draconidos son orgullosos guerreros humanoides con sangre de dragón. En D&D 2024 su Ancestral Dracónico determina tipo de daño; su Aliento inflige ese daño en un cono o línea (tSalv CON o DES, CD 8 + CON + comp), y su Resistencia los hace inmunes al daño de su tipo ancestral a nivel 5.'),
 (6, 'Gnomo', 30, 2, 500, 'Los gnomos son pequeñas criaturas inteligentes y curiosas con afinidad natural por la magia. En D&D 2024 todos los gnomos tienen: tamaño Pequeño, velocidad 30 pies, visión en la oscuridad 60 pies, Astucia de Gnomo (ventaja en tSalv de INT, SAB y CAR contra magia), e idiomas Común y Gnomo.'),
-(7, 'Aasimar', 30, 3, 90, 'Los aasimar llevan sangre celestial en sus venas. Rasgos en 2024: tamaño Mediano o Pequeño, velocidad 30 pies, visión en la oscuridad 60 pies, Resistencia Celestial (resistencia a daño necrótico y radiante), Curación de Manos (restaurar PG = nivel del personaje, 1/descanso largo), Revelación Celestial (nivel 3, 1/descanso largo, efectos según subtipo). Idiomas: Común y Celestial.'),
+(7, 'Aasimar', 30, 3, 160, 'Los aasimar llevan sangre celestial en sus venas. Rasgos en 2024: tamaño Mediano o Pequeño, velocidad 30 pies, visión en la oscuridad 60 pies, Resistencia Celestial (resistencia a daño necrótico y radiante), Curación de Manos (restaurar PG = nivel del personaje, 1/descanso largo), Revelación Celestial (nivel 3, 1/descanso largo, efectos según subtipo). Idiomas: Común y Celestial.'),
 (8, 'Goliat', 35, 3, 80, 'Los goliats son descendientes de gigantes. Rasgos en 2024: tamaño Mediano (o Grande a elección), velocidad 35 pies, Constitución Poderosa (cuentan como un tamaño mayor para cargar/empujar/arrastrar), Resistencia de Gigante (1/descanso corto: reducir daño a la mitad como reacción), Legado de Gigante (conjuro/rasgo según tipo de gigante ancestral). Idiomas: Común y Gigante.'),
 (9, 'Tiefling', 30, 3, 90, 'Los tieflings llevan la marca infernal de un pacto ancestral. En D&D 2024 tienen: visión en la oscuridad 60 pies, Resistencia Infernal (resistencia al daño de fuego), y el rasgo Legado Infernal que otorga conjuros innatos según linaje (Abissal, Asmodeo, Fierna, etc.) con escalado por nivel.'),
 (10, 'Orco', 30, 3, 60, 'Los orcos son guerreros robustos con gran resistencia innata. Rasgos en 2024: tamaño Mediano, velocidad 30 pies, visión en la oscuridad 120 pies, Aguante Atroz (1/descanso largo: cuando los PG caen a 0 pero no mueres, quedan en 1 PG en su lugar), Presencia Intimidante (competencia en Intimidación), Poderoso Físico (cuentan como un tamaño mayor para cargar/empujar). Idiomas: Común y Orco.');
@@ -3230,10 +3233,6 @@ INSERT INTO `subrace` (`race_id`, `subrace_id`, `subrace_name`, `subrace_desc`) 
 (2, 1, 'Elfo del Bosque', 'Los elfos del bosque tienen reflejos rápidos y sigilo excepcional. Poseen la habilidad Paso por el Bosque, que les permite moverse por terreno no mágico de vegetación difícil sin gastar movimiento extra. Su velocidad base es 35 pies (10,5 m). Tienen visión en la oscuridad y las competencias típicas de los elfos del bosque, como el arco largo.'),
 (2, 2, 'Elfo Alto', 'Los elfos altos tienen una mente aguda y dominio innato de la magia básica. Conocen un truco adicional del listado de conjuros de mago. Son elegantes y de porte orgulloso, a menudo asociados con civilizaciones avanzadas. Hablan élfico fluidamente y suelen aprender idiomas adicionales.'),
 (2, 3, 'Drow (Elfo Oscuro)', 'Los drow proceden de los Reinos Subterráneos. Poseen visión en la oscuridad superior (120 pies / 36 m), competencia en espada corta, ballesta de mano y estoque, y el rasgo Legado Drow: conocen el truco Luz de las Hadas; al nivel 3 pueden lanzar Oscuridad y al nivel 5 Contrahechizo, una vez cada uno con descanso largo. Son sensibles a la luz solar (desventaja en ataques y percepción cuando están en luz solar directa).'),
-(3, 1, 'Mediano Fornido', 'Los medianos fornidos son robustos y resistentes. Tienen el rasgo Resistencia de Fornido: cuando se determina el daño recibido, pueden repetir cualquier dado con resultado de 1 y deben usar el nuevo resultado. Son conocidos por su practicidad y su sentido común. Se establecen con frecuencia en comunidades rurales prósperas.'),
-(3, 2, 'Mediano Piesligeros', 'Los medianos piesligeros son los más viajeros de su especie. Tienen el rasgo Camuflarse con Otros: pueden intentar ocultarse incluso cuando solo están parcialmente cubiertos por una criatura de tamaño Mediano o mayor. Son curiosos, amistosos y adaptables, a menudo encontrados en ciudades humanas donde se mezclan con facilidad.'),
-(4, 1, 'Enano de las Colinas', 'Los enanos de las colinas son conocidos por su extraordinaria vitalidad. Ganan +1 PG por nivel y tienen resistencia al veneno. Son sociables en comparación con sus primos de la montaña y suelen actuar como intermediarios entre los enanos y otras razas. Tienen competencia en hachas de mano, martillos ligeros y mazas.'),
-(4, 2, 'Enano de la Montaña', 'Los enanos de la montaña son físicamente poderosos y tienen una larga historia como guerreros. Ganan competencia en armaduras ligeras y medias, y +2 a FUE. Son más grandes que los enanos de las colinas y viven en ciudades-fortaleza excavadas en las montañas. Son conocidos por su habilidad con las hachas de batalla y picos de guerra.'),
 (5, 1, 'Linaje Negro (Ácido)', 'Escamas negro brillante. Daño: Ácido. Aliento: línea 5×30 pies (tSalv DES). Resistencia al ácido. Los dracónidos negros suelen habitar pantanos y zonas oscuras y húmedas. Son sigilosos y vengativos.'),
 (5, 2, 'Linaje Azul (Eléctrico)', 'Escamas azul índigo. Daño: Eléctrico. Aliento: línea 5×30 pies (tSalv DES). Resistencia al daño eléctrico. Son orgullosos y metódicos, asociados a tormentas del desierto.'),
 (5, 3, 'Linaje Verde (Veneno)', 'Escamas verde esmeralda. Daño: Veneno. Aliento: cono 15 pies (tSalv CON). Resistencia al veneno. Son manipuladores y astutos, aficionados a los bosques densos y los enredos políticos.'),
@@ -3246,22 +3245,15 @@ INSERT INTO `subrace` (`race_id`, `subrace_id`, `subrace_name`, `subrace_desc`) 
 (5, 10, 'Linaje de Plata (Frío)', 'Escamas plateado brillante. Daño: Frío. Aliento: cono 15 pies (tSalv CON). Resistencia al frío. Empáticos y protectores, los metálicos más cercanos a los humanos.'),
 (6, 1, 'Gnomo de las Rocas', 'Los gnomos de las rocas son inventores natos. Tienen el rasgo Constructor: competencia en herramientas de artesano de su elección y en Historia cuando se trate de objetos mágicos, objetos alquímicos o mecanismos tecnológicos. También pueden comunicarse con pequeños animales mecánicos que construyan. Son los gnomos más comunes en mundo de fantasía.'),
 (6, 2, 'Gnomo del Bosque', 'Los gnomos del bosque son esquivos y mágicos por naturaleza. Conocen el truco Ilusión menor de forma innata. Además, pueden hablar con animales Pequeños o más pequeños: ardillas, topos, conejos, etc. Son criaturas silvestres que viven entre árboles y raramente se aventuran lejos de su hogar en el bosque.'),
-(7, 1, 'Aasimar Protector', 'Destinado a defender a los inocentes. Revelación Celestial (nivel 3): alas de luz, velocidad de vuelo = velocidad terrestre durante 1 minuto, daño radiante adicional (bonificador de competencia) una vez por turno. 1/descanso largo.'),
-(7, 2, 'Aasimar Vengador', 'Llamado a erradicar el mal. Revelación Celestial (nivel 3): llamas de energía radiante, velocidad de vuelo durante 1 minuto, daño radiante adicional (bonificador de competencia) una vez por turno. Aura de juicio. 1/descanso largo.'),
-(7, 3, 'Aasimar Caído', 'Lleva el peso de una corrupción celestial. Revelación Celestial (nivel 3): energía necróticamente cargada; los enemigos en 3 m reciben daño necrótico (bonificador de competencia) al inicio del turno del aasimar durante 1 minuto. 1/descanso largo.'),
 (8, 1, 'Descendiente de Gigante de Piedra', 'Legado: conoce Moldear la Tierra a voluntad. Al nivel 5 puede lanzar Pasar sin Rastro 1/descanso largo. Piel con vetas grises o marrones como el granito.'),
 (8, 2, 'Descendiente de Gigante de Escarcha', 'Resistencia al frío. Legado: conoce Armadura de Agathys 1/descanso largo sin gastar ranura. Piel blanquecina o azulada, ojos de azul glacial.'),
 (8, 3, 'Descendiente de Gigante de Fuego', 'Resistencia al fuego. Legado: conoce Manos Ardientes 1/descanso largo sin gastar ranura (CON como característica). Piel rojiza o anaranjada, cabello negro azabache.'),
-(9, 1, 'Linaje de Asmodeo', 'El más común. Inteligentes y calculadores. Truco: Taumaturgia. Nivel 3: Represalia Infernal. Nivel 5: Oscuridad. Ojos completamente rojos o negros.'),
-(9, 2, 'Linaje de Baalzebul', 'Señor de las Moscas. Manipuladores natos. Truco: Taumaturgia. Nivel 3: Rayo de Corona (daño eléctrico). Nivel 5: Cazatalentos. Piel oscura con venas brillantes.'),
-(9, 3, 'Linaje de Dispater', 'Señor de Dis. Espías y maestros del engaño. Truco: Taumaturgia. Nivel 3: Disfrazarse. Nivel 5: Detectar Pensamientos. Rasgos físicos sutiles y elegantes.'),
-(9, 4, 'Linaje de Fierna', 'Hija de Belial. Extremadamente carismáticos y seductores. Truco: Amigos. Nivel 3: Encantamiento de Persona. Nivel 5: Dominar Persona.'),
-(9, 5, 'Linaje de Glasya', 'Hija de Asmodeo. Ladrones y espías de élite. Truco: Ilusión Menor. Nivel 3: Invisibilidad. Nivel 5: Sitio Invisible. Piel en tonos lila o grisáceos.'),
-(9, 6, 'Linaje de Levistus', 'Atrapado en hielo eterno. Estoicos y calculadores. Resistencia adicional al frío. Truco: Rayo de Escarcha. Nivel 3: Armadura de Agathys. Nivel 5: versión reforzada.'),
-(9, 7, 'Linaje de Mammon', 'Señor de Minauros. Codiciosos y ambiciosos. Truco: Taumaturgia. Nivel 3: Tensión de Tensor. Nivel 5: Arcano Flotante. Ojos con tono áureo.'),
-(9, 8, 'Linaje de Mefistófeles', 'El más inteligente de los Archiduques. Gran afinidad arcana. Truco: Llama Sagrada (daño fuego). Nivel 3: Ráfaga de Manos. Nivel 5: Llama Infernal.'),
-(9, 9, 'Linaje de Zariel', 'General caída del Avernus. Guerreros natos. Truco: Llama Sagrada. Nivel 3: Represalia Infernal. Nivel 5: Branding Smite. Alas vestigiales visibles.'),
-(9, 10, 'Linaje Abismal (Demoniaco)', 'Desciende de demonios, no de diablos. Caótico e impredecible. Resistencia al veneno además del fuego. Truco: Toque de Muerte. Nivel 3: Risa Horrible. Nivel 5: Ráfaga de Llamas.');
+(8, 4, 'Descendiente de Gigante de Numbes', NULL),
+(8, 5, 'Descendiente de Gigante de Montaña', NULL),
+(8, 6, 'Descendiente de Gigante de Tormenta', NULL),
+(9, 1, 'Linaje Infernal', NULL),
+(9, 2, 'Linaje Ctónico', NULL),
+(9, 3, 'Linaje Abismal', NULL);
 
 -- --------------------------------------------------------
 
@@ -3281,81 +3273,70 @@ CREATE TABLE `trait` (
 
 INSERT INTO `trait` (`trait_id`, `trait_name`, `trait_desc`) VALUES
 (1, 'Versatilidad Humana', 'Obtienes una dote de origen adicional'),
-(2, 'Visión en la Oscuridad (Elfo)', 'Puedes ver en luz tenue hasta 18 metros como si fuera luz brillante, y en oscuridad como si fuera luz tenue.'),
+(2, 'Visión en la Oscuridad', 'Puedes ver en luz tenue hasta 60 pies / 18 metros como si fuera luz brillante, y en oscuridad como si fuera luz tenue.'),
 (3, 'Ascendencia Feérica', 'Tienes ventaja en las tiradas de salvación contra encantamiento y no puedes ser hechizado.'),
-(4, 'Sigilo del Mediano', 'Puedes intentar ocultarte incluso cuando solo estás cubierto por una criatura de al menos un tamaño mayor que el tuyo.'),
+(4, 'Sigilo natural', 'Puedes intentar ocultarte incluso cuando solo estás cubierto por una criatura de al menos un tamaño mayor que el tuyo.'),
 (5, 'Resistencia Enana', 'Tienes ventaja en las tiradas de salvación contra veneno y resistencia contra daño por veneno.'),
-(6, 'Robusto', 'Tus puntos de golpe aumentan en 1 y aumentan en 1 cada vez que subes de nivel.'),
-(7, 'Aliento de Dragón (Draconido)', 'Puedes exhalar energía destructiva. El tipo de daño (ácido, frío, fuego, eléctrico o veneno) depende de tu ascendencia.'),
-(8, 'Astucia de Gnomo', 'Tienes ventaja en todas las tiradas de salvación de INT, SAB y CAR contra magia.'),
-(9, 'Legado Infernal (Tiefling)', 'Conoces el truco Taumaturgia. Al nivel 3 puedes lanzar Represalia Infernal una vez, recuperándola con descanso largo. Al nivel 5 puedes lanzar Oscuridad una vez.'),
-(10, 'Resistencia Celestial (Aasimar)', 'El aasimar tiene resistencia al daño necrótico y al daño radiante.'),
-(11, 'Constitución Poderosa (Goliat)', 'El Goliat cuenta como un tamaño mayor para determinar la capacidad de carga y para empujar, arrastrar o levantar objetos y criaturas.'),
-(12, 'Curación de Manos (Aasimar)', 'Como acción, el aasimar toca a una criatura y restaura un número de PG igual a su nivel de personaje. Una vez por descanso largo.'),
-(13, 'Revelación Celestial: Protector', 'Nivel 3: el Aasimar Protector extiende alas de energía radiante (acción adicional). Durante 1 minuto: velocidad de vuelo igual a su velocidad terrestre y una vez por turno añade su bonificador de competencia como daño radiante adicional. 1/descanso largo.'),
-(14, 'Revelación Celestial: Vengador', 'Nivel 3: el Aasimar Vengador se envuelve en llamas de energía radiante (acción adicional). Durante 1 minuto: velocidad de vuelo y añade su bonificador de competencia como daño radiante a un objetivo por turno. 1/descanso largo.'),
-(15, 'Revelación Celestial: Caído', 'Nivel 3: el Aasimar Caído emana energía necróticamente cargada. Durante 1 minuto: todos los enemigos en 3 m reciben daño necrótico (bonificador de competencia) al inicio del turno del aasimar. 1/descanso largo.'),
-(16, 'Resistencia de Gigante (Goliat)', 'Una vez por descanso corto, cuando el Goliat recibe daño, puede usar su reacción para reducir ese daño a la mitad.'),
-(17, 'Legado de Gigante de Piedra', 'El Goliat conoce el conjuro Moldear la Tierra de forma innata (a voluntad). Al nivel 5 puede lanzar Pasar sin Rastro una vez por descanso largo.'),
-(18, 'Legado de Gigante de Escarcha', 'El Goliat tiene resistencia al daño de frío y conoce el conjuro Armadura de Agathys de forma innata (1/descanso largo, sin gastar ranura).'),
-(19, 'Legado de Gigante de Fuego', 'El Goliat tiene resistencia al daño de fuego y conoce el conjuro Manos Ardientes de forma innata (1/descanso largo, sin gastar ranura, característica CON).'),
-(20, 'Aguante Atroz (Orco)', 'Una vez por descanso largo, cuando el orco sufre daño que lo reduciría a 0 PG pero no lo mata instantáneamente, puede en su lugar quedar en 1 PG.'),
-(21, 'Presencia Intimidante (Orco)', 'El orco tiene competencia en la habilidad Intimidación. Si ya la tenía, puede elegir cualquier otra habilidad.'),
-(22, 'Poderoso Físico (Orco)', 'El orco cuenta como un tamaño mayor para determinar la capacidad de carga y para empujar, arrastrar o levantar.'),
-(30, 'Resistencia de Dragón (Dracónido)', 'El dracónido tiene resistencia al tipo de daño de su linaje (ácido, eléctrico, veneno, fuego o frío).'),
-(31, 'Instinto de Dragón (Dracónido)', 'El dracónido añade 1d4 a sus pruebas de Intimidación o Persuasión (a elección al crear el personaje).'),
-(40, 'Legado de Asmodeo', 'Truco: Taumaturgia (innato). Nivel 3: Represalia Infernal 1/descanso largo. Nivel 5: Oscuridad 1/descanso largo. Característica: Carisma.'),
-(41, 'Legado de Baalzebul', 'Truco: Taumaturgia (innato). Nivel 3: Rayo de Corona 1/descanso largo. Nivel 5: Cazatalentos 1/descanso largo.'),
-(42, 'Legado de Dispater', 'Truco: Taumaturgia (innato). Nivel 3: Disfrazarse 1/descanso largo. Nivel 5: Detectar Pensamientos 1/descanso largo.'),
-(43, 'Legado de Fierna', 'Truco: Amigos (innato). Nivel 3: Encantamiento de Persona 1/descanso largo. Nivel 5: Dominar Persona 1/descanso largo.'),
-(44, 'Legado de Glasya', 'Truco: Ilusión Menor (innato). Nivel 3: Invisibilidad 1/descanso largo. Nivel 5: Sitio Invisible 1/descanso largo.'),
-(45, 'Legado de Levistus', 'Resistencia adicional al daño de frío. Truco: Rayo de Escarcha. Nivel 3: Armadura de Agathys 1/descanso largo. Nivel 5: Armadura de Agathys reforzada.'),
-(46, 'Legado de Mammon', 'Truco: Taumaturgia (innato). Nivel 3: Tensión de Tensor 1/descanso largo. Nivel 5: Arcano Flotante 1/descanso largo.'),
-(47, 'Legado de Mefistófeles', 'Truco: Llama Sagrada (daño fuego). Nivel 3: Ráfaga de Manos 1/descanso largo. Nivel 5: Llama Infernal 1/descanso largo.'),
-(48, 'Legado de Zariel', 'Truco: Llama Sagrada (innato). Nivel 3: Represalia Infernal 1/descanso largo. Nivel 5: Branding Smite 1/descanso largo.'),
-(49, 'Legado Abismal (Demoniaco)', 'Resistencia adicional al daño de veneno. Truco: Toque de Muerte. Nivel 3: Risa Horrible de Tasha 1/descanso largo. Nivel 5: Ráfaga de Llamas 1/descanso largo.'),
-(50, 'Trance (Elfo/Aasimar)', 'En lugar de dormir, medita profundamente durante 4 horas por descanso largo. Es consciente del entorno mientras medita. Queda tan descansado como tras 8 horas de sueño.'),
-(51, 'Sentidos Agudos (Elfo)', 'El elfo tiene competencia en la habilidad Percepción.'),
-(52, 'Valiente (Mediano)', 'El mediano tiene ventaja en las tiradas de salvación para no ser asustado.'),
-(53, 'Suerte del Mediano', 'Cuando el mediano saca un 1 en una tirada de ataque, prueba de característica o tirada de salvación, puede repetir la tirada y debe usar el nuevo resultado.'),
-(54, 'Visión en la Oscuridad 120 pies (Drow/Orco)', 'Puedes ver en luz tenue hasta 36 m como si fuera luz brillante, y en oscuridad como si fuera luz tenue. En oscuridad solo percibes escala de grises.'),
-(55, 'Sensibilidad a la Luz Solar (Drow)', 'Tienes desventaja en tiradas de ataque y pruebas de Percepción que dependan de la vista cuando tú o tu objetivo estáis en luz solar directa.'),
-(56, 'Legado Drow (Conjuros)', 'Conoces el truco Luz de las Hadas. Al nivel 3 puedes lanzar Oscuridad 1/descanso largo. Al nivel 5 puedes lanzar Contemplar Tinieblas 1/descanso largo. Característica: Carisma.'),
-(57, 'Paso por el Bosque (Elfo del Bosque)', 'Puedes moverte por vegetación no mágica difícil sin gastar movimiento extra y sin recibir daño por espinas u otras plantas no mágicas similares.'),
-(58, 'Máscara de la Naturaleza (Elfo del Bosque)', 'Puedes intentar ocultarte incluso cuando solo estás ligeramente cubierto por follaje, lluvia intensa, nieve, niebla u otros fenómenos naturales.'),
-(59, 'Truco de Mago (Elfo Alto)', 'Conoces un truco adicional del listado de conjuros de mago. La Inteligencia es tu característica de lanzamiento para él.'),
+(6, 'Robustez Enana', 'Tus puntos de golpe aumentan en 1 y aumentan en 1 cada vez que subes de nivel.'),
+(7, 'Aliento de Dragón', 'Puedes exhalar energía destructiva. El tipo de daño depende de tu ascendencia.'),
+(8, 'Astucia Gnoma', 'Tienes ventaja en todas las tiradas de salvación de INT, SAB y CAR contra magia.'),
+(9, 'Legado Infernal', 'Conoces el truco Taumaturgia. Al nivel 3 puedes lanzar Represalia Infernal una vez, recuperándola con descanso largo. Al nivel 5 puedes lanzar Oscuridad una vez.'),
+(10, 'Resistencia Celestial', 'El aasimar tiene resistencia al daño necrótico y al daño radiante.'),
+(11, 'Construcción Poderosa', 'El Goliat cuenta como un tamaño mayor para determinar la capacidad de carga y para empujar, arrastrar o levantar objetos y criaturas. También tienes ventaja en las tiradas para acabar la condición de agarrado sobre ti'),
+(12, 'Curación de Manos', 'Como acción mágica, el aasimar toca a una criatura, tira tantos d4 como su bonificador de competencia y lo cura esa cantidad de PG a la criatura. Una vez por descanso largo.'),
+(16, 'Forma grande', 'A partir del nivel 5 de personaje, puedes cambiar tu tamaño a Grande como Acción Adicional si te encuentras en un espacio lo suficientemente grande. Esta transformación dura 10 minutos o hasta que la finalices (no requiere ninguna acción). Durante ese tiempo, tienes Ventaja en las tiradas de Fuerza y ​​tu Velocidad aumenta en 3 metros. Una vez que uses esta característica, no podrás volver a usarla hasta que completes un Descanso Largo.'),
+(17, 'Legado de Gigante de Piedra', 'Cuando recibes daño, puedes realizar una reacción para tirar 1d12. Suma tu modificador de Constitución al resultado obtenido y reduce el daño en esa cantidad. Puedes usar esta habilidad tantas veces al día como tu bonificador de competencia.'),
+(18, 'Legado de Gigante de Escarcha', 'Cuando impactas a un objetivo con una tirada de ataque y le infliges daño, también puedes infligirle 1d6 de daño de frío y reducir su Velocidad en 10 pies hasta el comienzo de tu siguiente turno. Puedes usar esta habilidad tantas veces al día como tu bonificador de competencia.'),
+(19, 'Legado de Gigante de Fuego', 'Cuando impactas a un objetivo con una tirada de ataque y le infliges daño, también puedes infligirle 1d10 de daño de Fuego. Puedes usar esta habilidad tantas veces al día como tu bonificador de competencia.'),
+(20, 'Aguante Atroz', 'Una vez por descanso largo, cuando el orco sufre daño que lo reduciría a 0 PG pero no lo mata instantáneamente, puede en su lugar quedar en 1 PG.'),
+(22, 'Subidón de adrenalina', 'Puedes realizar la acción de Correr como acción adicional. Al hacerlo, obtienes una cantidad de puntos de golpe temporales igual a tu bonificador de competencia. Puedes usar este rasgo un número de veces igual a tu bonificador de competencia, y recuperas todos los usos gastados al finalizar un descanso corto o largo.'),
+(30, 'Resistencia de Dragón', 'El dracónido tiene resistencia al tipo de daño de su linaje.'),
+(31, 'Vuelo draconido', 'Cuando alcanzas el nivel 5 de personaje, puedes canalizar magia dracónica para volar temporalmente. Como acción adicional, te brotan alas espectrales en la espalda que duran 10 minutos o hasta que las retraigas (sin necesidad de acción) o quedes incapacitado. Durante ese tiempo, tu velocidad de vuelo es igual a tu velocidad normal. Tus alas parecen estar hechas de la misma energía que tu arma de aliento. Una vez que uses esta habilidad, no podrás volver a usarla hasta que completes un descanso largo.'),
+(40, 'Hechizos del legado infernal', 'Tienes resistencia al daño de fuego y conocerás los siguientes conjuros al llegar al nivel indicado:<ul>\r\n<li><b>Truco:</b> Descarga de Fuego(innato).</li><li><b>Nivel 3:</b> Represalia Infernal 1/descanso largo.</b></li><li><b>Nivel 5:</b> Oscuridad 1/descanso largo.</li></ul>'),
+(41, 'Hechizos del legado infernal ctónico', 'Tienes resistencia al daño de necrótico y conocerás los siguientes conjuros al llegar al nivel indicado:<ul><li><b>Truco:</b> Toque helado(innato).</li><li><b>Nivel 3:</b> Falsa vida 1/descanso largo.</b></li><li><b>Nivel 5:</b> Rayo de Debilitamiento 1/descanso largo.</li></ul>'),
+(42, 'Hechizos del legado infernal abismal', 'Tienes resistencia al daño de veneno y conocerás los siguientes conjuros al llegar al nivel indicado:<ul><li><b>Truco:</b> Espray de veneno(innato).</li><li><b>Nivel 3:</b>  Rayo Nauseabundo 1/descanso largo.</b></li><li><b>Nivel 5:</b> Inmovilizar persona 1/descanso largo.</li></ul>'),
+(50, 'Revelación Celestial', 'Cuando alcances el nivel 3 de personaje, podrás transformarte como acción adicional usando una de las opciones que se indican a continuación (elige la opción cada vez que te transformes). La transformación dura 1 minuto o hasta que la finalices (no requiere ninguna acción). Una vez que te transformes, no podrás volver a hacerlo hasta que completes un descanso prolongado.<br>\r\nUna vez en cada uno de tus turnos antes de que termine la transformación, puedes infligir daño adicional a un objetivo cuando le infliges daño con un ataque o un conjuro. El daño adicional es igual a tu bonificador de competencia, y su tipo es Necrótico para Velo Necrótico o Radiante para Alas Celestiales y Resplandor Interior.<br>\r\nEstas son las opciones de transformación:\r\n<br>\r\n<ul>\r\n<li><b>Alas Celestiales.</b> Dos alas espectrales brotan temporalmente de tu espalda. Hasta que termine la transformación, tienes una velocidad de vuelo igual a tu velocidad normal.</li>\r\n<li><b>Resplandor Interior.</b> Una luz abrasadora emana temporalmente de tus ojos y boca. Durante la duración del efecto, emites Luz Brillante en un radio de 3 metros y Luz Tenue en un radio adicional de 3 metros. Al final de cada uno de tus turnos, cada criatura a 3 metros de ti recibe daño radiante igual a tu Bonificador de Competencia.</li>\r\n<li><b>Velo Necrótico.</b> Tus ojos se convierten brevemente en pozos de oscuridad y alas que no pueden volar brotan temporalmente de tu espalda. Las criaturas que no sean tus aliados y que se encuentren a 3 metros de ti deben superar una tirada de salvación de Carisma (CD 8 más tu modificador de Carisma y Bonificador de Competencia) o quedarán aterrorizadas hasta el final de tu siguiente turno.</li></ul>'),
+(51, 'Sentidos Agudos', 'El elfo tiene competencia en la habilidad Percepción, Perspicacia y Supervivencia.'),
+(52, 'Valiente', 'El mediano tiene ventaja en las tiradas de salvación para no ser asustado.'),
+(53, 'Suerte', 'Cuando el mediano saca un 1 en una tirada de ataque, prueba de característica o tirada de salvación, puede repetir la tirada y debe usar el nuevo resultado.'),
+(54, 'Visión en la Oscuridad Superior', 'Puedes ver en luz tenue hasta 120 pies / 36 metros como si fuera luz brillante, y en oscuridad como si fuera luz tenue. En oscuridad solo percibes escala de grises.'),
+(55, 'Trance', 'No duermes y la magia no puede dormirte. Puedes finalizar un descanso largo en 4 horas durante las cuales permaneces consciente'),
+(56, 'Legado Drow', 'Conoces el truco Luz de las Hadas. Al nivel 3 puedes lanzar Oscuridad 1/descanso largo. Al nivel 5 puedes lanzar Contemplar Tinieblas 1/descanso largo. Característica: Carisma.'),
+(57, 'Velocidad Aumentada', 'Tu velocidad es de 35 pies.'),
+(58, 'Hechizos del bosque', 'Conoces el conjuro de DruidCraft'),
+(59, 'Truco de Mago', 'Conoces un truco adicional del listado de conjuros de mago. La Inteligencia es tu característica de lanzamiento para él.'),
 (60, 'Tenacidad Enana (Enano de las Colinas)', 'Tus PG máximos aumentan en 1 y aumentan en 1 adicional cada vez que subes un nivel de personaje.'),
 (61, 'Competencia en Armadura (Enano de Montaña)', 'Tienes competencia en armaduras ligeras y medianas.'),
-(62, 'Constructor (Gnomo de Rocas)', 'Tienes competencia en herramientas de artesano a elección y ventaja en pruebas de Historia sobre objetos mágicos, alquímicos o mecánicos. Puedes comunicarte de forma rudimentaria con pequeñas bestias mecánicas que construyas.'),
-(63, 'Hablar con Animales Pequeños (Gnomo del Bosque)', 'Puedes comunicarte de forma sencilla con bestias de tamaño Pequeño o menor. Pueden darte información de su entorno pero no hablan de ideas abstractas.'),
-(64, 'Ilusión Natural (Gnomo del Bosque)', 'Conoces el truco Ilusión menor de forma innata. La Inteligencia es tu característica de lanzamiento para él.'),
-(65, 'Resistencia de Fornido (Mediano Fornido)', 'Cuando sufres daño, puedes repetir cualquier dado de daño con resultado 1 y debes usar el nuevo resultado (incluso si vuelve a ser 1).'),
-(66, 'Camuflaje Urbano (Mediano Piesligeros)', 'Puedes intentar ocultarte incluso cuando solo estás cubierto por una criatura de tamaño Mediano o mayor.'),
-(67, 'Fortaleza Enana', 'Tienes competencia en un tipo de herramientas de artesano a tu elección.'),
-(68, 'Combate Enano', 'Tienes competencia con el hacha de mano, el hacha de batalla, el martillo ligero y el martillo de guerra.'),
-(69, 'Astucia de Gnomo (Extendida)', 'Tienes ventaja en todas las tiradas de salvación de INT, SAB y CAR contra magia.'),
-(101, 'Furia (Bárbaro)', 'En combate, puedes entrar en furia como acción adicional. Mientras estés furioso, ganas ventaja en pruebas y tSalv de FUE, resistencia a daño físico y bonus a daño cuerpo a cuerpo.'),
-(102, 'Inspiración Bárdica (Bardo)', 'Puedes inspirar a otros con palabras o música. Otorgas un dado de inspiración (d6 al nivel 1) que puede usarse en pruebas, ataques o salvaciones.'),
-(103, 'Canal de Divinidad (Clérigo)', 'Puedes canalizar energía divina directamente de tu deidad. Número de usos y efectos según dominio y nivel.'),
-(104, 'Forma Salvaje (Druida)', 'Puedes usar tu acción para transformarte mágicamente en un animal que hayas visto antes. Límites según tu nivel de druida.'),
-(105, 'Segundo Aliento (Guerrero)', 'Puedes usar una acción adicional para recuperar 1d10 + nivel de guerrero puntos de golpe (1 uso/descanso corto o largo).'),
-(106, 'Recuperación Arcana (Mago)', 'Una vez al día, al terminar un descanso corto, puedes recuperar ranuras de conjuro gastadas con un nivel total no mayor a la mitad de tu nivel de mago.'),
+(67, 'Sentir la priedra', 'Como acción adicional, obtienes la habilidad Sentido sísmico con un alcance de 60 pies / 18 metros durante 10 minutos. Para usarla, debes estar sobre una superficie de piedra o tocarla. La piedra puede ser natural o trabajada. Puedes usar esta acción adicional un número de veces igual a tu bonificador de competencia, y recuperas todos los usos gastados al finalizar un descanso prolongado.'),
+(101, 'Furia', 'En combate, puedes entrar en furia como acción adicional. Mientras estés furioso, ganas ventaja en pruebas y tSalv de FUE, resistencia a daño físico y bonus a daño cuerpo a cuerpo.'),
+(102, 'Inspiración Bárdica', 'Puedes inspirar a otros con palabras o música. Otorgas un dado de inspiración (d6 al nivel 1) que puede usarse en pruebas, ataques o salvaciones.'),
+(103, 'Canal de Divinidad', 'Puedes canalizar energía divina directamente de tu deidad. Número de usos y efectos según dominio y nivel.'),
+(104, 'Forma Salvaje', 'Puedes usar tu acción para transformarte mágicamente en un animal que hayas visto antes. Límites según tu nivel de druida.'),
+(105, 'Segundo Aliento', 'Puedes usar una acción adicional para recuperar 1d10 + nivel de guerrero puntos de golpe (1 uso/descanso corto o largo).'),
+(106, 'Recuperación Arcana', 'Una vez al día, al terminar un descanso corto, puedes recuperar ranuras de conjuro gastadas con un nivel total no mayor a la mitad de tu nivel de mago.'),
 (107, 'Defensa sin Armadura (Monje)', 'Mientras no lleves armadura ni escudo, tu CA es igual a 10 + modificador de DES + modificador de SAB.'),
-(108, 'Imposición de Manos (Paladín)', 'Tienes una reserva de poder curativo. Puedes gastar puntos de la reserva para restaurar PG (1 punto = 1 PG). Reserva: nivel de paladín × 5.'),
-(109, 'Ataque Furtivo (Pícaro)', 'Una vez por turno, puedes infligir 1d6 de daño adicional (por cada 2 niveles de pícaro) a una criatura a la que tengas ventaja o haya aliado adyacente.'),
-(110, 'Enemigo Predilecto (Explorador)', 'Has aprendido a cazar ciertos tipos de enemigos. Elige un tipo de favorito: tienes ventaja en tSalv de SAB (Supervivencia) para rastrearlos.'),
-(111, 'Origen Sorcérico (Hechicero)', 'Tu magia innata proviene de una fuente especial. El origen determina rasgos que obtienes a nivel 1, 6, 14 y 18.'),
-(112, 'Invocaciones Sobrenaturales (Brujo)', 'Ganas una habilidad mágica especial otorgada por tu patrón sobrenatural. Puedes elegir invocaciones adicionales al subir de nivel.'),
-(1001, 'Crítico Mejorado (Campeón)', 'Tus ataques con armas obtienen un golpe crítico con 19 o 20 natural en el dado.'),
-(1002, 'Maniobras (Maestro de Batalla)', 'Conoces cuatro maniobras de combate y una reserva de dados de superioridad (d8). Ganas más maniobras al subir de nivel.'),
-(1003, 'Magia de Combate (Cab. Arcano)', 'Cuando usas tu acción para lanzar un conjuro, puedes realizar un ataque con arma como acción adicional.'),
-(2001, 'Esculpir Hechizos (Evocación)', 'Puedes crear zonas de seguridad en tus conjuros de área para proteger aliados automáticamente.'),
-(2002, 'Potenciar Hechizo (Evocación)', 'Puedes añadir tu modificador de INT al daño de un conjuro de evocación que normalmente no añade dicho modificador.'),
-(2003, 'Abjurador Arcano (Abjuración)', 'Tienes un escudo mágico que absorbe daño (máx. tu nivel de mago + modificador de INT). Se regenera con descanso largo.'),
-(2004, 'Proyección Astroversal (Adivinación)', 'Puedes lanzar el conjuro Augurio sin gastar ranuras de conjuro ni componentes. Se recupera con descanso corto.'),
-(3001, 'Golpe Divino (Paladín)', 'Cuando impactas con un arma, puedes gastar ranuras de hechizo para añadir daño radiante adicional: 2d8 por nivel de ranura.'),
-(3002, 'Esquiva Sobrenatural (Pícaro)', 'Cuando un atacante que puedes ver te impacta, puedes usar tu reacción para reducir el daño a la mitad.'),
-(3003, 'Trance Féerica (Elfo del Bosque)', 'En lugar de dormir, meditas profundamente 4 horas por descanso largo. Eres consciente del entorno mientras meditas.');
+(108, 'Imposición de Manos', 'Tienes una reserva de poder curativo. Puedes gastar puntos de la reserva para restaurar PG (1 punto = 1 PG). Reserva: nivel de paladín × 5.'),
+(109, 'Ataque Furtivo', 'Una vez por turno, puedes infligir 1d6 de daño adicional (por cada 2 niveles de pícaro) a una criatura a la que tengas ventaja o haya aliado adyacente.'),
+(110, 'Enemigo Predilecto', 'Has aprendido a cazar ciertos tipos de enemigos. Elige un tipo de favorito: tienes ventaja en tSalv de SAB (Supervivencia) para rastrearlos.'),
+(111, 'Origen Sorcérico', 'Tu magia innata proviene de una fuente especial. El origen determina rasgos que obtienes a nivel 1, 6, 14 y 18.'),
+(112, 'Invocaciones Sobrenaturales', 'Ganas una habilidad mágica especial otorgada por tu patrón sobrenatural. Puedes elegir invocaciones adicionales al subir de nivel.'),
+(1001, 'Crítico Mejorado', 'Tus ataques con armas obtienen un golpe crítico con 19 o 20 natural en el dado.'),
+(1002, 'Maniobras', 'Conoces cuatro maniobras de combate y una reserva de dados de superioridad (d8). Ganas más maniobras al subir de nivel.'),
+(1003, 'Magia de Combate', 'Cuando usas tu acción para lanzar un conjuro, puedes realizar un ataque con arma como acción adicional.'),
+(2001, 'Esculpir Hechizos', 'Puedes crear zonas de seguridad en tus conjuros de área para proteger aliados automáticamente.'),
+(2002, 'Potenciar Hechizo', 'Puedes añadir tu modificador de INT al daño de un conjuro de evocación que normalmente no añade dicho modificador.'),
+(2003, 'Abjurador Arcano', 'Tienes un escudo mágico que absorbe daño (máx. tu nivel de mago + modificador de INT). Se regenera con descanso largo.'),
+(2004, 'Proyección Astroversal', 'Puedes lanzar el conjuro Augurio sin gastar ranuras de conjuro ni componentes. Se recupera con descanso corto.'),
+(3001, 'Castigo Divino', 'Cuando impactas con un arma, puedes gastar ranuras de hechizo para añadir daño radiante adicional: 2d8 por nivel de ranura.'),
+(3002, 'Esquiva Sobrenatural', 'Cuando un atacante que puedes ver te impacta, puedes usar tu reacción para reducir el daño a la mitad.'),
+(3003, 'Hechizo del Gnomo del bosque', 'Conoces el conjuro de ilusión menor. Además, siempre tienes preparado el conjuro Hablar con los animales. Puedes lanzarlo sin usar un espacio de conjuro un número de veces igual a tu bonificador de competencia, y recuperas todos los usos gastados al finalizar un descanso largo. También puedes usar cualquier espacio de conjuro disponible para lanzarlo.'),
+(3004, 'Hechizo del Gnomo de la roca', 'Conoces los trucos de Reparación y Prestidigitación. Además, puedes dedicar 10 minutos a lanzar Prestidigitación para crear un Dispositivo Mecánico Diminuto (CA 5, 1 PG), como un juguete, un encendedor o una caja de música. Al crear el dispositivo, determinas su función eligiendo un efecto de Prestidigitación; el dispositivo produce ese efecto cada vez que tú u otra criatura realiza una Acción Adicional para activarlo con un toque. Si el efecto elegido tiene opciones, eliges una de ellas para el dispositivo al crearlo. Por ejemplo, si eliges el efecto de encender-extinguir del conjuro, determinas si el dispositivo enciende o extingue el fuego; el dispositivo no hace ambas cosas. Puedes tener tres de estos dispositivos en existencia a la vez, y cada uno se desintegra 8 horas después de su creación o cuando lo desmantelas con un toque como una acción de Utilizar.'),
+(3005, 'Legado de Gigante de Nube', 'Como acción adicional, te teletransportas mágicamente hasta 30 pies / 9 metros a un espacio desocupado que puedas ver.Puedes usar esta habilidad tantas veces al día como tu bonificador de competencia.'),
+(3006, 'Legado de Gigante de Montaña', 'Cuando golpeas a una criatura Grande o más pequeña con una tirada de ataque y le infliges daño, puedes aplicarle la condición de Derribado. Puedes usar esta habilidad tantas veces al día como tu bonificador de competencia.'),
+(3007, 'Legado de Gigante de Tormenta', 'Cuando recibes daño de una criatura que se encuentra a menos de 60 pies / 18 metros de ti, puedes realizar una reacción para infligir 1d8 puntos de daño de Trueno a esa criatura. Puedes usar esta habilidad tantas veces al día como tu bonificador de competencia.'),
+(3009, 'Agilidad mediana', 'Puedes moverte a través del espacio de cualquier criatura que sea de un tamaño mayor que el tuyo, pero no puedes detenerte en el mismo espacio.'),
+(3010, 'Con recursos', 'Ganas inspiración heroica si no la tenias al finalizar un descanso largo'),
+(3011, 'Habil', 'Ganas una competencia adicional');
 
 -- --------------------------------------------------------
 
@@ -3415,6 +3396,7 @@ CREATE TABLE `trait_race` (
 INSERT INTO `trait_race` (`trait_id`, `race_id`, `race_lv`) VALUES
 (1, 1, 1),
 (2, 2, 1),
+(2, 6, 1),
 (2, 7, 1),
 (3, 2, 1),
 (4, 3, 1),
@@ -3428,18 +3410,19 @@ INSERT INTO `trait_race` (`trait_id`, `race_id`, `race_lv`) VALUES
 (12, 7, 1),
 (16, 8, 1),
 (20, 10, 1),
-(21, 10, 1),
 (22, 10, 1),
 (30, 5, 1),
 (31, 5, 1),
-(50, 2, 1),
 (50, 7, 1),
 (51, 2, 1),
 (52, 3, 1),
 (53, 3, 1),
+(54, 4, 1),
 (54, 10, 1),
 (67, 4, 1),
-(68, 4, 1);
+(3009, 3, 1),
+(3010, 1, 1),
+(3011, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -3489,15 +3472,24 @@ CREATE TABLE `trait_subrace` (
 INSERT INTO `trait_subrace` (`trait_id`, `race_id`, `subrace_id`, `subrace_lv`) VALUES
 (2, 2, 1, 1),
 (2, 2, 2, 1),
-(2, 2, 3, 1),
+(2, 5, 1, 1),
+(2, 5, 2, 1),
+(2, 5, 3, 1),
+(2, 5, 4, 1),
+(2, 5, 5, 1),
+(2, 5, 6, 1),
+(2, 5, 7, 1),
+(2, 5, 8, 1),
+(2, 5, 9, 1),
+(2, 5, 10, 1),
+(2, 6, 1, 1),
+(2, 6, 2, 1),
+(2, 9, 1, 0),
+(2, 9, 2, 1),
+(2, 9, 3, 1),
 (3, 2, 1, 1),
 (3, 2, 2, 1),
 (3, 2, 3, 1),
-(4, 3, 1, 1),
-(4, 3, 2, 1),
-(5, 4, 1, 1),
-(5, 4, 2, 1),
-(6, 4, 1, 1),
 (7, 5, 1, 1),
 (7, 5, 2, 1),
 (7, 5, 3, 1),
@@ -3513,28 +3505,18 @@ INSERT INTO `trait_subrace` (`trait_id`, `race_id`, `subrace_id`, `subrace_lv`) 
 (9, 9, 1, 1),
 (9, 9, 2, 1),
 (9, 9, 3, 1),
-(9, 9, 4, 1),
-(9, 9, 5, 1),
-(9, 9, 6, 1),
-(9, 9, 7, 1),
-(9, 9, 8, 1),
-(9, 9, 9, 1),
-(9, 9, 10, 1),
-(10, 7, 1, 1),
-(10, 7, 2, 1),
-(10, 7, 3, 1),
 (11, 8, 1, 1),
 (11, 8, 2, 1),
 (11, 8, 3, 1),
-(12, 7, 1, 1),
-(12, 7, 2, 1),
-(12, 7, 3, 1),
-(13, 7, 1, 3),
-(14, 7, 2, 3),
-(15, 7, 3, 3),
+(11, 8, 4, 1),
+(11, 8, 5, 1),
+(11, 8, 6, 1),
 (16, 8, 1, 1),
 (16, 8, 2, 1),
 (16, 8, 3, 1),
+(16, 8, 4, 1),
+(16, 8, 5, 1),
+(16, 8, 6, 1),
 (17, 8, 1, 1),
 (18, 8, 2, 1),
 (19, 8, 3, 1),
@@ -3561,41 +3543,22 @@ INSERT INTO `trait_subrace` (`trait_id`, `race_id`, `subrace_id`, `subrace_lv`) 
 (40, 9, 1, 1),
 (41, 9, 2, 1),
 (42, 9, 3, 1),
-(43, 9, 4, 1),
-(44, 9, 5, 1),
-(45, 9, 6, 1),
-(46, 9, 7, 1),
-(47, 9, 8, 1),
-(48, 9, 9, 1),
-(49, 9, 10, 1),
-(50, 2, 1, 1),
-(50, 2, 2, 1),
-(50, 2, 3, 1),
 (51, 2, 1, 1),
 (51, 2, 2, 1),
 (51, 2, 3, 1),
-(52, 3, 1, 1),
-(52, 3, 2, 1),
-(53, 3, 1, 1),
-(53, 3, 2, 1),
 (54, 2, 3, 1),
+(55, 2, 1, 1),
+(55, 2, 2, 1),
 (55, 2, 3, 1),
 (56, 2, 3, 1),
 (57, 2, 1, 1),
 (58, 2, 1, 1),
 (59, 2, 2, 1),
-(60, 4, 1, 1),
-(61, 4, 2, 1),
-(62, 6, 1, 1),
-(63, 6, 2, 1),
-(64, 6, 2, 1),
-(65, 3, 1, 1),
-(66, 3, 2, 1),
-(67, 4, 1, 1),
-(67, 4, 2, 1),
-(68, 4, 1, 1),
-(68, 4, 2, 1),
-(3003, 2, 1, 1);
+(3003, 6, 2, 1),
+(3004, 6, 1, 1),
+(3005, 8, 4, 1),
+(3006, 8, 5, 1),
+(3007, 8, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -3608,19 +3571,6 @@ CREATE TABLE `users` (
   `user_name` varchar(30) NOT NULL,
   `user_mail` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `users`
---
-
-INSERT INTO `users` (`user_nick`, `user_name`, `user_mail`) VALUES
-('admin', 'Administrador del Sistema', 'admin@dndcampaign.com'),
-('dm_carlos', 'Carlos, el Dungeon Master', 'carlos@dndcampaign.com'),
-('juan', 'juan', 'administracion@geograma.com'),
-('jugador_ana', 'Ana, la Guerrero', 'ana@dndcampaign.com'),
-('jugador_luis', 'Luis, el Mago', 'luis@dndcampaign.com'),
-('jugador_sofia', 'Sofía, la Clériga', 'sofia@dndcampaign.com'),
-('pako', 'Pako', 'administracion@geograma.com');
 
 -- --------------------------------------------------------
 
@@ -3774,7 +3724,8 @@ ALTER TABLE `class`
   ADD PRIMARY KEY (`class_id`),
   ADD KEY `safe1_ability_id` (`safe1_ability_id`) USING BTREE,
   ADD KEY `safe2_ability_id` (`safe2_ability_id`) USING BTREE,
-  ADD KEY `spellcasting_ability` (`spellcasting_ability`) USING BTREE;
+  ADD KEY `spellcasting_ability` (`spellcasting_ability`) USING BTREE,
+  ADD KEY `class_ibfk_4` (`class_bundle_id`);
 
 --
 -- Indices de la tabla `class_bundle`
@@ -3894,6 +3845,7 @@ ALTER TABLE `prof_subclass`
 -- Indices de la tabla `prof_subrace`
 --
 ALTER TABLE `prof_subrace`
+  ADD PRIMARY KEY (`prof_id`,`race_id`,`subrace_id`),
   ADD KEY `prof_id` (`prof_id`),
   ADD KEY `race_id` (`race_id`,`subrace_id`);
 
@@ -4044,10 +3996,16 @@ ALTER TABLE `users_groups`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `bundle`
+--
+ALTER TABLE `bundle`
+  MODIFY `bundle_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
+
+--
 -- AUTO_INCREMENT de la tabla `character`
 --
 ALTER TABLE `character`
-  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `character_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT de la tabla `feat`
@@ -4059,13 +4017,13 @@ ALTER TABLE `feat`
 -- AUTO_INCREMENT de la tabla `groups`
 --
 ALTER TABLE `groups`
-  MODIFY `group_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `group_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT de la tabla `item`
 --
 ALTER TABLE `item`
-  MODIFY `item_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=743;
+  MODIFY `item_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=764;
 
 --
 -- AUTO_INCREMENT de la tabla `mastery`
@@ -4090,6 +4048,12 @@ ALTER TABLE `spell`
 --
 ALTER TABLE `spell_school`
   MODIFY `spell_school_id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT de la tabla `trait`
+--
+ALTER TABLE `trait`
+  MODIFY `trait_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3012;
 
 --
 -- Restricciones para tablas volcadas
@@ -4192,7 +4156,8 @@ ALTER TABLE `character_spell`
 ALTER TABLE `class`
   ADD CONSTRAINT `class_ibfk_1` FOREIGN KEY (`safe1_ability_id`) REFERENCES `ability` (`ability_id`),
   ADD CONSTRAINT `class_ibfk_2` FOREIGN KEY (`safe2_ability_id`) REFERENCES `ability` (`ability_id`),
-  ADD CONSTRAINT `class_ibfk_3` FOREIGN KEY (`spellcasting_ability`) REFERENCES `ability` (`ability_id`);
+  ADD CONSTRAINT `class_ibfk_3` FOREIGN KEY (`spellcasting_ability`) REFERENCES `ability` (`ability_id`),
+  ADD CONSTRAINT `class_ibfk_4` FOREIGN KEY (`class_bundle_id`) REFERENCES `bundle` (`bundle_id`);
 
 --
 -- Filtros para la tabla `class_bundle`
@@ -4224,7 +4189,7 @@ ALTER TABLE `feat_prerequisite`
 -- Filtros para la tabla `groups`
 --
 ALTER TABLE `groups`
-  ADD CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`user_nick`) REFERENCES `users` (`user_nick`);
+  ADD CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`user_nick`) REFERENCES `users` (`user_nick`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `item_armor`
@@ -4252,7 +4217,7 @@ ALTER TABLE `item_weapon`
 -- Filtros para la tabla `pass`
 --
 ALTER TABLE `pass`
-  ADD CONSTRAINT `pass_ibfk_1` FOREIGN KEY (`user_nick`) REFERENCES `users` (`user_nick`);
+  ADD CONSTRAINT `pass_ibfk_1` FOREIGN KEY (`user_nick`) REFERENCES `users` (`user_nick`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `prof_class`
@@ -4279,8 +4244,8 @@ ALTER TABLE `prof_subclass`
 -- Filtros para la tabla `prof_subrace`
 --
 ALTER TABLE `prof_subrace`
-  ADD CONSTRAINT `prof_subrace_ibfk_1` FOREIGN KEY (`prof_id`) REFERENCES `prof` (`prof_id`),
-  ADD CONSTRAINT `prof_subrace_ibfk_3` FOREIGN KEY (`race_id`,`subrace_id`) REFERENCES `subrace` (`race_id`, `subrace_id`);
+  ADD CONSTRAINT `prof_subrace_ibfk_1` FOREIGN KEY (`prof_id`) REFERENCES `prof` (`prof_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `prof_subrace_ibfk_3` FOREIGN KEY (`race_id`,`subrace_id`) REFERENCES `subrace` (`race_id`, `subrace_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `race`
@@ -4350,7 +4315,7 @@ ALTER TABLE `subrace`
 -- Filtros para la tabla `trait_race`
 --
 ALTER TABLE `trait_race`
-  ADD CONSTRAINT `trait_race_ibfk_1` FOREIGN KEY (`trait_id`) REFERENCES `trait` (`trait_id`),
+  ADD CONSTRAINT `trait_race_ibfk_1` FOREIGN KEY (`trait_id`) REFERENCES `trait` (`trait_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `trait_race_ibfk_2` FOREIGN KEY (`race_id`) REFERENCES `race` (`race_id`);
 
 --
@@ -4364,8 +4329,8 @@ ALTER TABLE `trait_subclass`
 -- Filtros para la tabla `trait_subrace`
 --
 ALTER TABLE `trait_subrace`
-  ADD CONSTRAINT `trait_subrace_ibfk_1` FOREIGN KEY (`trait_id`) REFERENCES `trait` (`trait_id`),
-  ADD CONSTRAINT `trait_subrace_ibfk_2` FOREIGN KEY (`race_id`,`subrace_id`) REFERENCES `subrace` (`race_id`, `subrace_id`);
+  ADD CONSTRAINT `trait_subrace_ibfk_1` FOREIGN KEY (`trait_id`) REFERENCES `trait` (`trait_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `trait_subrace_ibfk_2` FOREIGN KEY (`race_id`,`subrace_id`) REFERENCES `subrace` (`race_id`, `subrace_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
