@@ -66,10 +66,9 @@ if (isset($_GET['itemsTrasfondo'])) {
         echo "<ul>";
         foreach ($itemsTrasfondo as $item) {
             echo "<li>";
-            echo $item->item_name . " (" . $item->item_count . ")";
+            echo $item->item_name . " (" . $item->cantidad . ")";
             echo "</li>";
         }
-        echo "<li>" . $equipoTrasfondo->extra_gp . " po</li>";
         echo "</ul>";
     } else {
         //oro
@@ -80,17 +79,30 @@ if (isset($_GET['itemsTrasfondo'])) {
 //elegir items de la clase
 if (isset($_GET['itemsClase'])) {
     $seleccion = $_GET['itemsClase'];
+    $clase = getClass(getCon(), $personaje->clase)[0];
     $claseBundle = getClassBundle(getCon(), $personaje->clase);
     $precio = getBundle(getCon(), $claseBundle[0]->bundle_id)[0];
+    $bundleEquipoExtra = getBundle(getCon(), $clase->class_bundle_id)[0];
     if ($seleccion == "oro") {
         echo "<p>" . $precio->bundle_price . " po</p>";
     } else {
+        $items = getBundleItems(getCon(), $bundleEquipoExtra->bundle_id);
         if ($seleccion == "items") {
-            $items = getBundleItems(getCon(), $claseBundle[0]->bundle_id);
+            $itemsClase = getBundleItems(getCon(), $claseBundle[0]->bundle_id);
+            foreach ($itemsClase as $item) {
+                foreach ($items as $key => $existingItem) {
+                    if ($existingItem->item_id === $item->item_id) {
+                        $item->cantidad += $existingItem->cantidad;
+                        unset($items[$key]);
+                        break;
+                    }
+                }
+                $items[] = $item;
+            }
             echo "<ul>";
             foreach ($items as $item) {
                 echo "<li>";
-                echo $item->item_name . " (" . $item->item_count . ")";
+                echo $item->item_name . " (" . $item->cantidad . ")";
                 echo "</li>";
             }
             echo "<li>" . $precio->extra_gp . " po</li>";
@@ -98,11 +110,21 @@ if (isset($_GET['itemsClase'])) {
         } else {
             //items2 solo en caso del guerrero
             $precio = getBundle(getCon(), $claseBundle[1]->bundle_id)[0];
-            $items = getBundleItems(getCon(), $claseBundle[1]->bundle_id);
+            $itemsClase = getBundleItems(getCon(), $claseBundle[1]->bundle_id);
+            foreach ($itemsClase as $item) {
+                foreach ($items as $key => $existingItem) {
+                    if ($existingItem->item_id === $item->item_id) {
+                        $item->cantidad += $existingItem->cantidad;
+                        unset($items[$key]);
+                        break;
+                    }
+                }
+                $items[] = $item;
+            }
             echo "<ul>";
             foreach ($items as $item) {
                 echo "<li>";
-                echo $item->item_name . " (" . $item->item_count . ")";
+                echo $item->item_name . " (" . $item->cantidad . ")";
                 echo "</li>";
             }
             echo "<li>" . $precio->extra_gp . " po</li>";

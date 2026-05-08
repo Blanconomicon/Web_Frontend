@@ -106,6 +106,8 @@ require_once "../includes/header.php";
                         echo "<option value='" . $dote->feat_id . "' " . ($personaje->dotes[0]==$dote->feat_id ? "disabled" : "") . ">" . $dote->feat_name . "</option>";
                     }
                     echo "</select>";
+                    echo "<br>";
+                    echo "<br>";
                     echo "<h3 class='centrado'>Habilidad adicional</h3>";
                     $skills = getSkill(getCon());
                     echo "<select name='skillAdicional' id='skillAdicional'>";
