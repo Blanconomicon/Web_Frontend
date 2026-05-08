@@ -19,7 +19,7 @@ if (isset($_POST['siguiente'])) {
     //cargar la subraza
     $personaje->subraza = $_POST["subraza"];
     if (isset($_POST['dote'])) {
-        $personaje->dotes[] = $_POST['dote'];
+        $personaje->dotes[1] = $_POST['dote'];
     }
     //calcular la iniciativa
     $iniciativa = obtenerModificador($personaje->destreza);
@@ -35,6 +35,9 @@ if (isset($_POST['siguiente'])) {
     $personaje->pg = $pg;
     $personaje->iniciativa = $iniciativa;
     $personaje->tamanio = $_POST["tamanio"];
+    if (isset($_POST['skillAdicional'])) {
+        $personaje->skillAdicional = $_POST['skillAdicional'];
+    }
     $_SESSION['personaje'] = $personaje;
     header("Location: ./crearPersonaje3.php");
     exit();
@@ -100,7 +103,16 @@ require_once "../includes/header.php";
                     $dotes = getFeat(getCon());
                     echo "<select name='dote' id='dote'>";
                     foreach ($dotes as $dote) {
-                        echo "<option value='" . $dote->feat_id . "' " . (in_array($dote->feat_id, $personaje->dotes) ? "disabled" : "") . ">" . $dote->feat_name . "</option>";
+                        echo "<option value='" . $dote->feat_id . "' " . ($personaje->dotes[0]==$dote->feat_id ? "disabled" : "") . ">" . $dote->feat_name . "</option>";
+                    }
+                    echo "</select>";
+                    echo "<h3 class='centrado'>Habilidad adicional</h3>";
+                    $skills = getSkill(getCon());
+                    echo "<select name='skillAdicional' id='skillAdicional'>";
+                    foreach ($skills as $skill) {
+                        echo "<option value='" . $skill->skill_id . "' " .
+                            ((isset($personaje->skillAdicional) && $personaje->skillAdicional == $skill->skill_id) ? "selected" : "")
+                            . ">" . $skill->skill_name . "</option>";
                     }
                     echo "</select>";
                 }

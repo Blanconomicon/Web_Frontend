@@ -26,9 +26,6 @@ if (isset($_GET['subraza'])) {
     if (count($competenciasHabilidades) > 0) {
         $competenciasRazaSkills = [];
         foreach ($competenciasHabilidades as $skill) {
-            if ($skill->prof_type == "skill") {
-                $skill->prof_id = $skill->prof_id;
-            }
             $competenciasRazaSkills[] = $skill->prof_id;
         }
         $personaje->competenciasRaza = $competenciasRazaSkills;

@@ -69,6 +69,12 @@ if (isset($_POST['finalizar'])) {
             $habilidades[] = $habilidad - 100;
         }
     }
+    if (
+        !in_array($personaje->skillAdicional, $habilidades) && $personaje->skillAdicional > 0
+        && $personaje->skillAdicional < 19
+    ) {
+        $habilidades[] = $personaje->skillAdicional;
+    }
 
     //cargar competencias
     $competencias = [];
