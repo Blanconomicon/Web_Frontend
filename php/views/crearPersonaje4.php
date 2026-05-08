@@ -45,10 +45,11 @@ if (isset($_POST['finalizar'])) {
             $precio = getBundle(getCon(), $claseBundle[1]->bundle_id)[0];
         }
         $gp += $precio->extra_gp;
+        //AQUIIIIIIII
         foreach ($itemsClase as $item) {
             foreach ($items as $key => $existingItem) {
                 if ($existingItem->item_id === $item->item_id) {
-                    $item->item_count += $existingItem->item_count;
+                    $item->cantidad += $existingItem->cantidad;
                     unset($items[$key]);
                     break;
                 }
@@ -68,6 +69,12 @@ if (isset($_POST['finalizar'])) {
         if (!in_array($habilidad, $habilidades) && $habilidad - 100 > 0 && $habilidad - 100 < 19) {
             $habilidades[] = $habilidad - 100;
         }
+    }
+    if (
+        !in_array($personaje->skillAdicional, $habilidades) && $personaje->skillAdicional > 0
+        && $personaje->skillAdicional < 19
+    ) {
+        $habilidades[] = $personaje->skillAdicional;
     }
 
     //cargar competencias
@@ -141,7 +148,7 @@ if (isset($_POST['finalizar'])) {
 
     //poner los items al personaje
     foreach ($items as $item) {
-        putCharacterInventory(getCon(), $idPersonaje, $item->item_id, $item->item_count);
+        putCharacterInventory(getCon(), $idPersonaje, $item->item_id, $item->cantidad);
     }
 
     //poner las dotes al personaej
@@ -193,7 +200,7 @@ require_once "../includes/header.php";
                 </tr>
                 <tr>
                     <!-- divs cuyo contenido va a cambiar para mostrar los items de la clase y el trasfondo o el oro que dan -->
-                    <td style="width: 50%;">
+                    <td style="width: 50%; height: 18em;">
                         <div id='itemsClase'>
                         </div>
                     </td>
