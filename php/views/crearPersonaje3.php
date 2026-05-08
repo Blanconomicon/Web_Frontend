@@ -55,10 +55,12 @@ if (isset($_POST['siguiente'])) {
 
     //validar los conjuros
     if ($clase->class_spellcaster == 1) {
-        if (isset($_POST['Trucos']) && $progresion->cantrips_known == count($_POST['Trucos'])) {
-            $personaje->trucos = $_POST['Trucos'];
-        } else {
-            $error .= "El " . $clase->class_name . " tiene " . $progresion->cantrips_known . " trucos conocidos<br>";
+        if ($progresion->cantrips_known > 0) {
+            if (isset($_POST['Trucos']) && $progresion->cantrips_known == count($_POST['Trucos'])) {
+                $personaje->trucos = $_POST['Trucos'];
+            } else {
+                $error .= "El " . $clase->class_name . " tiene " . $progresion->cantrips_known . " trucos conocidos<br>";
+            }
         }
         if (isset($_POST['Nivel1']) && $progresion->spells_known == count($_POST['Nivel1'])) {
             $personaje->nivel1 = $_POST['Nivel1'];
