@@ -3585,23 +3585,6 @@ CREATE TABLE `users_groups` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `users_groups`
---
-
-INSERT INTO `users_groups` (`user_nick`, `group_id`, `rol_id`) VALUES
-('admin', 3, 'A'),
-('admin', 4, 'J'),
-('jugador_ana', 1, 'J'),
-('jugador_luis', 1, 'J'),
-('jugador_sofia', 1, 'J'),
-('dm_carlos', 1, 'M'),
-('dm_carlos', 2, 'M'),
-('juan', 5, 'M'),
-('pako', 4, 'M'),
-('pako', 6, 'M'),
-('pako', 7, 'M');
-
---
 -- Índices para tablas volcadas
 --
 
